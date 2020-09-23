@@ -1,6 +1,5 @@
-package com.krafton.kts.testlist.domain;
+package com.krafton.kts.module_testlist.domain;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 
 @Data

@@ -1,6 +1,7 @@
-package com.krafton.kts.repository.testinfo;
+package com.krafton.kts.module_repository.testinfo;
 
-import com.krafton.kts.testlist.domain.KTS_TEST;
+import com.krafton.kts.module_repository.JdbcCommon;
+import com.krafton.kts.module_testlist.domain.KTS_TEST;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
 import javax.sql.DataSource;
@@ -9,12 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-public class TestInfoRepo_jdbc implements TestInfoRepo {
+public class TestInfoRepo_jdbc extends JdbcCommon implements TestInfoRepo {
 
-    private final DataSource dataSource;
-
-    public TestInfoRepo_jdbc(DataSource dataSource){
-        this.dataSource = dataSource;
+    public TestInfoRepo_jdbc(DataSource dataSource) {
+        super(dataSource);
     }
 
     @Override
@@ -74,35 +73,5 @@ public class TestInfoRepo_jdbc implements TestInfoRepo {
 
 
 
-    private Connection getConnection() {
-        return DataSourceUtils.getConnection(dataSource);
-    }
-    private void close(Connection conn, PreparedStatement pstmt, ResultSet rs) {
-        try {
-            if (rs != null) {
-                rs.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
 
-        try {
-            if (pstmt != null) {
-                pstmt.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
-        try {
-            if (conn != null) {
-                close(conn);
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-    private void close(Connection conn) throws SQLException {
-        DataSourceUtils.releaseConnection(conn, dataSource);
-    }
 }

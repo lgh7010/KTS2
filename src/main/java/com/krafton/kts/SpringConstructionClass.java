@@ -1,7 +1,7 @@
 package com.krafton.kts;
 
-import com.krafton.kts.repository.testinfo.TestInfoRepo;
-import com.krafton.kts.repository.testinfo.TestInfoRepo_jdbc;
+import com.krafton.kts.module_repository.testinfo.TestInfoRepo;
+import com.krafton.kts.module_repository.testinfo.TestInfoRepo_jdbc;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

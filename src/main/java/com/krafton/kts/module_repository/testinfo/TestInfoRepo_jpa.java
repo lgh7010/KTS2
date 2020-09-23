@@ -1,6 +1,6 @@
-package com.krafton.kts.repository.testinfo;
+package com.krafton.kts.module_repository.testinfo;
 
-import com.krafton.kts.testlist.domain.KTS_TEST;
+import com.krafton.kts.module_testlist.domain.KTS_TEST;
 
 import java.util.List;
 import java.util.Optional;

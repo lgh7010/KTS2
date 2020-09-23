@@ -1,6 +1,6 @@
-package com.krafton.kts.repository.testinfo;
+package com.krafton.kts.module_repository.testinfo;
 
-import com.krafton.kts.testlist.domain.KTS_TEST;
+import com.krafton.kts.module_testlist.domain.KTS_TEST;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

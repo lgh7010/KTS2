@@ -11,12 +11,12 @@
         }
     </script>
 
-    <form method="POST">
+    <form>
         <div th:each="test : ${tests}">
             <h1 th:text="${test.NAME}"></h1>
             <h5 th:text="${test.DESCRIPTION}"></h5>
-            <input type="submit" name="clickIdx" th:value="${test.TEST_SEQ}" th:formaction="@{/testEdit}">
-            <input type="submit" name="clickIdx", th:value="${test.TEST_SEQ}" th:formaction="@{/testRemove}">
+            <input type="submit" name="clickIdx" th:value="${test.TEST_SEQ}" th:formmethod="POST" th:formaction="@{/testEdit}">
+            <input type="submit" name="clickIdx", th:value="${test.TEST_SEQ}" th:formmethod="POST" th:formaction="@{/testRemove}">
             <hr>
         </div>
     </form>

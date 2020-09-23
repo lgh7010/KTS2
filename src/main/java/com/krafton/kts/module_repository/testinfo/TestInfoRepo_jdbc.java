@@ -66,12 +66,4 @@ public class TestInfoRepo_jdbc extends JdbcCommon implements TestInfoRepo {
             close(conn, pstmt, rs);
         }
     }
-
-
-
-
-
-
-
-
 }

@@ -1,10 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <title>testList</title>
 </head>
 <body>
+    <script>
+        function test2(TEST_SEQ){
+            console.log(TEST_SEQ);
+        }
+    </script>
 
+    <div th:each="test : ${tests}">
+        <h1 th:text="${test.NAME}"></h1>
+        <h1 th:text="${test.DESCRIPTION}"></h1>
+        <button th:value="${test.TEST_SEQ}" onclick="test2(this.value)">편집</button>
+        <hr>
+    </div>
 </body>
 </html>

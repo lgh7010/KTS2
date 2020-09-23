@@ -27,6 +27,7 @@ public class TestListController {
 
         System.out.println(tests.stream().count());
         model.addAttribute("tests", tests);
+        model.addAttribute("clickIdx", "");
 
         return "testlist/testList";
     }

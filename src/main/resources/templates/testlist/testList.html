@@ -6,16 +6,19 @@
 </head>
 <body>
     <script>
-        function test2(TEST_SEQ){
+        function test(TEST_SEQ){
             console.log(TEST_SEQ);
         }
     </script>
 
-    <div th:each="test : ${tests}">
-        <h1 th:text="${test.NAME}"></h1>
-        <h1 th:text="${test.DESCRIPTION}"></h1>
-        <button th:value="${test.TEST_SEQ}" onclick="test2(this.value)">편집</button>
-        <hr>
-    </div>
+    <form method="POST" th:action="@{/testEdit}">
+        <div th:each="test : ${tests}">
+            <h1 th:text="${test.NAME}"></h1>
+            <h5 th:text="${test.DESCRIPTION}"></h5>
+            <input type="submit" name="clickIdx" th:value="${test.TEST_SEQ}">
+<!--            이렇게만 해도 action url 에 지정한 메소드대로 파라미터가 name값:value값으로 날아간다. Post 요청이 되는 것. 이를통해 각각의 편집 버튼을 구현할 수 있다.-->
+            <hr>
+        </div>
+    </form>
 </body>
 </html>

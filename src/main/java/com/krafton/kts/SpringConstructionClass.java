@@ -2,6 +2,7 @@ package com.krafton.kts;
 
 import com.krafton.kts.module_repository.testinfo.TestInfoRepo;
 import com.krafton.kts.module_repository.testinfo.TestInfoRepo_jdbc;
+import com.krafton.kts.module_repository.testinfo.TestInfoRepo_jpa;
 import com.krafton.kts.module_testlist.service.TestListService;
 import com.krafton.kts.module_testlist.service.TestListServiceImpl;
 import org.springframework.context.annotation.Bean;
@@ -20,6 +21,7 @@ public class SpringConstructionClass {
 
     @Bean
     public TestInfoRepo testInfoRepo(){
+        //return new TestInfoRepo_jpa();
         return new TestInfoRepo_jdbc(dataSource);
     }
 

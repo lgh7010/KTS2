@@ -18,26 +18,21 @@ public class TestInfoRepo_jdbc extends JdbcCommon implements TestInfoRepo {
 
     @Override
     public KTS_TEST create(KTS_TEST test) {
-        System.out.println("create");
         return null;
     }
 
     @Override
     public Optional<KTS_TEST> findById(int id) {
-        System.out.println("findById");
         return Optional.empty();
     }
 
     @Override
     public Optional<KTS_TEST> findByName(String name) {
-        System.out.println("findByName");
         return Optional.empty();
     }
 
     @Override
     public List<KTS_TEST> findAll() {
-        System.out.println("findAll");
-
         String sql = "select * from KTS_TEST";
 
         Connection conn = null;

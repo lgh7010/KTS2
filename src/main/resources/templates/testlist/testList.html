@@ -15,12 +15,14 @@
         <div th:each="test : ${tests}">
             <h1 th:text="${test.NAME}"></h1>
             <h5 th:text="${test.DESCRIPTION}"></h5>
-            <input type="submit" name="clickIdx" th:value="${test.TEST_SEQ}" th:formmethod="POST" th:formaction="@{/testEdit}">
-            <input type="submit" name="clickIdx", th:value="${test.TEST_SEQ}" th:formmethod="POST" th:formaction="@{/testRemove}">
+            <input type="submit" name="clickIdx" th:value="${test.TEST_SEQ}" th:formmethod="POST" th:formaction="@{/editTest}">
+            <input type="submit" name="clickIdx" th:value="${test.TEST_SEQ}" th:formmethod="POST" th:formaction="@{/removeTest}">
             <hr>
         </div>
     </form>
 
-    <button>추가</button>
+    <form>
+        <input type="submit" name="addTest" th:value="추가" th:formmethod="POST" th:formaction="@{/createTest}">
+    </form>
 </body>
 </html>

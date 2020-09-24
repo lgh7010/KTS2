@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class TestEditController {
 
-    @PostMapping("/testEdit")
+    @PostMapping("/editTest")
     public String testEdit(String clickIdx){
         System.out.println("testEdit : " + clickIdx);
         return "testedit/testEdit";

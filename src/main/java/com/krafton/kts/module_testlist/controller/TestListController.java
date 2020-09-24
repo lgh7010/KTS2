@@ -23,24 +23,19 @@ public class TestListController {
 
     @GetMapping("/")
     public String showList(Model model){
-
-        List<KTS_TEST> tests = this.testListService.findAll();
-
-        System.out.println(tests.stream().count());
-        model.addAttribute("tests", tests);
-        model.addAttribute("clickIdx", "");
-
+        model.addAttribute("tests", this.testListService.findAll());
         return "testlist/testList";
     }
 
-    @PostMapping("testRemove")
-    public String removeTest(String clickIdx){
-        System.out.println("remove : " + clickIdx);
-        return "testlist/testList";
+    @PostMapping("/removeTest")
+    public String removeTest(String clickIdx, Model model){
+        System.out.println("removeTest : " + clickIdx);
+        return showList(model);
     }
 
-    @GetMapping("/create")
-    public String showCreate(Model model){
+    @GetMapping("/createTest")
+    public String createTest(Model model){
+        System.out.println("showCreate");
         return "testedit/testEdit";
     }
 }

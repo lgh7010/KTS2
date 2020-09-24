@@ -9,18 +9,35 @@
         function removeTest(button){
             console.log("removeTest : " + button.value);
         }
-        function openEditLayer(){
-            console.log("openEditLayer");
+        function openEditLayer(button){
+            console.log("openEditLayer : " + button.value);
+
+            var data ="{\"clickIdx\" : \"" + button.value + "\"}";
+            console.log(data);
+            $.ajax({
+                url : "/editTest",
+                data : data,
+                type : "POST",
+                async : false,
+                dataType : "json",
+                success : function(data){
+                    console.log("ajax success : " + data);
+                },
+                error : function(data){
+                    console.log("error : " + data);
+                }
+            })
         }
     </script>
 
     <div th:each="test : ${tests}">
+        <h1 th:text="${test.NAME}"></h1>
+        <h5 th:text="${test.DESCRIPTION}"></h5>
         <form>
-            <h1 th:text="${test.NAME}"></h1>
-            <h5 th:text="${test.DESCRIPTION}"></h5>
             <input type="submit" name="clickIdx" th:value="${test.TEST_SEQ}" th:formmethod="POST" th:formaction="@{/editTest}">
         </form>
 
+        <button th:value="${test.TEST_SEQ}" th:onclick="openEditLayer(this)">편집</button>
         <button th:value="${test.TEST_SEQ}" th:onclick="removeTest(this)">삭제</button>
         <hr>
     </div>

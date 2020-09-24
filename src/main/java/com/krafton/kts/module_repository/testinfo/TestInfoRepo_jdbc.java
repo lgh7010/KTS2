@@ -24,17 +24,30 @@ public class TestInfoRepo_jdbc extends JdbcCommon implements TestInfoRepo {
 
     @Override
     public void removeTest(int TEST_SEQ) {
-        String sql = "update KTS_TEST set DELETED = 'Y' where TEST_SEQ = ?";
-
         Connection conn = null;
         PreparedStatement pstmt = null;
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement(sql);
+            conn.setAutoCommit(false);//트랜잭션 처리
+
+            //step 1. KTS_TEST 테이블에서 해당 테스트의 DELETED = Y로 변경
+            pstmt = conn.prepareStatement("update KTS_TEST set DELETED = 'Y' where TEST_SEQ = ?");
             pstmt.setInt(1, TEST_SEQ);
             pstmt.executeUpdate();
+
+            //step 2. TEST_REL_TESTCASE 테이블에서 해당하는 TEST_SEQ의 모든 관계내역의 DELETED = Y로 변경
+            pstmt = conn.prepareStatement("update TEST_REL_TESTCASE set DELETED = 'Y' where TEST_SEQ = ?");
+            pstmt.setInt(1, TEST_SEQ);
+            pstmt.executeUpdate();
+
+            conn.commit();
         } catch (Exception e){
+            try {
+                conn.rollback();
+            } catch(SQLException ee){
+                System.out.println(ee);
+            }
             throw new IllegalStateException(e);
         } finally {
             close(conn, pstmt);

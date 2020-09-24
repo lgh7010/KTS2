@@ -12,12 +12,13 @@
                 TEST_SEQ: button.value
             },
             success : function(list_of_testcase){
-                console.log("ajax success");
                 console.log(list_of_testcase);
+                console.log(list_of_testcase[0].testcase_SEQ);
+                console.log(list_of_testcase[0].TESTCASE_SEQ);
                 $("#testEditLayer").show();
             },
             error : function(err){
-                console.log("ajax error");
+                console.error(err);
             }
         });
     }

@@ -20,5 +20,6 @@ public interface TestInfoRepo {
     KTS_TESTCASE saveTestcase(KTS_TESTCASE testcase);
     Optional<KTS_TESTCASE> findTestcaseByTESTCASE_SEQ(int TESTCASE_SEQ);
     Optional<KTS_TESTCASE> findTestcaseByNAME(String NAME);
+    List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int TEST_SEQ);
     List<KTS_TESTCASE> findAllTestcase();
 }

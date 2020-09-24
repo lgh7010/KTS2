@@ -43,6 +43,11 @@ public class TestInfoRepo_jpa implements TestInfoRepo {
     }
 
     @Override
+    public List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int TEST_SEQ) {
+        return null;
+    }
+
+    @Override
     public List<KTS_TESTCASE> findAllTestcase() {
         return null;
     }

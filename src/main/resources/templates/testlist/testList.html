@@ -6,23 +6,25 @@
 </head>
 <body>
     <script>
-        function test(TEST_SEQ){
-            console.log(TEST_SEQ);
+        function removeTest(button){
+            console.log("removeTest : " + button.value);
+        }
+        function openEditLayer(){
+            console.log("openEditLayer");
         }
     </script>
 
-    <form>
-        <div th:each="test : ${tests}">
+    <div th:each="test : ${tests}">
+        <form>
             <h1 th:text="${test.NAME}"></h1>
             <h5 th:text="${test.DESCRIPTION}"></h5>
             <input type="submit" name="clickIdx" th:value="${test.TEST_SEQ}" th:formmethod="POST" th:formaction="@{/editTest}">
-            <input type="submit" name="clickIdx" th:value="${test.TEST_SEQ}" th:formmethod="POST" th:formaction="@{/removeTest}">
-            <hr>
-        </div>
-    </form>
+        </form>
 
-    <form>
-        <input type="submit" name="addTest" th:value="추가" th:formmethod="POST" th:formaction="@{/createTest}">
-    </form>
+        <button th:value="${test.TEST_SEQ}" th:onclick="removeTest(this)">삭제</button>
+        <hr>
+    </div>
+
+    <button onclick="openEditLayer()">추가</button>
 </body>
 </html>

@@ -32,10 +32,4 @@ public class TestListController {
         System.out.println("removeTest : " + clickIdx);
         return showList(model);
     }
-
-    @GetMapping("/createTest")
-    public String createTest(Model model){
-        System.out.println("showCreate");
-        return "testedit/testEdit";
-    }
 }

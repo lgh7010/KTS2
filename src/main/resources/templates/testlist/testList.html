@@ -6,21 +6,27 @@
     function openEditLayer(button){
         console.log("openEditLayer : " + button.value);
         $.ajax({
-            url : "/editTest",
+            url : "/testcaseList",
             type : "POST",
             data : {
                 TEST_SEQ: button.value
             },
-            success : function(data){
+            success : function(list_of_testcase){
                 console.log("ajax success");
+                console.log(list_of_testcase);
+                $("#testEditLayer").show();
             },
-            error : function(data){
+            error : function(err){
                 console.log("ajax error");
             }
         });
     }
+    function closeEditLayer(){
+        $("#testEditLayer").hide();
+    }
 </script>
 
+<!--html-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -31,14 +37,33 @@
     <div th:each="test : ${tests}">
         <h1 th:text="${test.NAME}"></h1>
         <h5 th:text="${test.DESCRIPTION}"></h5>
-<!--        <form>-->
-<!--            <input type="submit" name="clickIdx" th:value="${test.TEST_SEQ}" th:formmethod="POST" th:formaction="@{/editTest}">-->
-<!--        </form>-->
         <button th:value="${test.TEST_SEQ}" onclick="openEditLayer(this)">편집</button>
         <button th:value="${test.TEST_SEQ}" onclick="removeTest(this)">삭제</button>
         <hr>
     </div>
 
-    <button onclick="openEditLayer(this)">추가</button>
+    <button onclick="openEditLayer(this)">테스트 추가</button>
 </body>
 </html>
+
+<!--layers-->
+<div id="testEditLayer" class="testEditLayer" style="display: none">
+    <div>
+        testEditLayer
+    </div>
+    <hr>
+    <button onclick="closeEditLayer()">닫기</button>
+</div>
+<style>
+    .testEditLayer {
+        width: 100%;
+        height: 100%;
+        position: fixed;
+        left: 0%;
+        top: 0%;
+        border:2px solid #ccc;
+        overflow:auto;
+        background-color:white;
+        border-radius: 5px;
+    }
+</style>

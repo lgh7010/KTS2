@@ -17,6 +17,6 @@ public class TestListServiceImpl implements TestListService {
 
     @Override
     public List<KTS_TEST> findAll() {
-        return this.testInfoRepo.findAll();
+        return this.testInfoRepo.findAllTest();
     }
 }

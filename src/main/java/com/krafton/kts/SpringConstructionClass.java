@@ -21,7 +21,7 @@ public class SpringConstructionClass {
 
     @Bean
     public TestInfoRepo testInfoRepo(){
-        //return new TestInfoRepo_jpa();
+        //return new TestInfoRepo_jpa();//일단 jdbc 사용
         return new TestInfoRepo_jdbc(dataSource);
     }
 

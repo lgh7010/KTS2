@@ -1,6 +1,7 @@
 package com.krafton.kts.module_repository.testinfo;
 
 import com.krafton.kts.module_repository.JdbcCommon;
+import com.krafton.kts.module_testcaselist.domain.KTS_TESTCASE;
 import com.krafton.kts.module_testlist.domain.KTS_TEST;
 import org.springframework.jdbc.datasource.DataSourceUtils;
 
@@ -17,22 +18,22 @@ public class TestInfoRepo_jdbc extends JdbcCommon implements TestInfoRepo {
     }
 
     @Override
-    public KTS_TEST create(KTS_TEST test) {
+    public KTS_TEST saveTest(KTS_TEST test) {
         return null;
     }
 
     @Override
-    public Optional<KTS_TEST> findById(int id) {
+    public Optional<KTS_TEST> findTestByTEST_SEQ(int TEST_SEQ) {
         return Optional.empty();
     }
 
     @Override
-    public Optional<KTS_TEST> findByName(String name) {
+    public Optional<KTS_TEST> findTestByNAME(String NAME) {
         return Optional.empty();
     }
 
     @Override
-    public List<KTS_TEST> findAll() {
+    public List<KTS_TEST> findAllTest() {
         String sql = "select * from KTS_TEST";
 
         Connection conn = null;
@@ -60,5 +61,25 @@ public class TestInfoRepo_jdbc extends JdbcCommon implements TestInfoRepo {
         } finally {
             close(conn, pstmt, rs);
         }
+    }
+
+    @Override
+    public KTS_TESTCASE saveTestcase(KTS_TESTCASE testcase) {
+        return null;
+    }
+
+    @Override
+    public Optional<KTS_TESTCASE> findTestcaseByTESTCASE_SEQ(int TESTCASE_SEQ) {
+        return Optional.empty();
+    }
+
+    @Override
+    public Optional<KTS_TESTCASE> findTestcaseByNAME(String NAME) {
+        return Optional.empty();
+    }
+
+    @Override
+    public List<KTS_TESTCASE> findAllTestcase() {
+        return null;
     }
 }

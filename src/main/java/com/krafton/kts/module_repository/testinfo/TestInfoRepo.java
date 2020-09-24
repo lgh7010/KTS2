@@ -1,5 +1,6 @@
 package com.krafton.kts.module_repository.testinfo;
 
+import com.krafton.kts.module_repository.testinfo.domain.TEST_REL_TESTCASE;
 import com.krafton.kts.module_testcaselist.domain.KTS_TESTCASE;
 import com.krafton.kts.module_testlist.domain.KTS_TEST;
 import org.springframework.stereotype.Repository;
@@ -21,6 +22,9 @@ public interface TestInfoRepo {
     KTS_TESTCASE saveTestcase(KTS_TESTCASE testcase);
     Optional<KTS_TESTCASE> findTestcaseByTESTCASE_SEQ(int TESTCASE_SEQ);
     Optional<KTS_TESTCASE> findTestcaseByNAME(String NAME);
-    List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int TEST_SEQ);
     List<KTS_TESTCASE> findAllTestcase();
+
+    //TEST_REL_TESTCASE
+    List<TEST_REL_TESTCASE> findTestRelTestcaseByTEST_SEQ(int TEST_SEQ);
+    List<TEST_REL_TESTCASE> findTestRelTestcaseByTESTCASE_SEQ(int TESTCASE_SEQ);
 }

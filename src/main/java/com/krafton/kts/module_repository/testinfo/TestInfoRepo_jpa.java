@@ -1,5 +1,6 @@
 package com.krafton.kts.module_repository.testinfo;
 
+import com.krafton.kts.module_repository.testinfo.domain.TEST_REL_TESTCASE;
 import com.krafton.kts.module_testcaselist.domain.KTS_TESTCASE;
 import com.krafton.kts.module_testlist.domain.KTS_TEST;
 
@@ -48,12 +49,17 @@ public class TestInfoRepo_jpa implements TestInfoRepo {
     }
 
     @Override
-    public List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int TEST_SEQ) {
+    public List<KTS_TESTCASE> findAllTestcase() {
         return null;
     }
 
     @Override
-    public List<KTS_TESTCASE> findAllTestcase() {
+    public List<TEST_REL_TESTCASE> findTestRelTestcaseByTEST_SEQ(int TEST_SEQ) {
+        return null;
+    }
+
+    @Override
+    public List<TEST_REL_TESTCASE> findTestRelTestcaseByTESTCASE_SEQ(int TESTCASE_SEQ) {
         return null;
     }
 }

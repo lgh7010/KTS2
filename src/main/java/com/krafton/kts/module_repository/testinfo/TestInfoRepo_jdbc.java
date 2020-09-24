@@ -1,6 +1,7 @@
 package com.krafton.kts.module_repository.testinfo;
 
 import com.krafton.kts.module_repository.JdbcCommon;
+import com.krafton.kts.module_repository.testinfo.domain.TEST_REL_TESTCASE;
 import com.krafton.kts.module_testcaselist.domain.KTS_TESTCASE;
 import com.krafton.kts.module_testlist.domain.KTS_TEST;
 import org.springframework.jdbc.datasource.DataSourceUtils;
@@ -66,15 +67,13 @@ public class TestInfoRepo_jdbc extends JdbcCommon implements TestInfoRepo {
 
     @Override
     public List<KTS_TEST> findAllTest() {
-        String sql = "select * from KTS_TEST where deleted = 'N'";
-
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement(sql);
+            pstmt = conn.prepareStatement("select * from KTS_TEST where deleted = 'N'");
             rs = pstmt.executeQuery();
 
             List<KTS_TEST> tests = new ArrayList<>();
@@ -102,6 +101,7 @@ public class TestInfoRepo_jdbc extends JdbcCommon implements TestInfoRepo {
 
     @Override
     public Optional<KTS_TESTCASE> findTestcaseByTESTCASE_SEQ(int TESTCASE_SEQ) {
+        //이거 구현하면 됨
         return Optional.empty();
     }
 
@@ -111,30 +111,34 @@ public class TestInfoRepo_jdbc extends JdbcCommon implements TestInfoRepo {
     }
 
     @Override
-    public List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int TEST_SEQ) {
-        String sql = "select * from KTS_TESTCASE where TESTCASE_SEQ in (" +
-                "select TESTCASE_SEQ from TEST_REL_TESTCASE where TEST_SEQ = ? order by 'ORDER'" +
-                ") and DELETED = 'N'";
+    public List<KTS_TESTCASE> findAllTestcase() {
+        return null;
+    }
 
+    @Override
+    public List<TEST_REL_TESTCASE> findTestRelTestcaseByTEST_SEQ(int TEST_SEQ) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement(sql);
+            pstmt = conn.prepareStatement("select * from TEST_REL_TESTCASE where TEST_SEQ = ? and deleted = 'N'");
             pstmt.setInt(1, TEST_SEQ);
             rs = pstmt.executeQuery();
 
-            List<KTS_TESTCASE> testcases = new ArrayList<>();
+            List<TEST_REL_TESTCASE> rels = new ArrayList<>();
             while(rs.next()){
-                KTS_TESTCASE testcase = new KTS_TESTCASE();
-                testcase.setTESTCASE_SEQ(rs.getInt("TESTCASE_SEQ"));
-                testcase.setNAME(rs.getString("NAME"));
-                testcase.setDESCRIPTION(rs.getString("DESCRIPTION"));
-                testcases.add(testcase);
+                TEST_REL_TESTCASE rel = new TEST_REL_TESTCASE();
+                rel.setRELATION_SEQ(rs.getInt("RELATION_SEQ"));
+                rel.setTEST_SEQ(rs.getInt("TEST_SEQ"));
+                rel.setLIST_INDEX(rs.getInt("LIST_INDEX"));
+                rel.setTESTCASE_SEQ(rs.getInt("TESTCASE_SEQ"));
+
+                rels.add(rel);
             }
-            return testcases;
+
+            return rels;
         } catch (Exception e){
             throw new IllegalStateException(e);
         } finally {
@@ -143,7 +147,7 @@ public class TestInfoRepo_jdbc extends JdbcCommon implements TestInfoRepo {
     }
 
     @Override
-    public List<KTS_TESTCASE> findAllTestcase() {
+    public List<TEST_REL_TESTCASE> findTestRelTestcaseByTESTCASE_SEQ(int TESTCASE_SEQ) {
         return null;
     }
 }

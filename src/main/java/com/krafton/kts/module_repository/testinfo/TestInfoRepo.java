@@ -12,6 +12,7 @@ public interface TestInfoRepo {
 
     //TEST
     KTS_TEST saveTest(KTS_TEST test);
+    void removeTest(int TEST_SEQ);
     Optional<KTS_TEST> findTestByTEST_SEQ(int TEST_SEQ);
     Optional<KTS_TEST> findTestByNAME(String NAME);
     List<KTS_TEST> findAllTest();

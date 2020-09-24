@@ -2,6 +2,19 @@
 <script>
     function removeTest(button){
         console.log("removeTest : " + button.value);
+        $.ajax({
+            url : "/removeTest",
+            type : "POST",
+            data : {
+                TEST_SEQ: button.value
+            },
+            success : function(successMsg){
+                console.log(successMsg);
+            },
+            error : function(errMsg){
+                console.error(errMsg);
+            }
+        })
     }
     function openEditLayer(button){
         console.log("openEditLayer : " + button.value);
@@ -13,8 +26,6 @@
             },
             success : function(list_of_testcase){
                 console.log(list_of_testcase);
-                console.log(list_of_testcase[0].testcase_SEQ);
-                console.log(list_of_testcase[0].TESTCASE_SEQ);
                 $("#testEditLayer").show();
             },
             error : function(err){

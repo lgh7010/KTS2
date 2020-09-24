@@ -23,6 +23,25 @@ public class TestInfoRepo_jdbc extends JdbcCommon implements TestInfoRepo {
     }
 
     @Override
+    public void removeTest(int TEST_SEQ) {
+        String sql = "update KTS_TEST set DELETED = 'Y' where TEST_SEQ = ?";
+
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement(sql);
+            pstmt.setInt(1, TEST_SEQ);
+            pstmt.executeUpdate();
+        } catch (Exception e){
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt);
+        }
+    }
+
+    @Override
     public Optional<KTS_TEST> findTestByTEST_SEQ(int TEST_SEQ) {
         return Optional.empty();
     }
@@ -34,7 +53,7 @@ public class TestInfoRepo_jdbc extends JdbcCommon implements TestInfoRepo {
 
     @Override
     public List<KTS_TEST> findAllTest() {
-        String sql = "select * from KTS_TEST";
+        String sql = "select * from KTS_TEST where deleted = 'N'";
 
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -82,7 +101,7 @@ public class TestInfoRepo_jdbc extends JdbcCommon implements TestInfoRepo {
     public List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int TEST_SEQ) {
         String sql = "select * from KTS_TESTCASE where TESTCASE_SEQ in (" +
                 "select TESTCASE_SEQ from TEST_REL_TESTCASE where TEST_SEQ = ? order by 'ORDER'" +
-                ")";
+                ") and DELETED = 'N'";
 
         Connection conn = null;
         PreparedStatement pstmt = null;

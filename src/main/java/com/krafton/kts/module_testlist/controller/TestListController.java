@@ -8,6 +8,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -28,8 +29,14 @@ public class TestListController {
     }
 
     @PostMapping("/removeTest")
-    public String removeTest(String clickIdx, Model model){
-        System.out.println("removeTest : " + clickIdx);
-        return showList(model);
+    @ResponseBody
+    public String removeTest(String TEST_SEQ, Model model){
+        try {
+            this.testListService.removeTest(Integer.parseInt(TEST_SEQ));
+            return "removeTest Success";
+        } catch(Exception e){
+            System.out.println(e);
+            return e.getMessage();
+        }
     }
 }

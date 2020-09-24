@@ -19,4 +19,9 @@ public class TestListServiceImpl implements TestListService {
     public List<KTS_TEST> findAll() {
         return this.testInfoRepo.findAllTest();
     }
+
+    @Override
+    public void removeTest(int TEST_SEQ) {
+        this.testInfoRepo.removeTest(TEST_SEQ);
+    }
 }

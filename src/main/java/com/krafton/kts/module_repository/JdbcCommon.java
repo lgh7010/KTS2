@@ -19,15 +19,7 @@ public abstract class JdbcCommon {
     protected Connection getConnection() {
         return DataSourceUtils.getConnection(dataSource);
     }
-    protected void close(Connection conn, PreparedStatement pstmt, ResultSet rs) {
-        try {
-            if (rs != null) {
-                rs.close();
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+    protected void close(Connection conn, PreparedStatement pstmt){
         try {
             if (pstmt != null) {
                 pstmt.close();
@@ -43,6 +35,16 @@ public abstract class JdbcCommon {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+    protected void close(Connection conn, PreparedStatement pstmt, ResultSet rs) {
+        try {
+            if (rs != null) {
+                rs.close();
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        close(conn, pstmt);
     }
     protected void close(Connection conn) throws SQLException {
         DataSourceUtils.releaseConnection(conn, dataSource);

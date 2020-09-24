@@ -13,6 +13,11 @@ public class TestInfoRepo_jpa implements TestInfoRepo {
     }
 
     @Override
+    public void removeTest(int TEST_SEQ) {
+
+    }
+
+    @Override
     public Optional<KTS_TEST> findTestByTEST_SEQ(int TEST_SEQ) {
         return Optional.empty();
     }

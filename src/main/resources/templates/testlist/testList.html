@@ -1,4 +1,7 @@
-<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+
+<!--테스트 리스트 페이지-->
 <script>
     function removeTest(button){
         console.log("removeTest : " + button.value);
@@ -27,6 +30,7 @@
             success : function(list_of_testcase){
                 console.log(list_of_testcase);
                 $("#testEditLayer").show();
+                setTestcaseListVue(list_of_testcase);
             },
             error : function(err){
                 console.error(err);
@@ -35,6 +39,41 @@
     }
     function closeEditLayer(){
         $("#testEditLayer").hide();
+    }
+
+    var testcaseListVue = null
+    function setTestcaseListVue(list){
+        $("#testcaseList").show();
+        if(testcaseListVue == null){
+            testcaseListVue = new Vue({
+                el : "#testcaseList",
+                data : {
+                    list : list,
+                }
+            })
+        } else {
+            testcaseListVue.list = list;
+        }
+    }
+</script>
+
+<!--테스트케이스 리스트 레이어-->
+<script>
+    function moveUpTestcase(button){
+        var TESTCASE_SEQ = $(button).attr("TESTCASE_SEQ");
+        console.log(TESTCASE_SEQ);
+    }
+    function moveDownTestcase(button){
+        var TESTCASE_SEQ = $(button).attr("TESTCASE_SEQ");
+        console.log(TESTCASE_SEQ);
+    }
+    function editTestcase(button){
+        var TESTCASE_SEQ = $(button).attr("TESTCASE_SEQ");
+        console.log(TESTCASE_SEQ);
+    }
+    function removeTestcaseFromTest(button){
+        var TESTCASE_SEQ = $(button).attr("TESTCASE_SEQ");
+        console.log(TESTCASE_SEQ);
     }
 </script>
 
@@ -61,9 +100,24 @@
 <!--layers-->
 <div id="testEditLayer" class="testEditLayer" style="display: none">
     <div>
-        testEditLayer
+        <table>
+            <tbody id="testcaseList" style="display: none">
+            <tr v-for="tc in list">
+                <td>{{tc.name}}</td>
+                <td>{{tc.description}}</td>
+                <td>
+                    <button v-bind:TESTCASE_SEQ="tc.testcase_SEQ" onclick="moveUpTestcase(this)">위로</button>
+                    <button v-bind:TESTCASE_SEQ="tc.testcase_SEQ" onclick="moveDownTestcase(this)">아래로</button>
+                    <button v-bind:TESTCASE_SEQ="tc.testcase_SEQ" onclick="editTestcase(this)">편집</button>
+                    <button v-bind:TESTCASE_SEQ="tc.testcase_SEQ" onclick="removeTestcaseFromTest(this)">제거</button>
+                </td>
+            </tr>
+
+            </tbody>
+        </table>
     </div>
     <hr>
+    <button>추가</button>
     <button onclick="closeEditLayer()">닫기</button>
 </div>
 <style>

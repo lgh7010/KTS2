@@ -27,10 +27,21 @@
             data : {
                 TEST_SEQ: button.value
             },
-            success : function(list_of_test_rel_testcase){
-                console.log(list_of_test_rel_testcase);
-                $("#testEditLayer").show();
-                setTestcaseListVue(list_of_test_rel_testcase);
+            success : function(testRelTestcaseList){
+                console.log(testRelTestcaseList);
+
+                $.ajax({
+                    url : "/testcaseDic",
+                    type : "POST",
+                    data : {
+                        TEST_SEQ: button.value
+                    }, success : function(testcaseDic){
+                        $("#testEditLayer").show();
+                        setTestcaseListVue(testRelTestcaseList, testcaseDic);
+                    }, error : function(err){
+                        console.error(err);
+                    }
+                })
             },
             error : function(err){
                 console.error(err);
@@ -39,16 +50,29 @@
     }
     function closeEditLayer(){
         $("#testEditLayer").hide();
+        location.reload();
     }
 
     var testcaseListVue = null
-    function setTestcaseListVue(list){
+    function setTestcaseListVue(testRelTestcaseList, testcaseDic){
         $("#testRelTestcaseList").show();
+        var list = [];
+        for(var i = 0; i < testRelTestcaseList.length; i++){
+            list.push({
+                RELATION_SEQ: testRelTestcaseList[i].relation_SEQ,
+                TEST_SEQ : testRelTestcaseList[i].test_SEQ,
+                LIST_INDEX : testRelTestcaseList[i].list_INDEX,
+                TESTCASE_SEQ : testRelTestcaseList[i].testcase_SEQ,
+                NAME : testcaseDic[testRelTestcaseList[i].testcase_SEQ].name,
+                NAME : testcaseDic[testRelTestcaseList[i].testcase_SEQ].description
+            })
+        }
+
         if(testcaseListVue == null){
             testcaseListVue = new Vue({
                 el : "#testRelTestcaseList",
                 data : {
-                    list : list,
+                    testRelTestcaseList_with_name_and_desc : list
                 }
             })
         } else {
@@ -102,15 +126,15 @@
     <div>
         <table>
             <tbody id="testRelTestcaseList" style="display: none">
-            <tr v-for="rel in list">
-                <td>{{rel.relation_SEQ}}</td>
-                <td>{{rel.list_INDEX}}</td>
-                <td>{{rel.testcase_SEQ}}</td>
+            <tr v-for="rel in testRelTestcaseList_with_name_and_desc">
+                <td>{{rel.LIST_INDEX}}</td>
+                <td>{{rel.NAME}}</td>
+                <td>{{rel.DESCRIPTION}}</td>
                 <td>
-                    <button v-bind:TESTCASE_SEQ="rel.testcase_SEQ" onclick="moveUpTestcase(this)">위로</button>
-                    <button v-bind:TESTCASE_SEQ="rel.testcase_SEQ" onclick="moveDownTestcase(this)">아래로</button>
-                    <button v-bind:TESTCASE_SEQ="rel.testcase_SEQ" onclick="editTestcase(this)">편집</button>
-                    <button v-bind:TESTCASE_SEQ="rel.testcase_SEQ" onclick="removeTestcaseFromTest(this)">제거</button>
+                    <button v-bind:TESTCASE_SEQ="rel.TESTCASE_SEQ" v-bind:RELATION_SEQ="rel.RELATION_SEQ" onclick="moveUpTestcase(this)">위로</button>
+                    <button v-bind:TESTCASE_SEQ="rel.TESTCASE_SEQ" v-bind:RELATION_SEQ="rel.RELATION_SEQ"  onclick="moveDownTestcase(this)">아래로</button>
+                    <button v-bind:TESTCASE_SEQ="rel.TESTCASE_SEQ" v-bind:RELATION_SEQ="rel.RELATION_SEQ"  onclick="editTestcase(this)">편집</button>
+                    <button v-bind:TESTCASE_SEQ="rel.TESTCASE_SEQ" v-bind:RELATION_SEQ="rel.RELATION_SEQ"  onclick="removeTestcaseFromTest(this)">제거</button>
                 </td>
             </tr>
 

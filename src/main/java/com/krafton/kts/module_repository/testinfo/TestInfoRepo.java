@@ -27,4 +27,5 @@ public interface TestInfoRepo {
     //TEST_REL_TESTCASE
     List<TEST_REL_TESTCASE> findTestRelTestcaseByTEST_SEQ(int TEST_SEQ);
     List<TEST_REL_TESTCASE> findTestRelTestcaseByTESTCASE_SEQ(int TESTCASE_SEQ);
+    List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int TEST_SEQ);
 }

@@ -9,6 +9,6 @@ import java.util.List;
 @Service
 public interface TestcaseListService {
 
-    List<KTS_TESTCASE> findTestcaseByTEST_SEQ(int TEST_SEQ);
+    List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int TEST_SEQ);
     List<TEST_REL_TESTCASE> findTestRelTestcaseByTEST_SEQ(int TEST_SEQ);
 }

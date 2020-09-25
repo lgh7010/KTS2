@@ -174,4 +174,35 @@ public class TestInfoRepo_jdbc extends JdbcCommon implements TestInfoRepo {
     public List<TEST_REL_TESTCASE> findTestRelTestcaseByTESTCASE_SEQ(int TESTCASE_SEQ) {
         return null;
     }
+
+    @Override
+    public List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int TEST_SEQ) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement("SELECT * FROM KTS_TESTCASE WHERE TESTCASE_SEQ IN (" +
+                    "SELECT TESTCASE_SEQ FROM TEST_REL_TESTCASE WHERE TEST_SEQ = ?" +
+                    ")");
+            pstmt.setInt(1, TEST_SEQ);
+            rs = pstmt.executeQuery();
+
+            List<KTS_TESTCASE> list = new ArrayList<>();
+            while(rs.next()){
+                KTS_TESTCASE tc = new KTS_TESTCASE();
+                tc.setTESTCASE_SEQ(rs.getInt("TESTCASE_SEQ"));
+                tc.setNAME(rs.getString("NAME"));
+                tc.setDESCRIPTION(rs.getString("DESCRIPTION"));
+
+                list.add(tc);
+            }
+            return list;
+        } catch (Exception e){
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt, rs);
+        }
+    }
 }

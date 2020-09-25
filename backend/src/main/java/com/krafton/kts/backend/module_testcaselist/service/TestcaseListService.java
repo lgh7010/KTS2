@@ -1,7 +1,7 @@
-package com.krafton.kts.module_testcaselist.service;
+package com.krafton.kts.backend.module_testcaselist.service;
 
-import com.krafton.kts.module_repository.testinfo.domain.TEST_REL_TESTCASE;
-import com.krafton.kts.module_testcaselist.domain.KTS_TESTCASE;
+import com.krafton.kts.backend.module_repository.testinfo.domain.TEST_REL_TESTCASE;
+import com.krafton.kts.backend.module_testcaselist.domain.KTS_TESTCASE;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

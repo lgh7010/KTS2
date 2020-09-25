@@ -1,9 +1,8 @@
-package com.krafton.kts.module_testcaselist.controller;
+package com.krafton.kts.backend.module_testcaselist.controller;
 
-import com.krafton.kts.module_repository.testinfo.domain.TEST_REL_TESTCASE;
-import com.krafton.kts.module_testcaselist.domain.KTS_TESTCASE;
-import com.krafton.kts.module_testcaselist.service.TestcaseListService;
-import com.krafton.kts.module_testlist.domain.KTS_TEST;
+import com.krafton.kts.backend.module_repository.testinfo.domain.TEST_REL_TESTCASE;
+import com.krafton.kts.backend.module_testcaselist.domain.KTS_TESTCASE;
+import com.krafton.kts.backend.module_testcaselist.service.TestcaseListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

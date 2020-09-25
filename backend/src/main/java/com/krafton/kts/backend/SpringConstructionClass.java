@@ -1,18 +1,15 @@
-package com.krafton.kts;
+package com.krafton.kts.backend;
 
-import com.krafton.kts.module_repository.testinfo.TestInfoRepo;
-import com.krafton.kts.module_repository.testinfo.TestInfoRepo_jdbc;
-import com.krafton.kts.module_repository.testinfo.TestInfoRepo_jpa;
-import com.krafton.kts.module_testcaselist.domain.KTS_TESTCASE;
-import com.krafton.kts.module_testcaselist.service.TestcaseListService;
-import com.krafton.kts.module_testcaselist.service.TestcaseListServiceImpl;
-import com.krafton.kts.module_testlist.service.TestListService;
-import com.krafton.kts.module_testlist.service.TestListServiceImpl;
+import com.krafton.kts.backend.module_repository.testinfo.TestInfoRepo;
+import com.krafton.kts.backend.module_repository.testinfo.TestInfoRepo_jdbc;
+import com.krafton.kts.backend.module_testcaselist.service.TestcaseListService;
+import com.krafton.kts.backend.module_testcaselist.service.TestcaseListServiceImpl;
+import com.krafton.kts.backend.module_testlist.service.TestListService;
+import com.krafton.kts.backend.module_testlist.service.TestListServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import javax.sql.DataSource;
-import java.util.List;
 
 @Configuration
 public class SpringConstructionClass {

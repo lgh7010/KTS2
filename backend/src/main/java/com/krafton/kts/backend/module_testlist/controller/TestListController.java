@@ -1,16 +1,12 @@
-package com.krafton.kts.module_testlist.controller;
+package com.krafton.kts.backend.module_testlist.controller;
 
-import com.krafton.kts.module_repository.testinfo.TestInfoRepo;
-import com.krafton.kts.module_testlist.domain.KTS_TEST;
-import com.krafton.kts.module_testlist.service.TestListService;
+import com.krafton.kts.backend.module_testlist.service.TestListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-
-import java.util.List;
 
 @Controller
 public class TestListController {

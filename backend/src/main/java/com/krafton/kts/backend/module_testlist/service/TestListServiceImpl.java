@@ -1,7 +1,7 @@
-package com.krafton.kts.module_testlist.service;
+package com.krafton.kts.backend.module_testlist.service;
 
-import com.krafton.kts.module_repository.testinfo.TestInfoRepo;
-import com.krafton.kts.module_testlist.domain.KTS_TEST;
+import com.krafton.kts.backend.module_repository.testinfo.TestInfoRepo;
+import com.krafton.kts.backend.module_testlist.domain.KTS_TEST;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

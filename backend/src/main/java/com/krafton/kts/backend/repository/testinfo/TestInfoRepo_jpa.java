@@ -1,8 +1,8 @@
-package com.krafton.kts.backend.module_repository.testinfo;
+package com.krafton.kts.backend.repository.testinfo;
 
-import com.krafton.kts.backend.module_repository.testinfo.domain.TEST_REL_TESTCASE;
-import com.krafton.kts.backend.module_testcaselist.domain.KTS_TESTCASE;
-import com.krafton.kts.backend.module_testlist.domain.KTS_TEST;
+import com.krafton.kts.backend.repository.testinfo.domain.TEST_REL_TESTCASE;
+import com.krafton.kts.backend.testcaselist.domain.KTS_TESTCASE;
+import com.krafton.kts.backend.testlist.domain.KTS_TEST;
 
 import java.util.List;
 import java.util.Optional;

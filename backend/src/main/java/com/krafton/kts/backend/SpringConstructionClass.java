@@ -1,11 +1,11 @@
 package com.krafton.kts.backend;
 
-import com.krafton.kts.backend.module_repository.testinfo.TestInfoRepo;
-import com.krafton.kts.backend.module_repository.testinfo.TestInfoRepo_jdbc;
-import com.krafton.kts.backend.module_testcaselist.service.TestcaseListService;
-import com.krafton.kts.backend.module_testcaselist.service.TestcaseListServiceImpl;
-import com.krafton.kts.backend.module_testlist.service.TestListService;
-import com.krafton.kts.backend.module_testlist.service.TestListServiceImpl;
+import com.krafton.kts.backend.repository.testinfo.TestInfoRepo;
+import com.krafton.kts.backend.repository.testinfo.TestInfoRepo_jdbc;
+import com.krafton.kts.backend.testcaselist.service.TestcaseListService;
+import com.krafton.kts.backend.testcaselist.service.TestcaseListServiceImpl;
+import com.krafton.kts.backend.testlist.service.TestListService;
+import com.krafton.kts.backend.testlist.service.TestListServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 

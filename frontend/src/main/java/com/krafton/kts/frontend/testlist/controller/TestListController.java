@@ -1,6 +1,6 @@
-package com.krafton.kts.backend.module_testlist.controller;
+package com.krafton.kts.frontend.testlist.controller;
 
-import com.krafton.kts.backend.module_testlist.service.TestListService;
+import com.krafton.kts.backend.testlist.service.TestListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +20,7 @@ public class TestListController {
 
     @GetMapping("/")
     public String showList(Model model){
+        System.out.println("ttttttttt");
         model.addAttribute("tests", this.testListService.findAll());
         return "testlist/testList";
     }

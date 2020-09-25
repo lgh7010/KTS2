@@ -29,6 +29,7 @@ dependencies {
 	}
 
 	compile project(':backend')
+	compile project(':frontend')
 }
 
 test {

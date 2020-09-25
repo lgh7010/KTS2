@@ -1,4 +1,4 @@
-package com.krafton.kts.backend.module_repository.testinfo.domain;
+package com.krafton.kts.backend.repository.testinfo.domain;
 
 import lombok.Data;
 

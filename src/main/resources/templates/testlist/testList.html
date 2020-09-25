@@ -28,8 +28,6 @@
                 TEST_SEQ: button.value
             },
             success : function(testRelTestcaseList){
-                console.log(testRelTestcaseList);
-
                 $.ajax({
                     url : "/testcaseDic",
                     type : "POST",
@@ -63,7 +61,7 @@
                 LIST_INDEX : testRelTestcaseList[i].list_INDEX,
                 TESTCASE_SEQ : testRelTestcaseList[i].testcase_SEQ,
                 NAME : testcaseDic[testRelTestcaseList[i].testcase_SEQ].name,
-                NAME : testcaseDic[testRelTestcaseList[i].testcase_SEQ].description
+                DESCRIPTION : testcaseDic[testRelTestcaseList[i].testcase_SEQ].description
             })
         }
 
@@ -83,20 +81,20 @@
 <!--테스트케이스 리스트 레이어-->
 <script>
     function moveUpTestcase(button){
-        var TESTCASE_SEQ = $(button).attr("TESTCASE_SEQ");
-        console.log(TESTCASE_SEQ);
+        var RELATION_SEQ = $(button).attr("RELATION_SEQ");
+        console.log(RELATION_SEQ);
     }
     function moveDownTestcase(button){
-        var TESTCASE_SEQ = $(button).attr("TESTCASE_SEQ");
-        console.log(TESTCASE_SEQ);
+        var RELATION_SEQ = $(button).attr("RELATION_SEQ");
+        console.log(RELATION_SEQ);
     }
     function editTestcase(button){
-        var TESTCASE_SEQ = $(button).attr("TESTCASE_SEQ");
-        console.log(TESTCASE_SEQ);
+        var RELATION_SEQ = $(button).attr("RELATION_SEQ");
+        console.log(RELATION_SEQ);
     }
     function removeTestcaseFromTest(button){
-        var TESTCASE_SEQ = $(button).attr("TESTCASE_SEQ");
-        console.log(TESTCASE_SEQ);
+        var RELATION_SEQ = $(button).attr("RELATION_SEQ");
+        console.log(RELATION_SEQ);
     }
 </script>
 
@@ -124,16 +122,24 @@
 <div id="testEditLayer" class="testEditLayer" style="display: none">
     <div>
         <table>
+            <thead>
+                <tr>
+                    <th>순서</th>
+                    <th>테스트케이스 이름</th>
+                    <th>설명</th>
+                    <th>상호작용</th>
+                </tr>
+            </thead>
             <tbody id="testRelTestcaseList" style="display: none">
             <tr v-for="rel in testRelTestcaseList_with_name_and_desc">
                 <td>{{rel.LIST_INDEX}}</td>
                 <td>{{rel.NAME}}</td>
                 <td>{{rel.DESCRIPTION}}</td>
                 <td>
-                    <button v-bind:TESTCASE_SEQ="rel.TESTCASE_SEQ" v-bind:RELATION_SEQ="rel.RELATION_SEQ" onclick="moveUpTestcase(this)">위로</button>
-                    <button v-bind:TESTCASE_SEQ="rel.TESTCASE_SEQ" v-bind:RELATION_SEQ="rel.RELATION_SEQ"  onclick="moveDownTestcase(this)">아래로</button>
-                    <button v-bind:TESTCASE_SEQ="rel.TESTCASE_SEQ" v-bind:RELATION_SEQ="rel.RELATION_SEQ"  onclick="editTestcase(this)">편집</button>
-                    <button v-bind:TESTCASE_SEQ="rel.TESTCASE_SEQ" v-bind:RELATION_SEQ="rel.RELATION_SEQ"  onclick="removeTestcaseFromTest(this)">제거</button>
+                    <button v-bind:TESTCASE_SEQ="rel.TESTCASE_SEQ" v-bind:RELATION_SEQ="rel.RELATION_SEQ" v-bind:LIST_INDEX="rel.LIST_INDEX" onclick="moveUpTestcase(this)">위로</button>
+                    <button v-bind:TESTCASE_SEQ="rel.TESTCASE_SEQ" v-bind:RELATION_SEQ="rel.RELATION_SEQ" v-bind:LIST_INDEX="rel.LIST_INDEX" onclick="moveDownTestcase(this)">아래로</button>
+                    <button v-bind:TESTCASE_SEQ="rel.TESTCASE_SEQ" v-bind:RELATION_SEQ="rel.RELATION_SEQ" v-bind:LIST_INDEX="rel.LIST_INDEX" onclick="editTestcase(this)">편집</button>
+                    <button v-bind:TESTCASE_SEQ="rel.TESTCASE_SEQ" v-bind:RELATION_SEQ="rel.RELATION_SEQ" v-bind:LIST_INDEX="rel.LIST_INDEX" onclick="removeTestcaseFromTest(this)">제거</button>
                 </td>
             </tr>
 

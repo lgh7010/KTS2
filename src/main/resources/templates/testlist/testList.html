@@ -50,7 +50,6 @@
     }
     function closeEditLayer(){
         $("#testEditLayer").hide();
-        location.reload();
     }
 
     var testcaseListVue = null
@@ -76,7 +75,7 @@
                 }
             })
         } else {
-            testcaseListVue.list = list;
+            testcaseListVue.testRelTestcaseList_with_name_and_desc = list;
         }
     }
 </script>

@@ -22,15 +22,15 @@
     function openEditLayer(button){
         console.log("openEditLayer : " + button.value);
         $.ajax({
-            url : "/testcaseList",
+            url : "/testRelTestcaseList",
             type : "POST",
             data : {
                 TEST_SEQ: button.value
             },
-            success : function(list_of_testcase){
-                console.log(list_of_testcase);
+            success : function(list_of_test_rel_testcase){
+                console.log(list_of_test_rel_testcase);
                 $("#testEditLayer").show();
-                setTestcaseListVue(list_of_testcase);
+                setTestcaseListVue(list_of_test_rel_testcase);
             },
             error : function(err){
                 console.error(err);
@@ -43,10 +43,10 @@
 
     var testcaseListVue = null
     function setTestcaseListVue(list){
-        $("#testcaseList").show();
+        $("#testRelTestcaseList").show();
         if(testcaseListVue == null){
             testcaseListVue = new Vue({
-                el : "#testcaseList",
+                el : "#testRelTestcaseList",
                 data : {
                     list : list,
                 }
@@ -101,15 +101,16 @@
 <div id="testEditLayer" class="testEditLayer" style="display: none">
     <div>
         <table>
-            <tbody id="testcaseList" style="display: none">
-            <tr v-for="tc in list">
-                <td>{{tc.name}}</td>
-                <td>{{tc.description}}</td>
+            <tbody id="testRelTestcaseList" style="display: none">
+            <tr v-for="rel in list">
+                <td>{{rel.relation_SEQ}}</td>
+                <td>{{rel.list_INDEX}}</td>
+                <td>{{rel.testcase_SEQ}}</td>
                 <td>
-                    <button v-bind:TESTCASE_SEQ="tc.testcase_SEQ" onclick="moveUpTestcase(this)">위로</button>
-                    <button v-bind:TESTCASE_SEQ="tc.testcase_SEQ" onclick="moveDownTestcase(this)">아래로</button>
-                    <button v-bind:TESTCASE_SEQ="tc.testcase_SEQ" onclick="editTestcase(this)">편집</button>
-                    <button v-bind:TESTCASE_SEQ="tc.testcase_SEQ" onclick="removeTestcaseFromTest(this)">제거</button>
+                    <button v-bind:TESTCASE_SEQ="rel.testcase_SEQ" onclick="moveUpTestcase(this)">위로</button>
+                    <button v-bind:TESTCASE_SEQ="rel.testcase_SEQ" onclick="moveDownTestcase(this)">아래로</button>
+                    <button v-bind:TESTCASE_SEQ="rel.testcase_SEQ" onclick="editTestcase(this)">편집</button>
+                    <button v-bind:TESTCASE_SEQ="rel.testcase_SEQ" onclick="removeTestcaseFromTest(this)">제거</button>
                 </td>
             </tr>
 

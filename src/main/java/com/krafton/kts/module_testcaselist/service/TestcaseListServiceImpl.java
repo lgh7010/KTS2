@@ -29,4 +29,9 @@ public class TestcaseListServiceImpl implements TestcaseListService{
         }
         return ret;
     }
+
+    @Override
+    public List<TEST_REL_TESTCASE> findTestRelTestcaseByTEST_SEQ(int TEST_SEQ) {
+        return this.testInfoRepo.findTestRelTestcaseByTEST_SEQ(TEST_SEQ);
+    }
 }

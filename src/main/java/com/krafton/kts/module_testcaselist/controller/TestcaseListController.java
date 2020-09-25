@@ -1,5 +1,6 @@
 package com.krafton.kts.module_testcaselist.controller;
 
+import com.krafton.kts.module_repository.testinfo.domain.TEST_REL_TESTCASE;
 import com.krafton.kts.module_testcaselist.domain.KTS_TESTCASE;
 import com.krafton.kts.module_testcaselist.service.TestcaseListService;
 import com.krafton.kts.module_testlist.domain.KTS_TEST;
@@ -27,6 +28,17 @@ public class TestcaseListController {
     public List<KTS_TESTCASE> testcaseList(String TEST_SEQ){
         try {
             return this.testcaseListService.findTestcaseByTEST_SEQ(Integer.parseInt(TEST_SEQ));
+        } catch(Exception e){
+            System.out.println(e);
+            return null;
+        }
+    }
+
+    @PostMapping("/testRelTestcaseList")
+    @ResponseBody
+    public List<TEST_REL_TESTCASE> testRelTestcaseList(String TEST_SEQ){
+        try {
+            return this.testcaseListService.findTestRelTestcaseByTEST_SEQ(Integer.parseInt(TEST_SEQ));
         } catch(Exception e){
             System.out.println(e);
             return null;

@@ -73,7 +73,7 @@ public class TestInfoRepo_jdbc extends JdbcCommon implements TestInfoRepo {
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement("select * from KTS_TEST where deleted = 'N'");
+            pstmt = conn.prepareStatement("select * from KTS_TEST where DELETED = 'N'");
             rs = pstmt.executeQuery();
 
             List<KTS_TEST> tests = new ArrayList<>();
@@ -101,7 +101,31 @@ public class TestInfoRepo_jdbc extends JdbcCommon implements TestInfoRepo {
 
     @Override
     public Optional<KTS_TESTCASE> findTestcaseByTESTCASE_SEQ(int TESTCASE_SEQ) {
-        //이거 구현하면 됨
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement("select * from KTS_TESTCASE where TESTCASE_SEQ = ? and DELETED = 'N'");
+            pstmt.setInt(1, TESTCASE_SEQ);
+            rs = pstmt.executeQuery();
+
+            if(rs.next()){
+                KTS_TESTCASE tc = new KTS_TESTCASE();
+                tc.setTESTCASE_SEQ(rs.getInt("TESTCASE_SEQ"));
+                tc.setNAME(rs.getString("NAME"));
+                tc.setDESCRIPTION(rs.getString("DESCRIPTION"));
+                return Optional.of(tc);
+            } else {
+                Optional.empty();
+            }
+        } catch (Exception e){
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt, rs);
+        }
+
         return Optional.empty();
     }
 

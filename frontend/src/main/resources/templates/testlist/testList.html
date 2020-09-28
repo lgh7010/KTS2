@@ -1,104 +1,9 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+<script src="../../static/js/testListVue.js"></script>
+<script src="../../static/js/testList.js"></script>
+<link rel="stylesheet" type="text/css" href="../../static/css/testList.css">
 
-<!--테스트 리스트 페이지-->
-<script>
-    function removeTest(button){
-        console.log("removeTest : " + button.value);
-        $.ajax({
-            url : "/removeTest",
-            type : "POST",
-            data : {
-                TEST_SEQ: button.value
-            },
-            success : function(successMsg){
-                location.reload();
-            },
-            error : function(errMsg){
-                console.error(errMsg);
-            }
-        })
-    }
-    function openEditLayer(button){
-        console.log("openEditLayer : " + button.value);
-        $.ajax({
-            url : "/testRelTestcaseList",
-            type : "POST",
-            data : {
-                TEST_SEQ: button.value
-            },
-            success : function(testRelTestcaseList){
-                $.ajax({
-                    url : "/testcaseDic",
-                    type : "POST",
-                    data : {
-                        TEST_SEQ: button.value
-                    }, success : function(testcaseDic){
-                        $("#testEditLayer").show();
-                        setTestcaseListVue(testRelTestcaseList, testcaseDic);
-                    }, error : function(err){
-                        console.error(err);
-                    }
-                })
-            },
-            error : function(err){
-                console.error(err);
-            }
-        });
-    }
-    function closeEditLayer(){
-        $("#testEditLayer").hide();
-    }
-
-    var testcaseListVue = null
-    function setTestcaseListVue(testRelTestcaseList, testcaseDic){
-        $("#testRelTestcaseList").show();
-        var list = [];
-        for(var i = 0; i < testRelTestcaseList.length; i++){
-            list.push({
-                RELATION_SEQ: testRelTestcaseList[i].relation_SEQ,
-                TEST_SEQ : testRelTestcaseList[i].test_SEQ,
-                LIST_INDEX : testRelTestcaseList[i].list_INDEX,
-                TESTCASE_SEQ : testRelTestcaseList[i].testcase_SEQ,
-                NAME : testcaseDic[testRelTestcaseList[i].testcase_SEQ].name,
-                DESCRIPTION : testcaseDic[testRelTestcaseList[i].testcase_SEQ].description
-            })
-        }
-
-        if(testcaseListVue == null){
-            testcaseListVue = new Vue({
-                el : "#testRelTestcaseList",
-                data : {
-                    testRelTestcaseList_with_name_and_desc : list
-                }
-            })
-        } else {
-            testcaseListVue.testRelTestcaseList_with_name_and_desc = list;
-        }
-    }
-</script>
-
-<!--테스트케이스 리스트 레이어-->
-<script>
-    function moveUpTestcase(button){
-        var RELATION_SEQ = $(button).attr("RELATION_SEQ");
-        console.log(RELATION_SEQ);
-    }
-    function moveDownTestcase(button){
-        var RELATION_SEQ = $(button).attr("RELATION_SEQ");
-        console.log(RELATION_SEQ);
-    }
-    function editTestcase(button){
-        var RELATION_SEQ = $(button).attr("RELATION_SEQ");
-        console.log(RELATION_SEQ);
-    }
-    function removeTestcaseFromTest(button){
-        var RELATION_SEQ = $(button).attr("RELATION_SEQ");
-        console.log(RELATION_SEQ);
-    }
-</script>
-
-<!--html-->
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -150,16 +55,3 @@
     <button>추가</button>
     <button onclick="closeEditLayer()">닫기</button>
 </div>
-<style>
-    .testEditLayer {
-        width: 100%;
-        height: 100%;
-        position: fixed;
-        left: 0%;
-        top: 0%;
-        border:2px solid #ccc;
-        overflow:auto;
-        background-color:white;
-        border-radius: 5px;
-    }
-</style>

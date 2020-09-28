@@ -20,7 +20,6 @@ public class TestListController {
 
     @GetMapping("/")
     public String showList(Model model){
-        System.out.println("ttttttttt");
         model.addAttribute("tests", this.testListService.findAll());
         return "testlist/testList";
     }

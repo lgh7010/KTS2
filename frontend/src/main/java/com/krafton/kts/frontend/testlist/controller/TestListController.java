@@ -18,7 +18,7 @@ public class TestListController {
         this.testListService = testListService;
     }
 
-    @GetMapping("/")
+    @GetMapping("/testList")
     public String showList(Model model){
         model.addAttribute("tests", this.testListService.findAll());
         return "testlist/testList";

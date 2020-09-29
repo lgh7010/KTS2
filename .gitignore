@@ -32,3 +32,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+### webpack
+/frontend/src/main/resources/static/node_modules/*
+/frontend/src/main/resources/static/package-lock.json
+/frontend/src/main/resources/static/bundle.js

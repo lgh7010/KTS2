@@ -1,3 +1,16 @@
 <template>
-  <div id="app2">이게 나와야되는데</div>
+  <div id="app2">
+    <testlist-component/>
+  </div>
 </template>
+
+<script>
+import testlistComponent from './components/TestlistComponent.vue'
+
+export default {
+  name: 'App',
+  components: {
+    testlistComponent
+  }
+}
+</script>

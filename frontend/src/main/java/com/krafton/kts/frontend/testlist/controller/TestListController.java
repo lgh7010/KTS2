@@ -1,5 +1,6 @@
 package com.krafton.kts.frontend.testlist.controller;
 
+import com.krafton.kts.backend.testlist.domain.KTS_TEST;
 import com.krafton.kts.backend.testlist.service.TestListService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -7,6 +8,8 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.List;
 
 @Controller
 public class TestListController {
@@ -22,6 +25,12 @@ public class TestListController {
     public String showList(Model model){
         model.addAttribute("tests", this.testListService.findAll());
         return "testlist/testList";
+    }
+
+    @GetMapping("/testListOnly")
+    @ResponseBody
+    public List<KTS_TEST> testListOnly(){
+        return this.testListService.findAll();
     }
 
     @PostMapping("/removeTest")

@@ -37,3 +37,5 @@ out/
 /frontend/src/main/resources/static/webpack/node_modules/*
 /frontend/src/main/resources/static/webpack/package-lock.json
 /frontend/src/main/resources/static/webpack/bundle.js
+/frontend/src/main/node_modules/*
+/frontend/src/main/package-lock.json

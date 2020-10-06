@@ -1,11 +1,17 @@
-// entry.js
-require('!style-loader!css-loader!./style.css');
+import Vue from 'vue'
+import axios from 'axios'
 
-var hello = require('./hello');
-var world = require('./world');
-
-function test(){
-    return hello + ', ' + world + '!';
-}
-
-document.write(test());
+new Vue({
+    el: '#app',
+    created: function(){
+        console.log("vue is created");
+        this.drawTestList()
+    },
+    methods: {
+        drawTestList: function(){
+            axios.get('/testListOnly').then(testList => {
+                console.log(testList);
+            })
+        }
+    }
+})

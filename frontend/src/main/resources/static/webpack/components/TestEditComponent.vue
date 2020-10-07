@@ -16,10 +16,10 @@
           <td>{{rel.NAME}}</td>
           <td>{{rel.DESCRIPTION}}</td>
           <td>
-            <button>위로</button>
-            <button>아래로</button>
-            <button>편집</button>
-            <button>제거</button>
+            <button v-on:click="moveUp(rel.RELATION_SEQ)">위로</button>
+            <button v-on:click="moveDown(rel.RELATION_SEQ)">아래로</button>
+            <button v-on:click="editTestcase(rel.TESTCASE_SEQ)">편집</button>
+            <button v-on:click="removeTestcase(rel.RELATION_SEQ)">제거</button>
           </td>
         </tr>
         </tbody>
@@ -63,6 +63,20 @@ export default {
         this.testRelTestcaseList_with_name_and_desc = list
       })
     })
+  },
+  methods: {
+    moveUp: function(RELATION_SEQ){
+      console.log("moveUp : " + RELATION_SEQ)
+    },
+    moveDown: function(RELATION_SEQ){
+      console.log("moveDown : " + RELATION_SEQ)
+    },
+    editTestcase: function(TESTCASE_SEQ){
+      console.log("edit : " + TESTCASE_SEQ)
+    },
+    removeTestcase: function(RELATION_SEQ){
+      console.log("remove : " + RELATION_SEQ)
+    }
   }
 }
 </script>

@@ -22,12 +22,6 @@ public class TestListController {
     }
 
     @GetMapping("/testList")
-    public String showList(Model model){
-        model.addAttribute("tests", this.testListService.findAll());
-        return "testlist/testList";
-    }
-
-    @GetMapping("/testListOnly")
     @ResponseBody
     public List<KTS_TEST> testListOnly(){
         return this.testListService.findAll();

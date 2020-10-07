@@ -38,7 +38,7 @@ export default {
     }
   },
   mounted: function(){
-    axios.get('/testListOnly').then(testList => {
+    axios.get('/testList').then(testList => {
       this.testList = testList.data
     }).catch(error => {
       console.log(error)

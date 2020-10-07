@@ -1,14 +1,18 @@
 import Vue from 'vue'
 import App from './App.vue'
 
-import testListComponent from "./components/TestListComponent.vue"
-import testEditComponent from "./components/TestEditComponent.vue"
+import router from './router'
+import Router from 'vue-router'
 
-Vue.component('testListComponent', testListComponent)
-Vue.component('testEditComponent', testEditComponent)
+import HeaderComponent from "./components/layout/HeaderComponent.vue"
+import SidebarComponent from "./components/layout/SidebarComponent.vue"
+
+Vue.component('headerComponent', HeaderComponent)
+Vue.component('sidebarComponent', SidebarComponent)
 
 new Vue({
     el: '#app',
+    router,
     render: h => h(App),
     components: { App },
     template: '<App/>'

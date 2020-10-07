@@ -47,6 +47,7 @@ export default {
   },
   created: function(){
     EventBus.$on('openEditPage', TEST_SEQ => {
+      console.log("on event get : " + TEST_SEQ)
       this.openEditPage(TEST_SEQ)
     })
   },
@@ -70,12 +71,14 @@ export default {
             })
           }
           this.testRelTestcaseList_with_name_and_desc = list
-          $("#testEditLayer").show();
+          console.log(list)
+          $("#testEditLayer").show()
         })
       })
     },
     onClickClose: function(){
-      $("#testEditLayer").hide();
+      $("#testEditLayer").hide()
+      EventBus.$emit('closeEditPage')
     }
   }
 }

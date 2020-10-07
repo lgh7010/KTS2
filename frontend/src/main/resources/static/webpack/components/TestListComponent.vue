@@ -1,6 +1,6 @@
 <template>
   <div>
-    <table>
+    <table id="testList">
       <thead>
       <tr>
         <th>순서</th>
@@ -22,6 +22,8 @@
 
       </tbody>
     </table>
+
+    <test-edit-component/>
   </div>
 </template>
 
@@ -29,14 +31,17 @@
 import axios from 'axios'
 import jQuery from 'jquery'
 window.jQuery = window.$ = jQuery
-import TestEditComponent from "./TestEditComponent.vue";
 
 import {EventBus} from "./bus.js";
+import TestEditComponent from "./TestEditComponent.vue";
 
 export default {
   name: 'testListComponent',
-  components: {
-    TestEditComponent
+  components: {TestEditComponent},
+  created: function(){
+    EventBus.$on('closeEditPage', () => {
+      this.onClickCloseEditPage()
+    })
   },
   data: function(){
     return {
@@ -52,11 +57,14 @@ export default {
   },
   methods: {
     onClickEdit: function(TEST_SEQ){
+      $("#testList").hide()
       EventBus.$emit('openEditPage', TEST_SEQ)
-      //TestEditComponent.methods.openEditPage(TEST_SEQ)//이렇게 하면 vue 리로드가 안되는듯.
     },
     onClickRemove: function(TEST_SEQ){
       console.log("remove test : " + TEST_SEQ)
+    },
+    onClickCloseEditPage: function(){
+      $("#testList").show()
     }
   }
 }

@@ -1,16 +1,16 @@
 <template>
   <div id="app2">
-    <testlist-component/>
+    <test-list-component/>
   </div>
 </template>
 
 <script>
-import testlistComponent from './components/TestlistComponent.vue'
+import testListComponent from './components/TestListComponent.vue'
 
 export default {
   name: 'App',
   components: {
-    testlistComponent
+    testListComponent
   }
 }
 </script>

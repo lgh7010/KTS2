@@ -1,10 +1,9 @@
 import Vue from 'vue'
-import axios from 'axios'
 import App from './App.vue'
 
-import testlistComponent from "./components/TestlistComponent.vue"
+import testListComponent from "./components/TestListComponent.vue"
 
-Vue.component('testlistComponent', testlistComponent)
+Vue.component('testListComponent', testListComponent)
 
 new Vue({
     el: '#app',
@@ -12,4 +11,3 @@ new Vue({
     components: { App },
     template: '<App/>'
 })
-

@@ -14,7 +14,7 @@ const router = new Router({
             component: TestListComponent
         },
         {
-            path: '/test/edit',
+            path: '/test/edit/:TEST_SEQ',
             name: 'TestEdit',
             component: TestEditComponent
         }

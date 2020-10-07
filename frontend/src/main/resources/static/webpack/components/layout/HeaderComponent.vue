@@ -1,8 +1,7 @@
 <template>
   <div>
-    이게 바로 상단 메뉴
     <button v-on:click="onClickHome()">홈으로</button>
-    <button v-on:click="onClickTestList()">테스트 목록</button>
+    <router-link :to="{name: 'TestList'}"><button>테스트 목록</button></router-link>
   </div>
 </template>
 
@@ -12,9 +11,6 @@ export default {
   methods: {
     onClickHome: function(){
       this.$router.push('/')
-    },
-    onClickTestList: function (){
-      this.$router.push('/test/list')
     }
   }
 }

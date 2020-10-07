@@ -1,7 +1,7 @@
-package com.krafton.kts.frontend.testlist.controller;
+package com.krafton.kts.frontend.test.controller;
 
-import com.krafton.kts.backend.testlist.domain.KTS_TEST;
-import com.krafton.kts.backend.testlist.service.TestListService;
+import com.krafton.kts.backend.test.domain.KTS_TEST;
+import com.krafton.kts.backend.test.service.Service_test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,12 +12,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.List;
 
 @Controller
-public class TestListController {
+public class Controller_test {
 
-    private final TestListService testListService;
+    private final Service_test testListService;
 
     @Autowired
-    public TestListController(TestListService testListService){
+    public Controller_test(Service_test testListService){
         this.testListService = testListService;
     }
 

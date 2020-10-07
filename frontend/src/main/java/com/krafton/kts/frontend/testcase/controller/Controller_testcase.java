@@ -1,8 +1,7 @@
-package com.krafton.kts.frontend.testcaselist.controller;
+package com.krafton.kts.frontend.testcase.controller;
 
-import com.krafton.kts.backend.repository.testinfo.domain.TEST_REL_TESTCASE;
-import com.krafton.kts.backend.testcaselist.domain.KTS_TESTCASE;
-import com.krafton.kts.backend.testcaselist.service.TestcaseListService;
+import com.krafton.kts.backend.testcase.domain.KTS_TESTCASE;
+import com.krafton.kts.backend.testcase.service.Service_testcase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,12 +10,12 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.*;
 
 @Controller
-public class TestcaseListController {
+public class Controller_testcase {
 
-    private final TestcaseListService testcaseListService;
+    private final Service_testcase testcaseListService;
 
     @Autowired
-    public TestcaseListController(TestcaseListService testcaseListService){
+    public Controller_testcase(Service_testcase testcaseListService){
         this.testcaseListService = testcaseListService;
     }
 
@@ -43,17 +42,6 @@ public class TestcaseListController {
             }
             return ret;
         } catch(Exception e) {
-            System.out.println(e);
-            return null;
-        }
-    }
-
-    @PostMapping("/testRelTestcaseList")
-    @ResponseBody
-    public List<TEST_REL_TESTCASE> testRelTestcaseList(String TEST_SEQ){
-        try {
-            return this.testcaseListService.findTestRelTestcaseByTEST_SEQ(Integer.parseInt(TEST_SEQ));
-        } catch(Exception e){
             System.out.println(e);
             return null;
         }

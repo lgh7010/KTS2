@@ -1,4 +1,4 @@
-package com.krafton.kts.backend.repository;
+package com.krafton.kts.backend.common;
 
 import org.springframework.jdbc.datasource.DataSourceUtils;
 

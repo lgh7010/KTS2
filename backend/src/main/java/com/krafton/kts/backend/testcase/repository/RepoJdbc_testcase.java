@@ -1,6 +1,7 @@
 package com.krafton.kts.backend.testcase.repository;
 
 import com.krafton.kts.backend.common.JdbcCommon;
+import com.krafton.kts.backend.test.domain.KTS_TEST;
 import com.krafton.kts.backend.testcase.domain.KTS_TESTCASE;
 
 import javax.sql.DataSource;
@@ -91,6 +92,31 @@ public class RepoJdbc_testcase extends JdbcCommon implements Repo_testcase {
 
     @Override
     public List<KTS_TESTCASE> findAllTestcase() {
-        return null;
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement("select * from KTS_TESTCASE where DELETED = 'N'");
+            rs = pstmt.executeQuery();
+
+            List<KTS_TESTCASE> testcases = new ArrayList<>();
+            while(rs.next()){
+                KTS_TESTCASE test = new KTS_TESTCASE();
+                test.setTESTCASE_SEQ(rs.getInt("TESTCASE_SEQ"));
+                test.setNAME(rs.getString("NAME"));
+                test.setDESCRIPTION(rs.getString("DESCRIPTION"));
+                test.setDELETED(rs.getString("DELETED"));
+
+                testcases.add(test);
+            }
+
+            return testcases;
+        } catch (Exception e){
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt, rs);
+        }
     }
 }

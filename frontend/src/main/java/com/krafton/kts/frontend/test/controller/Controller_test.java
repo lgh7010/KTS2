@@ -23,7 +23,10 @@ public class Controller_test {
 
     @GetMapping("/testList")
     @ResponseBody
-    public Response testList(HttpServletRequest req, HttpServletResponse res){
+    public Response testList(
+            HttpServletRequest req,
+            HttpServletResponse res
+    ){
         Response response = new Response();
         response.putContext("testList", this.testListService.findAll());
         return response;

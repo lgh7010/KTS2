@@ -2,6 +2,7 @@
   <div>
     <button v-on:click="onClickHome()">홈으로</button>
     <router-link :to="{name: 'TestList'}"><button>테스트 목록</button></router-link>
+    <router-link :to="{name: 'TestcaseList'}"><button>테스트케이스 목록</button></router-link>
   </div>
 </template>
 

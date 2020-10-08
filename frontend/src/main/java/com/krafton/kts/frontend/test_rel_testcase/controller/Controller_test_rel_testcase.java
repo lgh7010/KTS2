@@ -25,7 +25,8 @@ public class Controller_test_rel_testcase {
     public Response testRelTestcaseList(
             HttpServletRequest req,
             @RequestParam(value = "TEST_SEQ") int TEST_SEQ,
-            HttpServletResponse res){
+            HttpServletResponse res
+    ){
         try {
             Response response = new Response();
             response.putContext("testRelTestcaseList", this.service_test_rel_testcase.findTestRelTestcaseByTEST_SEQ(TEST_SEQ));

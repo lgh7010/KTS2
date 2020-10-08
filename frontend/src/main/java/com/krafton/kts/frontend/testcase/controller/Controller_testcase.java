@@ -24,12 +24,16 @@ public class Controller_testcase {
 
     @GetMapping("/testcaseList")
     @ResponseBody
-    public List<KTS_TESTCASE> testcaseList(String TEST_SEQ){
+    public Response testcaseList(
+            HttpServletRequest req,
+            HttpServletResponse res
+    ){
         try {
-            return this.testcaseListService.findTestcasesByTEST_SEQ(Integer.parseInt(TEST_SEQ));
+            Response response = new Response();
+            response.putContext("testcaseList", this.testcaseListService.findAll());
+            return response;
         } catch(Exception e){
-            System.out.println(e);
-            return null;
+            return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
         }
     }
 
@@ -38,7 +42,8 @@ public class Controller_testcase {
     public Response testcaseDic(
             HttpServletRequest req,
             @RequestParam(value = "TEST_SEQ") int TEST_SEQ,
-            HttpServletResponse res){
+            HttpServletResponse res
+    ){
         try {
             List<KTS_TESTCASE> list = this.testcaseListService.findTestcasesByTEST_SEQ(TEST_SEQ);
             Map<Integer, KTS_TESTCASE> ret = new HashMap<>();

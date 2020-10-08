@@ -82,6 +82,7 @@ public class RepoJdbc_test extends JdbcCommon implements Repo_test {
                 test.setTEST_SEQ(rs.getInt("TEST_SEQ"));
                 test.setNAME(rs.getString("NAME"));
                 test.setDESCRIPTION(rs.getString("DESCRIPTION"));
+                test.setDELETED(rs.getString("DELETED"));
 
                 tests.add(test);
             }

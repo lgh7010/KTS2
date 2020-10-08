@@ -4,7 +4,6 @@ import com.krafton.kts.backend.testcase.domain.KTS_TESTCASE;
 import com.krafton.kts.backend.testcase.service.Service_testcase;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;

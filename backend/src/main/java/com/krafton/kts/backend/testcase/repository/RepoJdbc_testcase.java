@@ -17,8 +17,6 @@ public class RepoJdbc_testcase extends JdbcCommon implements Repo_testcase {
         super(dataSource);
     }
 
-
-
     @Override
     public List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int TEST_SEQ) {
         Connection conn = null;
@@ -39,6 +37,7 @@ public class RepoJdbc_testcase extends JdbcCommon implements Repo_testcase {
                 tc.setTESTCASE_SEQ(rs.getInt("TESTCASE_SEQ"));
                 tc.setNAME(rs.getString("NAME"));
                 tc.setDESCRIPTION(rs.getString("DESCRIPTION"));
+                tc.setDELETED(rs.getString("DELETED"));
 
                 list.add(tc);
             }

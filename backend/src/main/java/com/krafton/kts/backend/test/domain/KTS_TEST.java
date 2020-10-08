@@ -7,4 +7,5 @@ public class KTS_TEST {
     private int TEST_SEQ;
     private String NAME;
     private String DESCRIPTION;
+    private String DELETED;
 }

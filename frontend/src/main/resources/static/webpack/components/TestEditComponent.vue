@@ -46,7 +46,8 @@ export default {
   created: function() {
     var TEST_SEQ = this.$route.params.TEST_SEQ
 
-    //쿼리 한번으로 해결하려면 '관계'에 대한 도메인 클래스를 추가해야 해서 이런식으로 처리함. 근데 도메인 추가하는게 나은듯.
+    //쿼리 한번으로 해결하려면 TEST_REL_TESTCASE에 'NAME'과 'DESCRIPTION'을 더한 도메인 클래스를 따로 또 추가해야 해서 이런식으로 처리함.
+    //편의성과 일관성 사이의 Tradeoff에서 결정한 사항.
     axios.get("/testRelTestcaseList", { params: {'TEST_SEQ': TEST_SEQ}}).then(response => {
       var testRelTestcaseList = response.data.context.testRelTestcaseList
       axios.get("/testcaseDic", { params: {'TEST_SEQ': TEST_SEQ}}).then(response2 => {

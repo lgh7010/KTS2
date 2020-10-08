@@ -1,17 +1,14 @@
 package com.krafton.kts.frontend.test_rel_testcase.controller;
 
-import com.krafton.kts.backend.test_rel_testcase.domain.TEST_REL_TESTCASE;
 import com.krafton.kts.backend.test_rel_testcase.service.Service_test_rel_testcase;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.util.List;
 
 @Controller
 public class Controller_test_rel_testcase {

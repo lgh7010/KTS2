@@ -1,6 +1,7 @@
 <template>
   <div>
-    <div>
+    <div id="flowchart">
+<!--      SVG를 아예 빼버리고 그냥 div에다가 클래스 + 디자인 부여한다음에 처리해도 될듯-->
       <svg ref="flowchartSVG" class="flowchartSVG" width="100%" height="1000">
         <rect width="100%" height="100%" fill="white" stroke="black" stroke-width="5"/>
         <rect v-for="action in this.actionDic"
@@ -16,8 +17,13 @@
               :x="action.x_POS" :y="action.y_POS+70" fill="black"
         >{{action.description}}</text>
       </svg>
+      <button v-on:click="goBack()">닫기</button>
     </div>
-    <button v-on:click="goBack()">닫기</button>
+
+    <div id="actionEditor" class="actionEditor" style="display: none">
+      이게 액션에디터의 내용이다옹
+      <button v-on:click="actionClose">닫기</button>
+    </div>
   </div>
 </template>
 
@@ -73,6 +79,13 @@ export default {
     },
     actionOpen: function(action){
       this.currentAction = action
+
+      $("#actionEditor").show()
+    },
+    actionClose: function(){
+      this.currentAction = null
+
+      $("#actionEditor").hide()
     }
   }
 }
@@ -83,5 +96,13 @@ export default {
   margin: auto;
   position: center;
   display: block;
+}
+.actionEditor {
+  width: 400px;
+  height: 100px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index:300;
 }
 </style>

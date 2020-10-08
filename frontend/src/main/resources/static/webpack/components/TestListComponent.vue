@@ -49,9 +49,9 @@ export default {
       axios.post("/removeTest", {
         'TEST_SEQ': TEST_SEQ
       }).then(response => {
-        console.log(response)
+        alert(response)
       }).catch(error => {
-        console.log(error)
+        alert(error)
       })
     }
   }

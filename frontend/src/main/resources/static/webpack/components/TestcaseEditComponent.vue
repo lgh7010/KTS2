@@ -17,7 +17,7 @@
       </table>
     </div>
     <hr>
-    <router-link :to="{name: 'TestcaseList'}"><button>닫기</button></router-link>
+    <button v-on:click="goBack()">닫기</button>
   </div>
 </template>
 
@@ -36,10 +36,14 @@ export default {
 
     axios.get("/actionDic", { params: {'TESTCASE_SEQ': TESTCASE_SEQ}}).then(response => {
       this.actionDic = response.data.context.actionDic
-      console.log(this.actionDic)
     }).catch(error => {
       console.log(error)
     })
+  },
+  methods: {
+    goBack: function(){
+      this.$router.go(-1)
+    }
   }
 }
 </script>

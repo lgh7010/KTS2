@@ -2,7 +2,6 @@ package com.krafton.kts.backend.action.repository;
 
 import com.krafton.kts.backend.action.domain.KTS_ACTION;
 import com.krafton.kts.backend.common.JdbcCommon;
-import com.krafton.kts.backend.testcase.domain.KTS_TESTCASE;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

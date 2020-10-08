@@ -18,7 +18,7 @@
           <td>
             <button v-on:click="moveUp(rel.RELATION_SEQ)">위로</button>
             <button v-on:click="moveDown(rel.RELATION_SEQ)">아래로</button>
-            <button v-on:click="editTestcase(rel.TESTCASE_SEQ)">편집</button>
+            <router-link :to="{name: 'TestcaseEdit', params: {TESTCASE_SEQ: rel.TESTCASE_SEQ}}"><button>편집</button></router-link>
             <button v-on:click="removeTestcase(rel.RELATION_SEQ)">제거</button>
           </td>
         </tr>
@@ -77,9 +77,6 @@ export default {
     },
     moveDown: function(RELATION_SEQ){
       console.log("moveDown : " + RELATION_SEQ)
-    },
-    editTestcase: function(TESTCASE_SEQ){
-      console.log("edit : " + TESTCASE_SEQ)
     },
     removeTestcase: function(RELATION_SEQ){
       console.log("remove : " + RELATION_SEQ)

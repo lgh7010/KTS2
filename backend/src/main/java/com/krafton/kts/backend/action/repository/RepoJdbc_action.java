@@ -35,6 +35,8 @@ public class RepoJdbc_action extends JdbcCommon implements Repo_action {
                 action.setIS_START(rs.getString("IS_START"));
                 action.setNEXT_ACTION_SEQ(rs.getInt("NEXT_ACTION_SEQ"));
                 action.setACTION_ID(rs.getString("ACTION_ID"));
+                action.setX_POS(rs.getFloat("X_POS"));
+                action.setY_POS(rs.getFloat("Y_POS"));
                 action.setDESCRIPTION(rs.getString("DESCRIPTION"));
                 action.setPROPERTY_JSON(rs.getString("PROPERTY_JSON"));
                 action.setDELETED(rs.getString("DELETED"));

@@ -1,48 +1,48 @@
 <template>
   <div>
     <div>
-      <svg ref="box" width="500" height="500">
-        <rect width="100%" height="100%" fill="white" stroke="black" stroke-width="5"></rect>
-        <rect width="100" height="100" class="square" fill="red" :x="square.x" :y="square.y" @mousedown="drag" @mouseup="drop"></rect>
+      <svg ref="flowchartSVG" class="flowchartSVG" width="100%" height="1000">
+        <rect width="100%" height="100%" fill="white" stroke="black" stroke-width="5"/>
+        <rect v-for="action in this.actionDic"
+              width="400" height="100" fill="gray"
+              :x="action.x_POS" :y="action.y_POS" :style="cursor"
+              @mousedown="drag" @mouseup="drop" @mouseenter="enter(action)"
+              v-on:click="actionOpen(action)"
+        />
+        <text v-for="action in this.actionDic"
+              :x="action.x_POS" :y="action.y_POS+30" fill="black"
+        >{{action.action_ID}}</text>
+        <text v-for="action in this.actionDic"
+              :x="action.x_POS" :y="action.y_POS+70" fill="black"
+        >{{action.description}}</text>
       </svg>
     </div>
-
-    <table>
-      <thead>
-      <tr>
-        <th>액션ID</th>
-        <th>설명</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="action in this.actionDic">
-        <td>{{action.action_ID}}</td>
-        <td>{{action.description}}</td>
-      </tr>
-      </tbody>
-    </table>
-    <hr>
     <button v-on:click="goBack()">닫기</button>
   </div>
 </template>
 
 <script>
+import jQuery from 'jquery'
 import axios from "axios";
+window.jQuery = window.$ = jQuery
 
 export default {
   name: "TestcaseEditComponent",
   data: function(){
     return {
       actionDic: {},
-      square: {
-        x: 100,
-        y: 100
-      },
+      currentMouseOnActionSeq: 0,
+      currentAction: null,
       dragOffsetX: null,
       dragOffsetY: null
     }
   },
-  mounted: function(){
+  computed: {
+    cursor: function(){
+      return `cursor: ${this.dragOffsetX ? 'grabbing' : 'grab'}`
+    }
+  },
+  created: function(){
     var TESTCASE_SEQ = this.$route.params.TESTCASE_SEQ
 
     axios.get("/actionDic", { params: {'TESTCASE_SEQ': TESTCASE_SEQ}}).then(response => {
@@ -55,22 +55,31 @@ export default {
     goBack: function(){
       this.$router.go(-1)
     },
+    enter: function(action){
+      this.currentMouseOnActionSeq = action.action_SEQ
+    },
     drag: function({offsetX, offsetY}){
-      this.$refs.box.addEventListener('mousemove', this.move)
+      this.dragOffsetX = offsetX - this.actionDic[this.currentMouseOnActionSeq].x_POS
+      this.dragOffsetY = offsetY - this.actionDic[this.currentMouseOnActionSeq].y_POS
+      this.$refs.flowchartSVG.addEventListener('mousemove', this.move)
     },
     drop: function(){
-      this.$refs.box.removeEventListener('mousemove', this.move)
+      this.dragOffsetX = this.dragOffsetY = null
+      this.$refs.flowchartSVG.removeEventListener('mousemove', this.move)
     },
     move: function({offsetX, offsetY}){
-      this.square.x = offsetX
-      this.square.y = offsetY
+      this.actionDic[this.currentMouseOnActionSeq].x_POS = offsetX - this.dragOffsetX
+      this.actionDic[this.currentMouseOnActionSeq].y_POS = offsetY - this.dragOffsetY
+    },
+    actionOpen: function(action){
+      this.currentAction = action
     }
   }
 }
 </script>
 
 <style scoped>
-.box {
+.flowchartSVG {
   margin: auto;
   position: center;
   display: block;

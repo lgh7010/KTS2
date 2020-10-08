@@ -9,6 +9,8 @@ public class KTS_ACTION {
     private String IS_START;
     private int NEXT_ACTION_SEQ;
     private String ACTION_ID;
+    private float X_POS;
+    private float Y_POS;
     private String DESCRIPTION;
     private String PROPERTY_JSON;
     private String DELETED;

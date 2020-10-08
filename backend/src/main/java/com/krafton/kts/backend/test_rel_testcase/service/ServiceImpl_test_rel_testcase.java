@@ -3,7 +3,6 @@ package com.krafton.kts.backend.test_rel_testcase.service;
 import com.krafton.kts.backend.test_rel_testcase.domain.TEST_REL_TESTCASE;
 import com.krafton.kts.backend.test_rel_testcase.repository.Repo_test_rel_testcase;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 

@@ -38,15 +38,21 @@ export default {
     }
   },
   mounted: function(){
-    axios.get('/testList').then(testList => {
-      this.testList = testList.data
+    axios.get('/testList').then(response => {
+      this.testList = response.data.context.testList
     }).catch(error => {
       console.log(error)
     })
   },
   methods: {
     onClickRemove: function(TEST_SEQ){
-      console.log("remove test : " + TEST_SEQ)
+      axios.post("/removeTest", {
+        'TEST_SEQ': TEST_SEQ
+      }).then(response => {
+        console.log(response)
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }

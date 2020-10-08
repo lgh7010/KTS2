@@ -1,3 +1,5 @@
 dependencies {
     compile project(':backend')
+
+    implementation 'org.json:json:20190722'
 }

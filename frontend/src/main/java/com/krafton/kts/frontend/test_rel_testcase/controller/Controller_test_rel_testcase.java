@@ -2,11 +2,15 @@ package com.krafton.kts.frontend.test_rel_testcase.controller;
 
 import com.krafton.kts.backend.test_rel_testcase.domain.TEST_REL_TESTCASE;
 import com.krafton.kts.backend.test_rel_testcase.service.Service_test_rel_testcase;
+import com.krafton.kts.frontend.common.ERROR_CODE;
+import com.krafton.kts.frontend.common.Response;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @Controller
@@ -19,14 +23,18 @@ public class Controller_test_rel_testcase {
         this.service_test_rel_testcase = service_test_rel_testcase;
     }
 
-    @PostMapping("/testRelTestcaseList")
+    @GetMapping("/testRelTestcaseList")
     @ResponseBody
-    public List<TEST_REL_TESTCASE> testRelTestcaseList(String TEST_SEQ){
+    public Response testRelTestcaseList(
+            HttpServletRequest req,
+            @RequestParam(value = "TEST_SEQ") int TEST_SEQ,
+            HttpServletResponse res){
         try {
-            return this.service_test_rel_testcase.findTestRelTestcaseByTEST_SEQ(Integer.parseInt(TEST_SEQ));
+            Response response = new Response();
+            response.putContext("testRelTestcaseList", this.service_test_rel_testcase.findTestRelTestcaseByTEST_SEQ(TEST_SEQ));
+            return response;
         } catch(Exception e){
-            System.out.println(e);
-            return null;
+            return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
         }
     }
 }

@@ -1,15 +1,15 @@
 package com.krafton.kts.frontend.test.controller;
 
-import com.krafton.kts.backend.test.domain.KTS_TEST;
+import com.krafton.kts.frontend.common.ERROR_CODE;
+import com.krafton.kts.frontend.common.Response;
 import com.krafton.kts.backend.test.service.Service_test;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class Controller_test {
@@ -23,19 +23,21 @@ public class Controller_test {
 
     @GetMapping("/testList")
     @ResponseBody
-    public List<KTS_TEST> testListOnly(){
-        return this.testListService.findAll();
+    public Response testList(HttpServletRequest req, HttpServletResponse res){
+        Response response = new Response();
+        response.putContext("testList", this.testListService.findAll());
+        return response;
     }
 
     @PostMapping("/removeTest")
     @ResponseBody
-    public String removeTest(String TEST_SEQ, Model model){
+    public Response removeTest(HttpServletRequest req, @RequestBody String requestJsonStr, HttpServletResponse res){
         try {
-            this.testListService.removeTest(Integer.parseInt(TEST_SEQ));
-            return "removeTest Success";
+            JSONObject requestJsonObj = new JSONObject(requestJsonStr);
+            this.testListService.removeTest(requestJsonObj.getInt("TEST_SEQ"));
+            return new Response();
         } catch(Exception e){
-            System.out.println(e);
-            return e.getMessage();
+            return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
         }
     }
 }

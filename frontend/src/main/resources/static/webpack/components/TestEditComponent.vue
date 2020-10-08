@@ -32,8 +32,8 @@
 </template>
 
 <script>
-import ajax from "ajax";
 import jQuery from 'jquery'
+import axios from "axios";
 window.jQuery = window.$ = jQuery
 
 export default {
@@ -47,8 +47,10 @@ export default {
     var TEST_SEQ = this.$route.params.TEST_SEQ
 
     //쿼리 한번으로 해결하려면 '관계'에 대한 도메인 클래스를 추가해야 해서 이런식으로 처리함. 근데 도메인 추가하는게 나은듯.
-    ajax.post("/testRelTestcaseList", {TEST_SEQ: TEST_SEQ}, testRelTestcaseList => {
-      ajax.post("/testcaseDic", {TEST_SEQ: TEST_SEQ}, testcaseDic => {
+    axios.get("/testRelTestcaseList", { params: {'TEST_SEQ': TEST_SEQ}}).then(response => {
+      var testRelTestcaseList = response.data.context.testRelTestcaseList
+      axios.get("/testcaseDic", { params: {'TEST_SEQ': TEST_SEQ}}).then(response2 => {
+        var testcaseDic = response2.data.context.testcaseDic
         var list = []
         for(var i = 0; i < testRelTestcaseList.length; i++){
           list.push({
@@ -61,7 +63,11 @@ export default {
           })
         }
         this.testRelTestcaseList_with_name_and_desc = list
+      }).catch(error => {
+        console.log(error)
       })
+    }).catch(error => {
+      console.log(error)
     })
   },
   methods: {

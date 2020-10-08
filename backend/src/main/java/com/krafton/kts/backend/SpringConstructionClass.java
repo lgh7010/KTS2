@@ -1,5 +1,9 @@
 package com.krafton.kts.backend;
 
+import com.krafton.kts.backend.action.repository.RepoJdbc_action;
+import com.krafton.kts.backend.action.repository.Repo_action;
+import com.krafton.kts.backend.action.service.ServiceImpl_action;
+import com.krafton.kts.backend.action.service.Service_action;
 import com.krafton.kts.backend.test.repository.Repo_test;
 import com.krafton.kts.backend.test.repository.RepoJdbc_test;
 import com.krafton.kts.backend.test.service.ServiceImpl_test;
@@ -55,5 +59,15 @@ public class SpringConstructionClass {
     @Bean
     public Service_test_rel_testcase service_test_rel_testcase(){
         return new ServiceImpl_test_rel_testcase(repo_test_rel_testcase());
+    }
+
+    //action
+    @Bean
+    public Repo_action repo_action(){
+        return new RepoJdbc_action(dataSource);
+    }
+    @Bean
+    public Service_action service_action(){
+        return new ServiceImpl_action(repo_action());
     }
 }

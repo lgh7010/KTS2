@@ -1,7 +1,6 @@
 package com.krafton.kts.backend.testcase.repository;
 
 import com.krafton.kts.backend.common.JdbcCommon;
-import com.krafton.kts.backend.test.domain.KTS_TEST;
 import com.krafton.kts.backend.testcase.domain.KTS_TESTCASE;
 
 import javax.sql.DataSource;

@@ -2,7 +2,6 @@ import Vue from 'vue'
 import App from './App.vue'
 
 import router from './router'
-import Router from 'vue-router'
 
 import HeaderComponent from "./components/layout/HeaderComponent.vue"
 import SidebarComponent from "./components/layout/SidebarComponent.vue"

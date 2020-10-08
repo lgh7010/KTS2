@@ -1,5 +1,6 @@
 package com.krafton.kts.backend.testcase.service;
 
+import com.krafton.kts.backend.test.domain.KTS_TEST;
 import com.krafton.kts.backend.testcase.domain.KTS_TESTCASE;
 import org.springframework.stereotype.Service;
 

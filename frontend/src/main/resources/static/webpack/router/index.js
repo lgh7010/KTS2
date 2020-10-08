@@ -4,6 +4,7 @@ import Router from 'vue-router'
 import TestEditComponent from "../components/TestEditComponent.vue"
 import TestListComponent from "../components/TestListComponent.vue"
 import TestcaseListComponent from "../components/TestcaseListComponent.vue";
+import TestcaseEditComponent from "../components/TestcaseEditComponent.vue";
 
 Vue.use(Router)
 
@@ -23,6 +24,11 @@ const router = new Router({
             path: '/testcase/list',
             name: 'TestcaseList',
             component: TestcaseListComponent
+        },
+        {
+            path: '/testcase/edit/:TESTCASE_SEQ',
+            name: 'TestcaseEdit',
+            component: TestcaseEditComponent
         }
     ]
 })

@@ -17,7 +17,7 @@ public class ServiceImpl_testcase implements Service_testcase {
 
     @Override
     public List<KTS_TESTCASE> findAll() {
-        return this.repo_testcase.findAllTestcase();
+        return repo_testcase.findAllTestcase();
     }
 
     @Override

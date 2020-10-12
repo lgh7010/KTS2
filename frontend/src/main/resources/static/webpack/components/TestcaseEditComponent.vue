@@ -69,7 +69,6 @@ export default {
       actionDic: {},
       currentAction: null,
       nodes: {},
-      arrows: {},
       arrows_start_map: {},//키는 시작 action_SEQ, 값은 끝 action_SEQ
       arrows_end_map: {},//키는 끝 action_SEQ, 값은 시작 action_SEQ
     }
@@ -111,7 +110,6 @@ export default {
       var jarrow = $(arrow)
       this.arrows_start_map[jarrow.attr('action_SEQ')] = jarrow.attr('next_ACTION_SEQ')
       this.arrows_end_map[jarrow.attr('next_ACTION_SEQ')] = jarrow.attr('action_SEQ')
-      this.arrows[jarrow.id] = jarrow
     },
     registDragableNode: function(node, arrows_start_map, arrows_end_map){
       var jnode = $(node)

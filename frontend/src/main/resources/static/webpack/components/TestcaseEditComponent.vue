@@ -1,8 +1,8 @@
 <template>
   <div>
 
-    <div id="actionEditorBackground" style="
-        display: none;
+    <div id="actionEditorBackground"
+         style="display: none;
         width: 100vw;
         height: 100vh;
         position: fixed;
@@ -10,8 +10,8 @@
         opacity: 0.5;
         z-index:10;"/>
 
-    <div id="actionEditor" style="
-        display: none;
+    <div id="actionEditor"
+         style="display: none;
         width: 500px;
         height: 500px;
         position: fixed;
@@ -26,8 +26,9 @@
     </div>
 
     <div id="flowchart">
-      <div v-for="action in this.actionDic" v-bind:id="action.action_SEQ" style="
-        width:400px;
+      <div v-for="action in this.actionDic"
+           v-bind:id="action.action_SEQ" v-bind:action_SEQ="action.action_SEQ" v-bind:next_ACTION_SEQ="action.next_ACTION_SEQ"
+           class="node" style="width:400px;
         height:100px;
         background-color:gray;
         position: absolute;">
@@ -45,9 +46,12 @@
           <path d="M 0 0 L 10 5 L 0 10 z" fill="black"/>
         </marker>
       </defs>
-      <line v-for="action in this.actionDic" v-bind:id="'line_'+action.action_SEQ+'_'+action.next_ACTION_SEQ"
-            class="arrow" v-bind:x1="action.x_POS" v-bind:y1="action.y_POS" v-bind:x2="action.x_POS+50" v-bind:y2="action.y_POS+100"
-            stroke-width="7" stroke="black" marker-end="url(#arrow)"/>
+      <line v-for="action in this.actionDic" v-if="action.next_ACTION_SEQ > 0"
+            v-bind:id="'arrow_'+action.action_SEQ+'_'+action.next_ACTION_SEQ"
+            v-bind:action_SEQ="action.action_SEQ" v-bind:next_ACTION_SEQ="action.next_ACTION_SEQ"
+            v-bind:x1="action.x_POS+200" v-bind:y1="action.y_POS"
+            v-bind:x2="action.x_POS+200" v-bind:y2="action.y_POS+100"
+            class="arrow" stroke-width="7" stroke="black" marker-end="url(#arrow)"/>
     </svg>
 
   </div>
@@ -63,7 +67,11 @@ export default {
   data: function(){
     return {
       actionDic: {},
-      currentAction: null
+      currentAction: null,
+      nodes: {},
+      arrows: {},
+      arrows_start_map: {},//키는 시작 action_SEQ, 값은 끝 action_SEQ
+      arrows_end_map: {},//키는 끝 action_SEQ, 값은 시작 action_SEQ
     }
   },
   created: function(){
@@ -79,61 +87,81 @@ export default {
   updated: function() {
     for(let ACTION_SEQ in this.actionDic){
       var action = this.actionDic[ACTION_SEQ]
-      var elem = document.getElementById(ACTION_SEQ)
-      var jelem = $("#"+ACTION_SEQ);
-      this.registDragElement(elem)
-      elem.style.top = action.y_POS + "px"
-      elem.style.left = action.x_POS + "px"
+      var node = document.getElementById(ACTION_SEQ)
 
-      //화살표
-      // var arrow = jelem.children('.arrow');
-      // arrow.attr('x1', action.x_POS)
-      // arrow.attr('y1', action.y_POS)
-      // if(action.next_ACTION_SEQ > 0){
-      //   console.log(action.x_POS + " -> " + this.actionDic[action.next_ACTION_SEQ].x_POS)
-      //   console.log(action.y_POS + " -> " + this.actionDic[action.next_ACTION_SEQ].y_POS)
-      //   arrow.attr('x2', this.actionDic[action.next_ACTION_SEQ].x_POS)
-      //   arrow.attr('y2', this.actionDic[action.next_ACTION_SEQ].y_POS)
-      // } else {
-      //   arrow.attr('x2', action.x_POS)
-      //   arrow.attr('y2', action.y_POS)
-      // }
+      //노드 등록 및 위치 설정
+      this.nodes[ACTION_SEQ] = node
+      node.style.top = action.y_POS + "px"
+      node.style.left = action.x_POS + "px"
+
+      //드래그 설정
+      this.registDragableNode(node, this.arrows_start_map, this.arrows_end_map)
+      this.registDragableArrow(document.getElementById("arrow_" + ACTION_SEQ + "_" + action.next_ACTION_SEQ))
     }
   },
   methods: {
     goBack: function(){
       this.$router.go(-1)
     },
-    registDragElement: function(elmnt){
+    registDragableArrow: function(arrow){
+      if(!arrow){
+        return
+      }
+
+      var jarrow = $(arrow)
+      this.arrows_start_map[jarrow.attr('action_SEQ')] = jarrow.attr('next_ACTION_SEQ')
+      this.arrows_end_map[jarrow.attr('next_ACTION_SEQ')] = jarrow.attr('action_SEQ')
+      this.arrows[jarrow.id] = jarrow
+    },
+    registDragableNode: function(node, arrows_start_map, arrows_end_map){
+      var jnode = $(node)
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0
-      elmnt.onmousedown = dragMouseDown
+      node.onmousedown = dragMouseDown
 
       function dragMouseDown(e){
-        e = e || window.event;
-        e.preventDefault();
+        e = e || window.event
+        e.preventDefault()
+
         // get the mouse cursor position at startup:
-        pos3 = e.clientX;
-        pos4 = e.clientY;
-        document.onmouseup = closeDragElement;
+        pos3 = e.clientX
+        pos4 = e.clientY
+        document.onmouseup = closeDragElement
+
         // call a function whenever the cursor moves:
-        document.onmousemove = elementDrag;
+        document.onmousemove = elementDrag
       }
       function elementDrag(e){
-        e = e || window.event;
-        e.preventDefault();
+        e = e || window.event
+        e.preventDefault()
+
         // calculate the new cursor position:
-        pos1 = pos3 - e.clientX;
-        pos2 = pos4 - e.clientY;
-        pos3 = e.clientX;
-        pos4 = e.clientY;
+        pos1 = pos3 - e.clientX
+        pos2 = pos4 - e.clientY
+        pos3 = e.clientX
+        pos4 = e.clientY
+
         // set the element's new position:
-        elmnt.style.top = (elmnt.offsetTop - pos2) + "px";
-        elmnt.style.left = (elmnt.offsetLeft - pos1) + "px";
+        node.style.top = (node.offsetTop - pos2) + "px"
+        node.style.left = (node.offsetLeft - pos1) + "px"
+
+        //들어오는 화살표 위치 조정
+        var startAt = arrows_end_map[jnode.attr('action_SEQ')]
+        var endAt = jnode.attr('action_SEQ')
+        var jarrow = $("#arrow_" + startAt + "_" + endAt)
+        jarrow.attr('x2', node.style.left)
+        jarrow.attr('y2', node.style.top)
+
+        //나가는 화살표 위치 조정
+        startAt = jnode.attr('action_SEQ')
+        endAt = arrows_start_map[jnode.attr('action_SEQ')]
+        jarrow = $("#arrow_" + startAt + "_" + endAt)
+        jarrow.attr('x1', node.style.left)
+        jarrow.attr('y1', node.style.top)
       }
       function closeDragElement(){
         // stop moving when mouse button is released:
-        document.onmouseup = null;
-        document.onmousemove = null;
+        document.onmouseup = null
+        document.onmousemove = null
       }
     },
     actionOpen: function(action){

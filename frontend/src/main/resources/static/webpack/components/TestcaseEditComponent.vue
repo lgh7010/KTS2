@@ -30,10 +30,11 @@
         width:400px;
         height:100px;
         background-color:gray;
-        position: absolute">
-        {{action.description}}
+        position: absolute;">
         <button v-on:click="actionOpen(action)">편집</button>
         <button>삭제</button>
+        <hr>
+        {{action.description}}
       </div>
       <button v-on:click="goBack()">닫기</button>
     </div>
@@ -66,7 +67,11 @@ export default {
   },
   updated: function() {
     for(let ACTION_SEQ in this.actionDic){
-      this.registDragElement(document.getElementById(this.actionDic[ACTION_SEQ].action_SEQ))
+      var action =this.actionDic[ACTION_SEQ]
+      var elem = document.getElementById(action.action_SEQ)
+      this.registDragElement(elem)
+      elem.style.top = action.y_POS + "px"
+      elem.style.left = action.x_POS + "px"
     }
   },
   methods: {

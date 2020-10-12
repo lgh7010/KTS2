@@ -39,6 +39,17 @@
       <button v-on:click="goBack()">닫기</button>
     </div>
 
+    <svg width="1000" height="1000" viewbox="0 0 1000 1000">
+      <defs>
+        <marker id="arrow" viewBox="0 0 10 10" refX="5" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M 0 0 L 10 5 L 0 10 z" fill="black"/>
+        </marker>
+      </defs>
+      <line v-for="action in this.actionDic" v-bind:id="'line_'+action.action_SEQ+'_'+action.next_ACTION_SEQ"
+            class="arrow" v-bind:x1="action.x_POS" v-bind:y1="action.y_POS" v-bind:x2="action.x_POS+50" v-bind:y2="action.y_POS+100"
+            stroke-width="7" stroke="black" marker-end="url(#arrow)"/>
+    </svg>
+
   </div>
 </template>
 
@@ -67,11 +78,26 @@ export default {
   },
   updated: function() {
     for(let ACTION_SEQ in this.actionDic){
-      var action =this.actionDic[ACTION_SEQ]
-      var elem = document.getElementById(action.action_SEQ)
+      var action = this.actionDic[ACTION_SEQ]
+      var elem = document.getElementById(ACTION_SEQ)
+      var jelem = $("#"+ACTION_SEQ);
       this.registDragElement(elem)
       elem.style.top = action.y_POS + "px"
       elem.style.left = action.x_POS + "px"
+
+      //화살표
+      // var arrow = jelem.children('.arrow');
+      // arrow.attr('x1', action.x_POS)
+      // arrow.attr('y1', action.y_POS)
+      // if(action.next_ACTION_SEQ > 0){
+      //   console.log(action.x_POS + " -> " + this.actionDic[action.next_ACTION_SEQ].x_POS)
+      //   console.log(action.y_POS + " -> " + this.actionDic[action.next_ACTION_SEQ].y_POS)
+      //   arrow.attr('x2', this.actionDic[action.next_ACTION_SEQ].x_POS)
+      //   arrow.attr('y2', this.actionDic[action.next_ACTION_SEQ].y_POS)
+      // } else {
+      //   arrow.attr('x2', action.x_POS)
+      //   arrow.attr('y2', action.y_POS)
+      // }
     }
   },
   methods: {

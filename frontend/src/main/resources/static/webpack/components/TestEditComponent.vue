@@ -34,7 +34,7 @@
         <tr v-for="testcase in this.testcaseList">
           <td>{{testcase.name}}</td>
           <td>{{testcase.description}}</td>
-          <td><button v-on:click="onClickTestcaseAdd(testcase)">추가</button></td>
+          <td><button v-on:click="onClickTestcaseAddToTest(testcase)">추가</button></td>
         </tr>
         </tbody>
       </table>
@@ -131,7 +131,7 @@ export default {
       $("#addTestcaseToTestLayerBackground").hide()
       $("#addTestcaseToTestLayer").hide()
     },
-    onClickTestcaseAdd: function(testcase){
+    onClickTestcaseAddToTest: function(testcase){
       this.testRelTestcaseList_with_name_and_desc.push({
         relation_SEQ: 0,
         test_SEQ : this.currentTEST_SEQ,
@@ -142,8 +142,11 @@ export default {
       })
     },
     onClickSave: function(){
-      axios.post("/testRelTestcaseSave", {"REL_LIST": this.testRelTestcaseList_with_name_and_desc}).then(response => {
-        //alert("저장 완료")
+      axios.post("/testRelTestcaseSave", {
+        "REL_LIST": this.testRelTestcaseList_with_name_and_desc,
+        "TEST_SEQ": this.currentTEST_SEQ
+      }).then(response => {
+        alert("저장 완료")
         console.log(response)
       }).catch(error => {
         console.log(error)

@@ -51,18 +51,20 @@ public class Controller_test_rel_testcase {
         try {
             JSONObject requestJsonObj = new JSONObject(requestJsonStr);
             JSONArray array = requestJsonObj.getJSONArray("REL_LIST");
+            int testSeq = requestJsonObj.getInt("TEST_SEQ");
             List<TEST_REL_TESTCASE> list = new ArrayList<>();
             for(int i = 0; i < array.length(); i++){
                 JSONObject relObj = array.getJSONObject(i);
                 TEST_REL_TESTCASE elem = new TEST_REL_TESTCASE();
                 int relSeq = relObj.getInt("relation_SEQ");
                 elem.setRELATION_SEQ(relSeq > 0 ? relSeq : 0);
-                elem.setTEST_SEQ(relObj.getInt("test_SEQ"));
+                //elem.setTEST_SEQ(relObj.getInt("test_SEQ"));
+                elem.setTEST_SEQ(testSeq);
                 elem.setLIST_INDEX(relObj.getInt("list_INDEX"));
                 elem.setTESTCASE_SEQ(relObj.getInt("testcase_SEQ"));
                 list.add(elem);
             }
-            this.service_test_rel_testcase.saveTestRelTestcase(list);
+            this.service_test_rel_testcase.saveTestRelTestcase(list, testSeq);
 
             return new Response();
         } catch(Exception e){

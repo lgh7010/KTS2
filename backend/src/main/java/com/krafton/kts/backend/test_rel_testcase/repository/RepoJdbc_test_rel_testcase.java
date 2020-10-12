@@ -4,10 +4,7 @@ import com.krafton.kts.backend.common.JdbcCommon;
 import com.krafton.kts.backend.test_rel_testcase.domain.TEST_REL_TESTCASE;
 
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,26 +51,50 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
     }
 
     @Override
-    public void saveTestRelTestcase(List<TEST_REL_TESTCASE> rels) {
+    public void saveTestRelTestcase(List<TEST_REL_TESTCASE> rels, int TEST_SEQ, Boolean createNewTest) {
         Connection conn = null;
         PreparedStatement pstmt = null;
 
-        String values = "";
-        for(int i = 0; i < rels.stream().count(); i++){
-            TEST_REL_TESTCASE rel = rels.get(i);
-            values += "(" + rel.getRELATION_SEQ() + ", " + rel.getTEST_SEQ() + ", " + rel.getLIST_INDEX() + ", " + rel.getTESTCASE_SEQ() + ")";
-            if(i < rels.stream().count()-1){
-                values += ",";
-            }
-        }
-        System.out.println(values);
         try {
             conn = getConnection();
+            conn.setAutoCommit(false);//트랜잭션 처리
 
+            //step 1. 테스트 생성
+            if(createNewTest){
+                pstmt = conn.prepareStatement("INSERT INTO KTS_TEST (NAME, DESCRIPTION) VALUES ('기본값', '기본설명')", Statement.RETURN_GENERATED_KEYS);
+                pstmt.executeUpdate();
+
+                try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
+                    if (generatedKeys.next()) {
+                        TEST_SEQ = generatedKeys.getInt(1);
+                    }
+                    else {
+                        throw new SQLException("Creating user failed, no ID obtained.");
+                    }
+                }
+            }
+
+            String values = "";
+            for(int i = 0; i < rels.stream().count(); i++){
+                TEST_REL_TESTCASE rel = rels.get(i);
+                values += "(" + rel.getRELATION_SEQ() + ", " + TEST_SEQ + ", " + rel.getLIST_INDEX() + ", " + rel.getTESTCASE_SEQ() + ")";
+                if(i < rels.stream().count()-1){
+                    values += ",";
+                }
+            }
+
+            //step 2. 관계 생성
             pstmt = conn.prepareStatement("INSERT INTO TEST_REL_TESTCASE (RELATION_SEQ, TEST_SEQ, LIST_INDEX, TESTCASE_SEQ) VALUES " + values
             + " ON DUPLICATE KEY UPDATE RELATION_SEQ = RELATION_SEQ");
             pstmt.executeUpdate();
+
+            conn.commit();
         } catch (Exception e){
+            try {
+                conn.rollback();
+            } catch(SQLException ee){
+                System.out.println(ee);
+            }
             throw new IllegalStateException(e);
         } finally {
             close(conn, pstmt);

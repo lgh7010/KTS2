@@ -23,7 +23,7 @@ public class ServiceImpl_test_rel_testcase implements Service_test_rel_testcase 
     }
 
     @Override
-    public void saveTestRelTestcase(List<TEST_REL_TESTCASE> rels) {
-        this.repo_test_rel_testcase.saveTestRelTestcase(rels);
+    public void saveTestRelTestcase(List<TEST_REL_TESTCASE> rels, int TEST_SEQ) {
+        this.repo_test_rel_testcase.saveTestRelTestcase(rels, TEST_SEQ, TEST_SEQ > 0 ? false : true);
     }
 }

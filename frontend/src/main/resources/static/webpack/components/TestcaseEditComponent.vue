@@ -1,5 +1,30 @@
 <template>
   <div>
+
+    <div id="actionEditorBackground" style="
+        display: none;
+        width: 100vw;
+        height: 100vh;
+        position: fixed;
+        background-color:gray;
+        opacity: 0.5;
+        z-index:10;"/>
+
+    <div id="actionEditor" style="
+        display: none;
+        width: 500px;
+        height: 500px;
+        position: fixed;
+        left: 50%;
+        top: 50%;
+        margin-left: -250px;
+        margin-top: -250px;
+        background-color: white;
+        z-index:11;">
+      이게 액션에디터의 내용이다옹
+      <button v-on:click="actionClose">닫기</button>
+    </div>
+
     <div id="flowchart">
       <div v-for="action in this.actionDic" v-bind:id="action.action_SEQ" style="
         width:400px;
@@ -13,10 +38,6 @@
       <button v-on:click="goBack()">닫기</button>
     </div>
 
-    <div id="actionEditor" class="actionEditor" style="display: none">
-      이게 액션에디터의 내용이다옹
-      <button v-on:click="actionClose">닫기</button>
-    </div>
   </div>
 </template>
 
@@ -44,9 +65,9 @@ export default {
     })
   },
   updated: function() {
-    this.registDragElement(document.getElementById(this.actionDic[1].action_SEQ))
-    this.registDragElement(document.getElementById(this.actionDic[2].action_SEQ))
-    this.registDragElement(document.getElementById(this.actionDic[3].action_SEQ))
+    for(let ACTION_SEQ in this.actionDic){
+      this.registDragElement(document.getElementById(this.actionDic[ACTION_SEQ].action_SEQ))
+    }
   },
   methods: {
     goBack: function(){
@@ -87,11 +108,13 @@ export default {
     actionOpen: function(action){
       this.currentAction = action
 
+      $("#actionEditorBackground").show()
       $("#actionEditor").show()
     },
     actionClose: function(){
       this.currentAction = null
 
+      $("#actionEditorBackground").hide()
       $("#actionEditor").hide()
     }
   }
@@ -99,12 +122,5 @@ export default {
 </script>
 
 <style scoped>
-.actionEditor {
-  width: 400px;
-  height: 100px;
-  position: absolute;
-  left: 50%;
-  top: 50%;
-  z-index:300;
-}
+
 </style>

@@ -141,22 +141,24 @@ export default {
         pos4 = e.clientY
 
         // set the element's new position:
-        node.style.top = (node.offsetTop - pos2) + "px"
-        node.style.left = (node.offsetLeft - pos1) + "px"
+        var newTop = (node.offsetTop - pos2)
+        var newLeft = (node.offsetLeft - pos1)
+        node.style.top = newTop + "px"
+        node.style.left = newLeft + "px"
 
         //들어오는 화살표 위치 조정
         var startAt = arrows_end_map[jnode.attr('action_SEQ')]
         var endAt = jnode.attr('action_SEQ')
         var jarrow = $("#arrow_" + startAt + "_" + endAt)
-        jarrow.attr('x2', node.style.left)
-        jarrow.attr('y2', node.style.top)
+        jarrow.attr('x2', newLeft + 200)
+        jarrow.attr('y2', newTop - 100)
 
         //나가는 화살표 위치 조정
         startAt = jnode.attr('action_SEQ')
         endAt = arrows_start_map[jnode.attr('action_SEQ')]
         jarrow = $("#arrow_" + startAt + "_" + endAt)
-        jarrow.attr('x1', node.style.left)
-        jarrow.attr('y1', node.style.top)
+        jarrow.attr('x1', newLeft + 200)
+        jarrow.attr('y1', newTop)
       }
       function closeDragElement(){
         // stop moving when mouse button is released:

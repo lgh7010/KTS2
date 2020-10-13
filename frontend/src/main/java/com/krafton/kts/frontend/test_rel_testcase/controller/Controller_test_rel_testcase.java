@@ -50,13 +50,15 @@ public class Controller_test_rel_testcase {
     ){
         try {
             JSONObject requestJsonObj = new JSONObject(requestJsonStr);
-            JSONArray array = requestJsonObj.getJSONArray("REL_LIST");
+
             int testSeq = requestJsonObj.getInt("TEST_SEQ");
             String testName = requestJsonObj.getString("TEST_NAME");
             String testDescription = requestJsonObj.getString("TEST_DESCRIPTION");
+
+            JSONArray relArray = requestJsonObj.getJSONArray("REL_LIST");
             List<TEST_REL_TESTCASE> list = new ArrayList<>();
-            for(int listIndex = 0; listIndex < array.length(); listIndex++){
-                JSONObject relObj = array.getJSONObject(listIndex);
+            for(int listIndex = 0; listIndex < relArray.length(); listIndex++){
+                JSONObject relObj = relArray.getJSONObject(listIndex);
                 TEST_REL_TESTCASE elem = new TEST_REL_TESTCASE();
                 int relSeq = relObj.getInt("relation_SEQ");
                 elem.setRELATION_SEQ(relSeq > 0 ? relSeq : 0);
@@ -66,7 +68,13 @@ public class Controller_test_rel_testcase {
                 elem.setTESTCASE_SEQ(relObj.getInt("testcase_SEQ"));
                 list.add(elem);
             }
-            this.service_test_rel_testcase.saveTestRelTestcase(list, testSeq, testName, testDescription);
+
+            JSONArray removeTestcaseSeqListArray = requestJsonObj.getJSONArray("REMOVE_TESTCASE_SEQ_LIST");
+            List<Integer> removeTestcaseSeqList = new ArrayList<>();
+            for(int i = 0; i < removeTestcaseSeqListArray.length(); i++){
+                removeTestcaseSeqList.add(removeTestcaseSeqListArray.getInt(i));
+            }
+            this.service_test_rel_testcase.saveTestRelTestcase(list, testSeq, testName, testDescription, removeTestcaseSeqList);
 
             return new Response();
         } catch(Exception e){

@@ -101,6 +101,7 @@ export default {
       testRelTestcaseList_with_name_and_desc: [],
       testcaseList: [],
       currentTest: null,
+      removeTestcaseSeqList: [],
     }
   },
   mounted: function() {
@@ -167,7 +168,8 @@ export default {
         "REL_LIST": this.testRelTestcaseList_with_name_and_desc,
         "TEST_SEQ": this.currentTest.test_SEQ,
         "TEST_NAME": document.getElementById("testName").value,
-        "TEST_DESCRIPTION": document.getElementById("testDescription").value
+        "TEST_DESCRIPTION": document.getElementById("testDescription").value,
+        "REMOVE_TESTCASE_SEQ_LIST": this.removeTestcaseSeqList,
       }).then(response => {
         alert("저장 완료")
         console.log(response)
@@ -188,7 +190,9 @@ export default {
       this.testRelTestcaseList_with_name_and_desc[listIndex] = this.testRelTestcaseList_with_name_and_desc.splice(listIndex + 1, 1, this.testRelTestcaseList_with_name_and_desc[listIndex])[0]
     },
     removeTestcase: function(listIndex){
+      this.removeTestcaseSeqList.push(this.testRelTestcaseList_with_name_and_desc[listIndex].relation_SEQ)
       this.testRelTestcaseList_with_name_and_desc.splice(listIndex, 1)
+      console.log(this.removeTestcaseSeqList)
     }
   }
 }

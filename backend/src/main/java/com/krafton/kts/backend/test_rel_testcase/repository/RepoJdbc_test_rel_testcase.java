@@ -21,7 +21,7 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement("select * from TEST_REL_TESTCASE where TEST_SEQ = ? and DELETED = 'N'");
+            pstmt = conn.prepareStatement("select * from TEST_REL_TESTCASE where TEST_SEQ = ? and DELETED = 'N' ORDER BY LIST_INDEX");
             pstmt.setInt(1, TEST_SEQ);
             rs = pstmt.executeQuery();
 
@@ -92,7 +92,7 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
                 }
             }
             pstmt = conn.prepareStatement("INSERT INTO TEST_REL_TESTCASE (RELATION_SEQ, TEST_SEQ, LIST_INDEX, TESTCASE_SEQ) VALUES " + values
-            + " ON DUPLICATE KEY UPDATE RELATION_SEQ = RELATION_SEQ");
+            + " ON DUPLICATE KEY UPDATE LIST_INDEX = VALUES(LIST_INDEX)");
             pstmt.executeUpdate();
 
             conn.commit();

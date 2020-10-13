@@ -71,8 +71,8 @@
           <td>{{rel.name}}</td>
           <td>{{rel.description}}</td>
           <td>
-            <button v-on:click="moveUp(rel.relation_SEQ)">위로</button>
-            <button v-on:click="moveDown(rel.relation_SEQ)">아래로</button>
+            <button v-on:click="moveUp(rel.list_INDEX)">위로</button>
+            <button v-on:click="moveDown(rel.list_INDEX)">아래로</button>
             <router-link :to="{name: 'TestcaseEdit', params: {TESTCASE_SEQ: rel.testcase_SEQ}}"><button>편집</button></router-link>
             <button v-on:click="removeTestcase(rel.relation_SEQ)">제거</button>
           </td>
@@ -163,6 +163,7 @@ export default {
       })
     },
     onClickSave: function(){
+      console.log(this.testRelTestcaseList_with_name_and_desc)
       axios.post("/testRelTestcaseSave", {
         "REL_LIST": this.testRelTestcaseList_with_name_and_desc,
         "TEST_SEQ": this.currentTest.test_SEQ,
@@ -175,11 +176,27 @@ export default {
         console.log(error)
       })
     },
-    moveUp: function(RELATION_SEQ){
-      console.log("moveUp : " + RELATION_SEQ)
+    moveUp: function(listIndex){
+      if(listIndex < 1){
+        return
+      }
+      var up = this.testRelTestcaseList_with_name_and_desc[listIndex - 1]
+      var self = this.testRelTestcaseList_with_name_and_desc[listIndex]
+      up.list_INDEX += 1
+      self.list_INDEX -= 1
+      this.testRelTestcaseList_with_name_and_desc[listIndex - 1] = self
+      this.testRelTestcaseList_with_name_and_desc[listIndex] = up
     },
-    moveDown: function(RELATION_SEQ){
-      console.log("moveDown : " + RELATION_SEQ)
+    moveDown: function(listIndex){
+      if(listIndex > this.testRelTestcaseList_with_name_and_desc.length - 2){
+        return
+      }
+      var self = this.testRelTestcaseList_with_name_and_desc[listIndex]
+      var down = this.testRelTestcaseList_with_name_and_desc[listIndex + 1]
+      self.list_INDEX += 1
+      down.list_INDEX -= 1
+      this.testRelTestcaseList_with_name_and_desc[listIndex] = down
+      this.testRelTestcaseList_with_name_and_desc[listIndex + 1] = self
     },
     removeTestcase: function(RELATION_SEQ){
       console.log("remove : " + RELATION_SEQ)

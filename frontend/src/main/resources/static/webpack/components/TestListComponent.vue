@@ -53,7 +53,7 @@ export default {
       axios.post("/removeTest", {
         'TEST_SEQ': TEST_SEQ
       }).then(response => {
-        alert(response)
+        alert('삭제 완료')
       }).catch(error => {
         alert(error)
       })

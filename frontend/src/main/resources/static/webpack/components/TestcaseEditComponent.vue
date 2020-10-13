@@ -26,6 +26,9 @@
     </div>
 
     <div id="flowchart">
+      <button v-on:click="goBack()">닫기</button>
+      <button v-on:click="onClickAdd()">추가</button>
+
       <div v-for="action in this.actionDic"
            v-bind:id="action.action_SEQ" v-bind:action_SEQ="action.action_SEQ" v-bind:next_ACTION_SEQ="action.next_ACTION_SEQ"
            class="node" style="width:400px;
@@ -37,7 +40,6 @@
         <hr>
         {{action.description}}
       </div>
-      <button v-on:click="goBack()">닫기</button>
     </div>
 
     <svg width="1000" height="1000" viewbox="0 0 1000 1000">
@@ -60,49 +62,73 @@
 <script>
 import jQuery from 'jquery'
 import axios from "axios";
+import Vue from 'vue'
 window.jQuery = window.$ = jQuery
 
 export default {
   name: "TestcaseEditComponent",
-  data: function(){
+  data(){
     return {
-      actionDic: {},
-      currentAction: null,
-      nodes: {},
+      actionDic: {},//현재 페이지에서 관리중인 액션노드의 딕셔너리. 키값은 ACTION_SEQ
+      actionTempleteDic: {},//액션 템플릿의 딕셔너리. 최초 페이지 생성시 불러온다.
+      currentTestcaseSeq: this.$route.params.TESTCASE_SEQ,//현재 이 에디터에서 편집중인 테스트케이스의 시퀀스
+      currentAction: null,//현재 열려있는 액션 에디터의 주체가 되는 액션노드.
+      nodes: {},//액션노드들의 html 엘리먼트를 보관하는 딕셔너리
       arrows_start_map: {},//키는 시작 action_SEQ, 값은 끝 action_SEQ
       arrows_end_map: {},//키는 끝 action_SEQ, 값은 시작 action_SEQ
     }
   },
-  created: function(){
+  created(){
+    axios.get("/actionTempleteDic").then(response => {
+      this.actionTempleteDic = response.data.context.actionTempleteDic
+    }).catch(error => {
+      console.log(error)
+    })
   },
-  mounted: function(){
-    var TESTCASE_SEQ = this.$route.params.TESTCASE_SEQ
-    axios.get("/actionDic", { params: {'TESTCASE_SEQ': TESTCASE_SEQ}}).then(response => {
+  mounted(){
+    axios.get("/actionDic", { params: {'TESTCASE_SEQ': this.currentTestcaseSeq}}).then(response => {
       this.actionDic = response.data.context.actionDic
     }).catch(error => {
       console.log(error)
     })
   },
-  updated: function() {
+  updated(){
     for(let ACTION_SEQ in this.actionDic){
+      //this.addNode(this.actionDic[ACTION_SEQ])
       var action = this.actionDic[ACTION_SEQ]
-      var node = document.getElementById(ACTION_SEQ)
+      var node = document.getElementById(action.action_SEQ)
 
       //노드 등록 및 위치 설정
-      this.nodes[ACTION_SEQ] = node
+      this.nodes[action.action_SEQ] = node
       node.style.top = action.y_POS + "px"
       node.style.left = action.x_POS + "px"
 
       //드래그 설정
       this.registDragableNode(node, this.arrows_start_map, this.arrows_end_map)
-      this.registDragableArrow(document.getElementById("arrow_" + ACTION_SEQ + "_" + action.next_ACTION_SEQ))
+      this.registDragableArrow(document.getElementById("arrow_" + action.action_SEQ + "_" + action.next_ACTION_SEQ))
     }
   },
   methods: {
-    goBack: function(){
+    //제어 관련
+    goBack(){
       this.$router.go(-1)
     },
-    registDragableArrow: function(arrow){
+    onClickAdd(){
+      Vue.set(this.actionDic, 0, {
+        action_SEQ: 0,
+        testcase_SEQ: this.currentTestcaseSeq,
+        is_START: 'N',
+        next_ACTION_SEQ: 1,
+        action_ID: 'Empty',
+        x_POS: 20,
+        y_POS: 700,
+        description: this.actionTempleteDic['Empty'].templete_PROPERTY_JSON,
+        deleted: 'N',
+      })
+    },
+
+    //SVG 관련
+    registDragableArrow(arrow){
       if(!arrow){
         return
       }
@@ -111,7 +137,7 @@ export default {
       this.arrows_start_map[jarrow.attr('action_SEQ')] = jarrow.attr('next_ACTION_SEQ')
       this.arrows_end_map[jarrow.attr('next_ACTION_SEQ')] = jarrow.attr('action_SEQ')
     },
-    registDragableNode: function(node, arrows_start_map, arrows_end_map){
+    registDragableNode(node, arrows_start_map, arrows_end_map){
       var jnode = $(node)
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0
       node.onmousedown = dragMouseDown
@@ -164,13 +190,15 @@ export default {
         document.onmousemove = null
       }
     },
-    actionOpen: function(action){
+
+    //액션노드 편집 관련
+    actionOpen(action){
       this.currentAction = action
 
       $("#actionEditorBackground").show()
       $("#actionEditor").show()
     },
-    actionClose: function(){
+    actionClose(){
       this.currentAction = null
 
       $("#actionEditorBackground").hide()

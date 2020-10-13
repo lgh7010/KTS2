@@ -1,25 +1,33 @@
 <template>
   <div>
-    <table>
-      <thead>
-      <tr>
-        <th>테스트케이스 이름</th>
-        <th>설명</th>
-        <th>상호작용</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr v-for="testcase in this.testcaseList">
-        <td>{{testcase.name}}</td>
-        <td>{{testcase.description}}</td>
-        <td>
-          <router-link :to="{name: 'TestcaseEdit', params: {TESTCASE_SEQ: testcase.testcase_SEQ}}"><button>편집</button></router-link>
-          <button v-on:click="onClickRemove(testcase.testcase_SEQ)">삭제</button>
-        </td>
-      </tr>
 
-      </tbody>
-    </table>
+    <div>
+      <router-link :to="{name: 'TestcaseEdit', params: {TESTCASE_SEQ: 0}}"><button>추가</button></router-link>
+    </div>
+
+    <div>
+      <table>
+        <thead>
+        <tr>
+          <th>테스트케이스 이름</th>
+          <th>설명</th>
+          <th>상호작용</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr v-for="testcase in this.testcaseList">
+          <td>{{testcase.name}}</td>
+          <td>{{testcase.description}}</td>
+          <td>
+            <router-link :to="{name: 'TestcaseEdit', params: {TESTCASE_SEQ: testcase.testcase_SEQ}}"><button>편집</button></router-link>
+            <button v-on:click="onClickRemove(testcase.testcase_SEQ)">삭제</button>
+          </td>
+        </tr>
+
+        </tbody>
+      </table>
+    </div>
+
   </div>
 </template>
 

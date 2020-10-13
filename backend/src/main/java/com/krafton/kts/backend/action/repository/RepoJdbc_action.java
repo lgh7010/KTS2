@@ -1,6 +1,7 @@
 package com.krafton.kts.backend.action.repository;
 
 import com.krafton.kts.backend.action.domain.KTS_ACTION;
+import com.krafton.kts.backend.action.domain.KTS_ACTION_TEMPLETE;
 import com.krafton.kts.backend.common.JdbcCommon;
 
 import javax.sql.DataSource;
@@ -41,6 +42,34 @@ public class RepoJdbc_action extends JdbcCommon implements Repo_action {
                 action.setPROPERTY_JSON(rs.getString("PROPERTY_JSON"));
                 action.setDELETED(rs.getString("DELETED"));
                 list.add(action);
+            }
+            return list;
+        } catch (Exception e){
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt, rs);
+        }
+    }
+
+    @Override
+    public List<KTS_ACTION_TEMPLETE> findAllTemplete() {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement("select * from KTS_ACTION_TEMPLETE");
+            rs = pstmt.executeQuery();
+
+            List<KTS_ACTION_TEMPLETE> list = new ArrayList<>();
+            while(rs.next()){
+                KTS_ACTION_TEMPLETE tp = new KTS_ACTION_TEMPLETE();
+                tp.setACTION_ID(rs.getString("ACTION_ID"));
+                tp.setTYPE(rs.getString("TYPE"));
+                tp.setTEMPLETE_DESCRIPTION(rs.getString("TEMPLETE_DESCRIPTION"));
+                tp.setTEMPLETE_PROPERTY_JSON(rs.getString("TEMPLETE_PROPERTY_JSON"));
+                list.add(tp);
             }
             return list;
         } catch (Exception e){

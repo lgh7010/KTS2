@@ -30,7 +30,7 @@ public class Controller_action {
 
     @GetMapping("/actionDic")
     @ResponseBody
-    public Response testcaseDic(
+    public Response actionDic(
             HttpServletRequest req,
             @RequestParam(value = "TESTCASE_SEQ") int TESTCASE_SEQ,
             HttpServletResponse res
@@ -47,6 +47,21 @@ public class Controller_action {
             response.putContext("actionDic", ret);
             return response;
         } catch(Exception e) {
+            return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
+        }
+    }
+
+    @GetMapping("/actionTempleteDic")
+    @ResponseBody
+    public Response actionTempleteDic(
+        HttpServletRequest req,
+        HttpServletResponse res
+    ){
+        try {
+            Response response = new Response();
+            response.putContext("actionTempleteDic", this.service_action.findAllTemplete());
+            return response;
+        } catch(Exception e){
             return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
         }
     }

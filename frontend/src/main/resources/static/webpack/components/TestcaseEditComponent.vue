@@ -48,7 +48,7 @@
           <path d="M 0 0 L 10 5 L 0 10 z" fill="black"/>
         </marker>
       </defs>
-      <line v-for="action in this.actionDic" v-if="action.next_ACTION_SEQ > 0"
+      <line v-for="action in this.actionDic" v-if="action.next_ACTION_SEQ != 0"
             v-bind:id="'arrow_'+action.action_SEQ+'_'+action.next_ACTION_SEQ"
             v-bind:action_SEQ="action.action_SEQ" v-bind:next_ACTION_SEQ="action.next_ACTION_SEQ"
             v-bind:x1="action.x_POS+200" v-bind:y1="action.y_POS"
@@ -76,6 +76,7 @@ export default {
       nodes: {},//액션노드들의 html 엘리먼트를 보관하는 딕셔너리
       arrows_start_map: {},//키는 시작 action_SEQ, 값은 끝 action_SEQ
       arrows_end_map: {},//키는 끝 action_SEQ, 값은 시작 action_SEQ
+      dummySeq: -1,//편집시에 추가되어서 아직 DB에 저장되지 않은 노드들에게 임시로 붙일 시퀀스. 음수값을 가져야 한다.
     }
   },
   created(){
@@ -113,18 +114,38 @@ export default {
     goBack(){
       this.$router.go(-1)
     },
+    getFirstAction(){
+      for(let ACTION_SEQ in this.actionDic){
+        if(this.actionDic[ACTION_SEQ].is_START == 'Y'){
+          return this.actionDic[ACTION_SEQ]
+        }
+      }
+      return null
+    },
+    getLastAction(){
+      for(let ACTION_SEQ in this.actionDic){
+        if(this.actionDic[ACTION_SEQ].next_ACTION_SEQ == 0){
+          return this.actionDic[ACTION_SEQ]
+        }
+      }
+      return null
+    },
     onClickAdd(){
-      Vue.set(this.actionDic, 0, {
-        action_SEQ: 0,
+      var lastAction = this.getLastAction()
+      lastAction.next_ACTION_SEQ = this.dummySeq;
+      Vue.set(this.actionDic, this.dummySeq, {
+        action_SEQ: this.dummySeq,
         testcase_SEQ: this.currentTestcaseSeq,
         is_START: 'N',
-        next_ACTION_SEQ: 1,
+        next_ACTION_SEQ: 0,
         action_ID: 'Empty',
-        x_POS: 20,
-        y_POS: 700,
+        x_POS: 500,
+        y_POS: 500,
         description: this.actionTempleteDic['Empty'].templete_PROPERTY_JSON,
         deleted: 'N',
       })
+      this.dummySeq--
+      console.log(this.actionDic)
     },
 
     //SVG 관련

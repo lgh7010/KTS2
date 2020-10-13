@@ -55,14 +55,14 @@ public class Controller_test_rel_testcase {
             String testName = requestJsonObj.getString("TEST_NAME");
             String testDescription = requestJsonObj.getString("TEST_DESCRIPTION");
             List<TEST_REL_TESTCASE> list = new ArrayList<>();
-            for(int i = 0; i < array.length(); i++){
-                JSONObject relObj = array.getJSONObject(i);
+            for(int listIndex = 0; listIndex < array.length(); listIndex++){
+                JSONObject relObj = array.getJSONObject(listIndex);
                 TEST_REL_TESTCASE elem = new TEST_REL_TESTCASE();
                 int relSeq = relObj.getInt("relation_SEQ");
                 elem.setRELATION_SEQ(relSeq > 0 ? relSeq : 0);
                 //elem.setTEST_SEQ(relObj.getInt("test_SEQ"));
                 elem.setTEST_SEQ(testSeq);
-                elem.setLIST_INDEX(relObj.getInt("list_INDEX"));
+                elem.setLIST_INDEX(listIndex);
                 elem.setTESTCASE_SEQ(relObj.getInt("testcase_SEQ"));
                 list.add(elem);
             }

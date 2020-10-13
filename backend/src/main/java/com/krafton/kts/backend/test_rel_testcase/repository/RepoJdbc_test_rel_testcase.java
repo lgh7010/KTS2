@@ -30,7 +30,7 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
                 TEST_REL_TESTCASE rel = new TEST_REL_TESTCASE();
                 rel.setRELATION_SEQ(rs.getInt("RELATION_SEQ"));
                 rel.setTEST_SEQ(rs.getInt("TEST_SEQ"));
-                rel.setLIST_INDEX(rs.getInt("LIST_INDEX"));
+                //rel.setLIST_INDEX(rs.getInt("LIST_INDEX"));
                 rel.setTESTCASE_SEQ(rs.getInt("TESTCASE_SEQ"));
                 rel.setDELETED(rs.getString("DELETED"));
 
@@ -84,10 +84,10 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
 
             //step 2. 관계 생성
             String values = "";
-            for(int i = 0; i < rels.stream().count(); i++){
-                TEST_REL_TESTCASE rel = rels.get(i);
-                values += "(" + rel.getRELATION_SEQ() + ", " + TEST_SEQ + ", " + rel.getLIST_INDEX() + ", " + rel.getTESTCASE_SEQ() + ")";
-                if(i < rels.stream().count()-1){
+            for(int listIndex = 0; listIndex < rels.stream().count(); listIndex++){
+                TEST_REL_TESTCASE rel = rels.get(listIndex);
+                values += "(" + rel.getRELATION_SEQ() + ", " + TEST_SEQ + ", " + listIndex + ", " + rel.getTESTCASE_SEQ() + ")";
+                if(listIndex < rels.stream().count()-1){
                     values += ",";
                 }
             }

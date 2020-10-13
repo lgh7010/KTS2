@@ -66,15 +66,15 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="rel in this.testRelTestcaseList_with_name_and_desc">
-          <td>{{rel.list_INDEX}}</td>
+        <tr v-for="(rel, index) in this.testRelTestcaseList_with_name_and_desc">
+          <td>{{index}}</td>
           <td>{{rel.name}}</td>
           <td>{{rel.description}}</td>
           <td>
-            <button v-on:click="moveUp(rel.list_INDEX)">위로</button>
-            <button v-on:click="moveDown(rel.list_INDEX)">아래로</button>
+            <button v-on:click="moveUp(index)">위로</button>
+            <button v-on:click="moveDown(index)">아래로</button>
             <router-link :to="{name: 'TestcaseEdit', params: {TESTCASE_SEQ: rel.testcase_SEQ}}"><button>편집</button></router-link>
-            <button v-on:click="removeTestcase(rel.relation_SEQ)">제거</button>
+            <button v-on:click="removeTestcase(index)">제거</button>
           </td>
         </tr>
         </tbody>
@@ -120,7 +120,7 @@ export default {
             list.push({
               relation_SEQ: testRelTestcaseList[i].relation_SEQ,
               test_SEQ : testRelTestcaseList[i].test_SEQ,
-              list_INDEX : testRelTestcaseList[i].list_INDEX,
+              //list_INDEX : testRelTestcaseList[i].list_INDEX,
               testcase_SEQ : testRelTestcaseList[i].testcase_SEQ,
               name : testcaseDic[testRelTestcaseList[i].testcase_SEQ].name,
               description : testcaseDic[testRelTestcaseList[i].testcase_SEQ].description
@@ -156,14 +156,13 @@ export default {
       this.testRelTestcaseList_with_name_and_desc.push({
         relation_SEQ: 0,
         test_SEQ : this.currentTest.test_SEQ,
-        list_INDEX : this.testRelTestcaseList_with_name_and_desc.length,
+        //list_INDEX : this.testRelTestcaseList_with_name_and_desc.length,
         testcase_SEQ : testcase.testcase_SEQ,
         name : testcase.name,
         description : testcase.description
       })
     },
     onClickSave: function(){
-      console.log(this.testRelTestcaseList_with_name_and_desc)
       axios.post("/testRelTestcaseSave", {
         "REL_LIST": this.testRelTestcaseList_with_name_and_desc,
         "TEST_SEQ": this.currentTest.test_SEQ,
@@ -180,26 +179,16 @@ export default {
       if(listIndex < 1){
         return
       }
-      var up = this.testRelTestcaseList_with_name_and_desc[listIndex - 1]
-      var self = this.testRelTestcaseList_with_name_and_desc[listIndex]
-      up.list_INDEX += 1
-      self.list_INDEX -= 1
-      this.testRelTestcaseList_with_name_and_desc[listIndex - 1] = self
-      this.testRelTestcaseList_with_name_and_desc[listIndex] = up
+      this.testRelTestcaseList_with_name_and_desc[listIndex] = this.testRelTestcaseList_with_name_and_desc.splice(listIndex - 1, 1, this.testRelTestcaseList_with_name_and_desc[listIndex])[0]
     },
     moveDown: function(listIndex){
       if(listIndex > this.testRelTestcaseList_with_name_and_desc.length - 2){
         return
       }
-      var self = this.testRelTestcaseList_with_name_and_desc[listIndex]
-      var down = this.testRelTestcaseList_with_name_and_desc[listIndex + 1]
-      self.list_INDEX += 1
-      down.list_INDEX -= 1
-      this.testRelTestcaseList_with_name_and_desc[listIndex] = down
-      this.testRelTestcaseList_with_name_and_desc[listIndex + 1] = self
+      this.testRelTestcaseList_with_name_and_desc[listIndex] = this.testRelTestcaseList_with_name_and_desc.splice(listIndex + 1, 1, this.testRelTestcaseList_with_name_and_desc[listIndex])[0]
     },
-    removeTestcase: function(RELATION_SEQ){
-      console.log("remove : " + RELATION_SEQ)
+    removeTestcase: function(listIndex){
+      this.testRelTestcaseList_with_name_and_desc.splice(listIndex, 1)
     }
   }
 }

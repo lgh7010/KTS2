@@ -32,6 +32,18 @@ public class Controller_test {
         return response;
     }
 
+    @GetMapping("/test")
+    @ResponseBody
+    public Response test(
+            HttpServletRequest req,
+            @RequestParam int TEST_SEQ,
+            HttpServletResponse res
+    ){
+        Response response = new Response();
+        response.putContext("test", this.testListService.find(TEST_SEQ));
+        return response;
+    }
+
     @PostMapping("/removeTest")
     @ResponseBody
     public Response removeTest(HttpServletRequest req, @RequestBody String requestJsonStr, HttpServletResponse res){

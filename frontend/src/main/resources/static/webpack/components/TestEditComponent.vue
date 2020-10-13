@@ -44,6 +44,21 @@
       <table>
         <thead>
         <tr>
+          <th>테스트 이름</th>
+          <th>테스트 설명</th>
+        </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><input id="testName" type="text"></td>
+            <td><input id="testDescription" type="text"></td>
+          </tr>
+        </tbody>
+      </table>
+
+      <table>
+        <thead>
+        <tr>
           <th>순서</th>
           <th>테스트케이스 이름</th>
           <th>설명</th>
@@ -83,32 +98,38 @@ export default {
   name: "testEditComponent",
   data: function(){
     return {
-      currentTEST_SEQ: 0,
       testRelTestcaseList_with_name_and_desc: [],
-      testcaseList: []
+      testcaseList: [],
+      currentTest: null,
     }
   },
   mounted: function() {
-    this.currentTEST_SEQ = this.$route.params.TEST_SEQ
+    axios.get("/test", { params: {'TEST_SEQ': this.$route.params.TEST_SEQ}}).then(responseTest => {
+      this.currentTest = responseTest.data.context.test
+      document.getElementById("testName").value = this.currentTest.name
+      document.getElementById("testDescription").value = this.currentTest.description
 
-    //쿼리 한번으로 해결하려면 TEST_REL_TESTCASE에 'NAME'과 'DESCRIPTION'을 더한 도메인 클래스를 따로 또 추가해야 해서 이런식으로 처리함.
-    //편의성과 일관성 사이의 Tradeoff에서 결정한 사항.
-    axios.get("/testRelTestcaseList", { params: {'TEST_SEQ': this.currentTEST_SEQ}}).then(response => {
-      var testRelTestcaseList = response.data.context.testRelTestcaseList
-      axios.get("/testcaseDic", { params: {'TEST_SEQ': this.currentTEST_SEQ}}).then(response2 => {
-        var testcaseDic = response2.data.context.testcaseDic
-        var list = []
-        for(var i = 0; i < testRelTestcaseList.length; i++){
-          list.push({
-            relation_SEQ: testRelTestcaseList[i].relation_SEQ,
-            test_SEQ : testRelTestcaseList[i].test_SEQ,
-            list_INDEX : testRelTestcaseList[i].list_INDEX,
-            testcase_SEQ : testRelTestcaseList[i].testcase_SEQ,
-            name : testcaseDic[testRelTestcaseList[i].testcase_SEQ].name,
-            description : testcaseDic[testRelTestcaseList[i].testcase_SEQ].description
-          })
-        }
-        this.testRelTestcaseList_with_name_and_desc = list
+      //쿼리 한번으로 해결하려면 TEST_REL_TESTCASE에 'NAME'과 'DESCRIPTION'을 더한 도메인 클래스를 따로 또 추가해야 해서 이런식으로 처리함.
+      //편의성과 일관성 사이의 Tradeoff에서 결정한 사항.
+      axios.get("/testRelTestcaseList", { params: {'TEST_SEQ': this.currentTest.test_SEQ}}).then(responseRel => {
+        var testRelTestcaseList = responseRel.data.context.testRelTestcaseList
+        axios.get("/testcaseDic", { params: {'TEST_SEQ': this.currentTest.test_SEQ}}).then(responseDic => {
+          var testcaseDic = responseDic.data.context.testcaseDic
+          var list = []
+          for(var i = 0; i < testRelTestcaseList.length; i++){
+            list.push({
+              relation_SEQ: testRelTestcaseList[i].relation_SEQ,
+              test_SEQ : testRelTestcaseList[i].test_SEQ,
+              list_INDEX : testRelTestcaseList[i].list_INDEX,
+              testcase_SEQ : testRelTestcaseList[i].testcase_SEQ,
+              name : testcaseDic[testRelTestcaseList[i].testcase_SEQ].name,
+              description : testcaseDic[testRelTestcaseList[i].testcase_SEQ].description
+            })
+          }
+          this.testRelTestcaseList_with_name_and_desc = list
+        }).catch(error => {
+          console.log(error)
+        })
       }).catch(error => {
         console.log(error)
       })
@@ -134,7 +155,7 @@ export default {
     onClickTestcaseAddToTest: function(testcase){
       this.testRelTestcaseList_with_name_and_desc.push({
         relation_SEQ: 0,
-        test_SEQ : this.currentTEST_SEQ,
+        test_SEQ : this.currentTest.test_SEQ,
         list_INDEX : this.testRelTestcaseList_with_name_and_desc.length,
         testcase_SEQ : testcase.testcase_SEQ,
         name : testcase.name,
@@ -144,7 +165,9 @@ export default {
     onClickSave: function(){
       axios.post("/testRelTestcaseSave", {
         "REL_LIST": this.testRelTestcaseList_with_name_and_desc,
-        "TEST_SEQ": this.currentTEST_SEQ
+        "TEST_SEQ": this.currentTest.test_SEQ,
+        "TEST_NAME": document.getElementById("testName").value,
+        "TEST_DESCRIPTION": document.getElementById("testDescription").value
       }).then(response => {
         alert("저장 완료")
         console.log(response)

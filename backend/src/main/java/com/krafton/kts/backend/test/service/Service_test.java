@@ -9,6 +9,7 @@ import java.util.List;
 public interface Service_test {
 
     List<KTS_TEST> findAll();
+    KTS_TEST find(int TEST_SEQ);
     void removeTest(int TEST_SEQ);
 
 }

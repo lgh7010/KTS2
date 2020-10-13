@@ -18,7 +18,7 @@
           <td>{{test.name}}</td>
           <td>{{test.description}}</td>
           <td>
-            <router-link :to="{name: 'TestEdit', params: {TEST_SEQ: test.test_SEQ}}"><button>편집</button></router-link>
+            <router-link :to="{name: 'TestEdit', params: { TEST_SEQ: test.test_SEQ }}"><button>편집</button></router-link>
             <button v-on:click="onClickRemove(test.test_SEQ)">삭제</button>
           </td>
         </tr>

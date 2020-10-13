@@ -5,6 +5,7 @@ import com.krafton.kts.backend.test.domain.KTS_TEST;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ServiceImpl_test implements Service_test {
 
@@ -18,6 +19,15 @@ public class ServiceImpl_test implements Service_test {
     @Override
     public List<KTS_TEST> findAll() {
         return this.testRepo.findAllTest();
+    }
+
+    @Override
+    public KTS_TEST find(int TEST_SEQ) {
+        Optional<KTS_TEST> result = this.testRepo.findTestByTEST_SEQ(TEST_SEQ);
+        if(result.isPresent()){
+            return result.get();
+        }
+        return null;
     }
 
     @Override

@@ -52,6 +52,8 @@ public class Controller_test_rel_testcase {
             JSONObject requestJsonObj = new JSONObject(requestJsonStr);
             JSONArray array = requestJsonObj.getJSONArray("REL_LIST");
             int testSeq = requestJsonObj.getInt("TEST_SEQ");
+            String testName = requestJsonObj.getString("TEST_NAME");
+            String testDescription = requestJsonObj.getString("TEST_DESCRIPTION");
             List<TEST_REL_TESTCASE> list = new ArrayList<>();
             for(int i = 0; i < array.length(); i++){
                 JSONObject relObj = array.getJSONObject(i);
@@ -64,7 +66,7 @@ public class Controller_test_rel_testcase {
                 elem.setTESTCASE_SEQ(relObj.getInt("testcase_SEQ"));
                 list.add(elem);
             }
-            this.service_test_rel_testcase.saveTestRelTestcase(list, testSeq);
+            this.service_test_rel_testcase.saveTestRelTestcase(list, testSeq, testName, testDescription);
 
             return new Response();
         } catch(Exception e){

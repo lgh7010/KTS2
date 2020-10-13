@@ -57,7 +57,30 @@ public class RepoJdbc_test extends JdbcCommon implements Repo_test {
 
     @Override
     public Optional<KTS_TEST> findTestByTEST_SEQ(int TEST_SEQ) {
-        return Optional.empty();
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement("select * from KTS_TEST where TEST_SEQ = ? AND DELETED = 'N'");
+            pstmt.setInt(1, TEST_SEQ);
+            rs = pstmt.executeQuery();
+
+            rs.next();
+
+            KTS_TEST test = new KTS_TEST();
+            test.setTEST_SEQ(rs.getInt("TEST_SEQ"));
+            test.setNAME(rs.getString("NAME"));
+            test.setDESCRIPTION(rs.getString("DESCRIPTION"));
+            test.setDELETED(rs.getString("DELETED"));
+
+            return Optional.of(test);
+        } catch (Exception e){
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt, rs);
+        }
     }
 
     @Override

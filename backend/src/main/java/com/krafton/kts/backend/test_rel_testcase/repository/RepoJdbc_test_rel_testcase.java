@@ -51,7 +51,7 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
     }
 
     @Override
-    public void saveTestRelTestcase(List<TEST_REL_TESTCASE> rels, int TEST_SEQ, Boolean createNewTest) {
+    public void saveTestRelTestcase(List<TEST_REL_TESTCASE> rels, int TEST_SEQ, Boolean createNewTest, String testName, String testDescription) {
         Connection conn = null;
         PreparedStatement pstmt = null;
 
@@ -61,19 +61,28 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
 
             //step 1. 테스트 생성
             if(createNewTest){
-                pstmt = conn.prepareStatement("INSERT INTO KTS_TEST (NAME, DESCRIPTION) VALUES ('기본값', '기본설명')", Statement.RETURN_GENERATED_KEYS);
+                pstmt = conn.prepareStatement("INSERT INTO KTS_TEST (NAME, DESCRIPTION) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
+                pstmt.setString(1, testName);
+                pstmt.setString(2, testDescription);
                 pstmt.executeUpdate();
 
                 try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
                     if (generatedKeys.next()) {
                         TEST_SEQ = generatedKeys.getInt(1);
-                    }
-                    else {
-                        throw new SQLException("Creating user failed, no ID obtained.");
+                    } else {
+                        throw new SQLException("Creating KTS_TEST failed, no TEST_SEQ obtained.");
                     }
                 }
+            } else {
+                //테스트 정보 업데이트
+                pstmt = conn.prepareStatement("UPDATE KTS_TEST SET NAME = ?, DESCRIPTION = ? WHERE TEST_SEQ = ?");
+                pstmt.setString(1, testName);
+                pstmt.setString(2, testDescription);
+                pstmt.setInt(3, TEST_SEQ);
+                pstmt.executeUpdate();
             }
 
+            //step 2. 관계 생성
             String values = "";
             for(int i = 0; i < rels.stream().count(); i++){
                 TEST_REL_TESTCASE rel = rels.get(i);
@@ -82,8 +91,6 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
                     values += ",";
                 }
             }
-
-            //step 2. 관계 생성
             pstmt = conn.prepareStatement("INSERT INTO TEST_REL_TESTCASE (RELATION_SEQ, TEST_SEQ, LIST_INDEX, TESTCASE_SEQ) VALUES " + values
             + " ON DUPLICATE KEY UPDATE RELATION_SEQ = RELATION_SEQ");
             pstmt.executeUpdate();

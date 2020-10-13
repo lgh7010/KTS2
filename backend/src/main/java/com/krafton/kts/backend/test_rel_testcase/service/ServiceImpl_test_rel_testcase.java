@@ -5,6 +5,7 @@ import com.krafton.kts.backend.test_rel_testcase.domain.TEST_REL_TESTCASE;
 import com.krafton.kts.backend.test_rel_testcase.repository.Repo_test_rel_testcase;
 import org.springframework.beans.factory.annotation.Autowired;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -19,6 +20,10 @@ public class ServiceImpl_test_rel_testcase implements Service_test_rel_testcase 
 
     @Override
     public List<TEST_REL_TESTCASE> findTestRelTestcaseByTEST_SEQ(int TEST_SEQ) {
+        if(TEST_SEQ < 1){
+            List<TEST_REL_TESTCASE> list = new ArrayList<>();
+            return list;
+        }
         return this.repo_test_rel_testcase.findTestRelTestcaseByTEST_SEQ(TEST_SEQ);
     }
 

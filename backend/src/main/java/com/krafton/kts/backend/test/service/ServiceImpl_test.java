@@ -23,6 +23,9 @@ public class ServiceImpl_test implements Service_test {
 
     @Override
     public KTS_TEST find(int TEST_SEQ) {
+        if(TEST_SEQ < 1){
+            return null;
+        }
         Optional<KTS_TEST> result = this.testRepo.findTestByTEST_SEQ(TEST_SEQ);
         if(result.isPresent()){
             return result.get();
@@ -32,6 +35,9 @@ public class ServiceImpl_test implements Service_test {
 
     @Override
     public void removeTest(int TEST_SEQ) {
+        if(TEST_SEQ < 1){
+            return;
+        }
         this.testRepo.removeTest(TEST_SEQ);
     }
 }

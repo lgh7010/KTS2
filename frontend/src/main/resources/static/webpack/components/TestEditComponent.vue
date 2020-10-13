@@ -156,7 +156,7 @@ export default {
     onClickTestcaseAddToTest: function(testcase){
       this.testRelTestcaseList_with_name_and_desc.push({
         relation_SEQ: 0,
-        test_SEQ : this.currentTest.test_SEQ,
+        test_SEQ : (this.currentTest != null) ? this.currentTest.test_SEQ : 0,
         //list_INDEX : this.testRelTestcaseList_with_name_and_desc.length,
         testcase_SEQ : testcase.testcase_SEQ,
         name : testcase.name,
@@ -166,7 +166,7 @@ export default {
     onClickSave: function(){
       axios.post("/testRelTestcaseSave", {
         "REL_LIST": this.testRelTestcaseList_with_name_and_desc,
-        "TEST_SEQ": this.currentTest.test_SEQ,
+        "TEST_SEQ": (this.currentTest != null) ? this.currentTest.test_SEQ : 0,
         "TEST_NAME": document.getElementById("testName").value,
         "TEST_DESCRIPTION": document.getElementById("testDescription").value,
         "REMOVE_TESTCASE_SEQ_LIST": this.removeTestcaseSeqList,

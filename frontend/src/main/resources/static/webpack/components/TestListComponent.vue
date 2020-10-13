@@ -13,8 +13,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="test in this.testList">
-          <td>{{test.test_SEQ}}</td>
+        <tr v-for="(test, index) in this.testList">
+          <td>{{index + 1}}</td>
           <td>{{test.name}}</td>
           <td>{{test.description}}</td>
           <td>
@@ -54,6 +54,7 @@ export default {
         'TEST_SEQ': TEST_SEQ
       }).then(response => {
         alert('삭제 완료')
+        location.reload()
       }).catch(error => {
         alert(error)
       })

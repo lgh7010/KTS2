@@ -21,8 +21,36 @@
         margin-top: -250px;
         background-color: white;
         z-index:11;">
-      
-      <button v-on:click="actionClose">닫기</button>
+
+      <div>
+        <select id="actionIdSelection" @change="onChangeActionID()">
+          <option v-for="actionTemplete in this.actionTempleteDic" v-bind:value="actionTemplete.action_ID">
+            {{actionTemplete.action_ID}}
+          </option>
+        </select>
+        <button v-on:click="onClickActionSave">저장</button>
+        <button v-on:click="actionClose">닫기</button>
+      </div>
+
+      <div>
+        <table>
+          <thead>
+            <tr>
+              <th>속성</th>
+              <th>값</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr v-for="prop in this.actionProperties">
+              <td>{{prop.property_NAME}}</td>
+              <td><input type="text"
+                         v-bind:id="prop.property_SEQ" v-bind:name="prop.property_NAME" v-bind:value="prop.property_VALUE"
+                         v-on:input="onPropertyChange(prop)"></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
 
     <div id="flowchart">
@@ -79,11 +107,12 @@ export default {
       actionDic: {},//현재 페이지에서 관리중인 액션노드의 딕셔너리. 키값은 ACTION_GUID
       actionTempleteDic: {},//액션 템플릿의 딕셔너리. 최초 페이지 생성시 불러온다.
       currentTestcaseSeq: this.$route.params.TESTCASE_SEQ,//현재 이 에디터에서 편집중인 테스트케이스의 시퀀스
-      currentAction: null,//현재 열려있는 액션 에디터의 주체가 되는 액션노드.
-      nodes: {},//액션노드들의 html 엘리먼트를 보관하는 딕셔너리
+
       arrows_start_map: {},//키는 시작 action_GUID, 값은 끝 action_GUID
       arrows_end_map: {},//키는 끝 action_GUID, 값은 시작 action_GUID
       removeActionGuidList: [],//페이지상에서 삭제되었지만 아직 DB에 반영되지 않은 액션노드 정보들
+
+      actionProperties: [],//액션 에디터에 나타날 프로퍼티들
     }
   },
   created(){
@@ -107,7 +136,6 @@ export default {
       var node = document.getElementById(action.action_GUID)
 
       //노드 등록 및 위치 설정
-      this.nodes[action.action_GUID] = node
       node.style.top = action.y_POS + "px"
       node.style.left = action.x_POS + "px"
 
@@ -259,16 +287,41 @@ export default {
 
     //액션노드 편집 관련
     actionOpen(action){
-      this.currentAction = action
+      //현재 해당 노드에 포함된 속성정보를 불러온다.
+      axios.get("/properties", { params: {'ACTION_GUID': action.action_GUID}}).then(properties => {
+        this.actionProperties = properties.data.context.properties
 
-      $("#actionEditorBackground").show()
-      $("#actionEditor").show()
+        $("#actionEditorBackground").show()
+        $("#actionEditor").show()
+      }).catch(error => {
+        console.log(error)
+      })
     },
     actionClose(){
-      this.currentAction = null
-
       $("#actionEditorBackground").hide()
       $("#actionEditor").hide()
+    },
+    onChangeActionID(){
+      //해당 액션의 템플릿의 속성정보를 불러온다.
+      axios.get("/propertiesTemplete", { params: {'ACTION_ID': $("#actionIdSelection").val()}}).then(templeteProperties => {
+        this.actionProperties = templeteProperties.data.context.templeteProperties
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    onClickActionSave(){
+      axios.post("/saveProperties", {
+        "PROPERTIES": this.actionProperties
+      }).then(response => {
+        alert('저장 완료')
+        console.log(response)
+      }).catch(error => {
+        console.log(error)
+      })
+    },
+    onPropertyChange(prop){
+      var index = this.actionProperties.indexOf(prop)
+      this.actionProperties[index].property_VALUE = document.getElementById(prop.property_SEQ).value
     }
   }
 }

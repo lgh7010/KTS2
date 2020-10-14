@@ -87,7 +87,12 @@ public class RepoJdbc_property extends JdbcCommon implements Repo_property {
             conn = getConnection();
             conn.setAutoCommit(false);//트랜잭션 처리
 
-            //step 1. 프로퍼티 정보 저장
+            //step 1. 기존 프로퍼티 정보 삭제(DELETED = Y로 변경)
+            pstmt = conn.prepareStatement("UPDATE KTS_PROPERTY SET DELETED = 'Y' WHERE ACTION_GUID = ?");
+            pstmt.setString(1, ACTION_GUID);
+            pstmt.executeUpdate();
+
+            //step 2. 프로퍼티 정보 저장
             String values = "";
             for(int i = 0; i < list.stream().count(); i++){
                 KTS_PROPERTY prop = list.get(i);
@@ -100,7 +105,7 @@ public class RepoJdbc_property extends JdbcCommon implements Repo_property {
                     + " ON DUPLICATE KEY UPDATE PROPERTY_NAME = VALUES(PROPERTY_NAME), PROPERTY_VALUE = VALUES(PROPERTY_VALUE), ACTION_GUID = VALUES(ACTION_GUID)");
             pstmt.executeUpdate();
 
-            //step 2. 액션의 액션ID 변경 -> 이거 도메인 규정 위반이다. 근데 어떻게 고치지?
+            //step 3. 액션의 액션ID 변경 -> 이거 도메인 규정 위반이다. 근데 어떻게 고치지?
             pstmt = conn.prepareStatement("UPDATE KTS_ACTION SET ACTION_ID = ? WHERE ACTION_GUID = ?");
             pstmt.setString(1, ACTION_ID);
             pstmt.setString(2, ACTION_GUID);

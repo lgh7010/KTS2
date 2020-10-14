@@ -65,6 +65,12 @@ import axios from "axios";
 import Vue from 'vue'
 window.jQuery = window.$ = jQuery
 
+let NULL_ACTION_NODE_SEQ = 0
+let ACTION_NODE_WIDTH_HALF = 200
+let ACTION_NODE_HEIGHT = 100
+let DEFAULT_NODE_TOP = 500
+let DEFAULT_NODE_LEFT = 500
+
 export default {
   name: "TestcaseEditComponent",
   data(){
@@ -108,6 +114,7 @@ export default {
       this.registDragableNode(node, this.arrows_start_map, this.arrows_end_map)
       this.registDragableArrow(document.getElementById("arrow_" + action.action_SEQ + "_" + action.next_ACTION_SEQ))
 
+      //최초 위치 설정
       this.nodePositionSet(node, action.y_POS, action.x_POS)
     }
   },
@@ -126,7 +133,7 @@ export default {
     },
     getLastAction(){
       for(let ACTION_SEQ in this.actionDic){
-        if(this.actionDic[ACTION_SEQ].next_ACTION_SEQ == 0){
+        if(this.actionDic[ACTION_SEQ].next_ACTION_SEQ == NULL_ACTION_NODE_SEQ){
           return this.actionDic[ACTION_SEQ]
         }
       }
@@ -139,10 +146,10 @@ export default {
         action_SEQ: this.dummySeq,
         testcase_SEQ: this.currentTestcaseSeq,
         is_START: 'N',
-        next_ACTION_SEQ: 0,
+        next_ACTION_SEQ: NULL_ACTION_NODE_SEQ,
         action_ID: 'Empty',
-        x_POS: 500,
-        y_POS: 500,
+        x_POS: DEFAULT_NODE_LEFT,
+        y_POS: DEFAULT_NODE_TOP,
         property_JSON:this.actionTempleteDic['Empty'].templete_PROPERTY_JSON,
         description: "",
         deleted: 'N',
@@ -206,14 +213,14 @@ export default {
       var startAt = this.arrows_end_map[jnode.attr('action_SEQ')]
       var endAt = jnode.attr('action_SEQ')
       var jarrow = $("#arrow_" + startAt + "_" + endAt)
-      jarrow.attr('x2', newLeft + 200)
-      jarrow.attr('y2', newTop - 100)
+      jarrow.attr('x2', newLeft + ACTION_NODE_WIDTH_HALF)
+      jarrow.attr('y2', newTop - ACTION_NODE_HEIGHT)
 
       //나가는 화살표 위치 조정
       startAt = jnode.attr('action_SEQ')
       endAt = this.arrows_start_map[jnode.attr('action_SEQ')]
       jarrow = $("#arrow_" + startAt + "_" + endAt)
-      jarrow.attr('x1', newLeft + 200)
+      jarrow.attr('x1', newLeft + ACTION_NODE_WIDTH_HALF)
       jarrow.attr('y1', newTop)
     },
 

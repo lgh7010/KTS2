@@ -107,6 +107,8 @@ export default {
       //드래그 설정
       this.registDragableNode(node, this.arrows_start_map, this.arrows_end_map)
       this.registDragableArrow(document.getElementById("arrow_" + action.action_SEQ + "_" + action.next_ACTION_SEQ))
+
+      this.nodePositionSet(node, action.y_POS, action.x_POS)
     }
   },
   methods: {
@@ -141,7 +143,8 @@ export default {
         action_ID: 'Empty',
         x_POS: 500,
         y_POS: 500,
-        description: this.actionTempleteDic['Empty'].templete_PROPERTY_JSON,
+        property_JSON:this.actionTempleteDic['Empty'].templete_PROPERTY_JSON,
+        description: "",
         deleted: 'N',
       })
       this.dummySeq--
@@ -159,8 +162,8 @@ export default {
       this.arrows_end_map[jarrow.attr('next_ACTION_SEQ')] = jarrow.attr('action_SEQ')
     },
     registDragableNode(node, arrows_start_map, arrows_end_map){
-      var jnode = $(node)
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0
+      var self = this
       node.onmousedown = dragMouseDown
 
       function dragMouseDown(e){
@@ -186,30 +189,32 @@ export default {
         pos4 = e.clientY
 
         // set the element's new position:
-        var newTop = (node.offsetTop - pos2)
-        var newLeft = (node.offsetLeft - pos1)
-        node.style.top = newTop + "px"
-        node.style.left = newLeft + "px"
-
-        //들어오는 화살표 위치 조정
-        var startAt = arrows_end_map[jnode.attr('action_SEQ')]
-        var endAt = jnode.attr('action_SEQ')
-        var jarrow = $("#arrow_" + startAt + "_" + endAt)
-        jarrow.attr('x2', newLeft + 200)
-        jarrow.attr('y2', newTop - 100)
-
-        //나가는 화살표 위치 조정
-        startAt = jnode.attr('action_SEQ')
-        endAt = arrows_start_map[jnode.attr('action_SEQ')]
-        jarrow = $("#arrow_" + startAt + "_" + endAt)
-        jarrow.attr('x1', newLeft + 200)
-        jarrow.attr('y1', newTop)
+        self.nodePositionSet(node, (node.offsetTop - pos2), (node.offsetLeft - pos1))
       }
       function closeDragElement(){
         // stop moving when mouse button is released:
         document.onmouseup = null
         document.onmousemove = null
       }
+    },
+    nodePositionSet(node, newTop, newLeft) {
+      var jnode = $(node)
+      node.style.top = newTop + "px"
+      node.style.left = newLeft + "px"
+
+      //들어오는 화살표 위치 조정
+      var startAt = this.arrows_end_map[jnode.attr('action_SEQ')]
+      var endAt = jnode.attr('action_SEQ')
+      var jarrow = $("#arrow_" + startAt + "_" + endAt)
+      jarrow.attr('x2', newLeft + 200)
+      jarrow.attr('y2', newTop - 100)
+
+      //나가는 화살표 위치 조정
+      startAt = jnode.attr('action_SEQ')
+      endAt = this.arrows_start_map[jnode.attr('action_SEQ')]
+      jarrow = $("#arrow_" + startAt + "_" + endAt)
+      jarrow.attr('x1', newLeft + 200)
+      jarrow.attr('y1', newTop)
     },
 
     //액션노드 편집 관련

@@ -79,12 +79,15 @@ public class RepoJdbc_property extends JdbcCommon implements Repo_property {
     }
 
     @Override
-    public void saveProperties(List<KTS_PROPERTY> list) {
+    public void saveProperties(List<KTS_PROPERTY> list, String ACTION_GUID, String ACTION_ID) {
         Connection conn = null;
         PreparedStatement pstmt = null;
 
         try {
             conn = getConnection();
+            conn.setAutoCommit(false);//트랜잭션 처리
+
+            //step 1. 프로퍼티 정보 저장
             String values = "";
             for(int i = 0; i < list.stream().count(); i++){
                 KTS_PROPERTY prop = list.get(i);
@@ -96,7 +99,20 @@ public class RepoJdbc_property extends JdbcCommon implements Repo_property {
             pstmt = conn.prepareStatement("INSERT INTO KTS_PROPERTY (PROPERTY_SEQ, PROPERTY_NAME, PROPERTY_VALUE, ACTION_GUID) VALUES " + values
                     + " ON DUPLICATE KEY UPDATE PROPERTY_NAME = VALUES(PROPERTY_NAME), PROPERTY_VALUE = VALUES(PROPERTY_VALUE), ACTION_GUID = VALUES(ACTION_GUID)");
             pstmt.executeUpdate();
+
+            //step 2. 액션의 액션ID 변경 -> 이거 도메인 규정 위반이다. 근데 어떻게 고치지?
+            pstmt = conn.prepareStatement("UPDATE KTS_ACTION SET ACTION_ID = ? WHERE ACTION_GUID = ?");
+            pstmt.setString(1, ACTION_ID);
+            pstmt.setString(2, ACTION_GUID);
+            pstmt.executeUpdate();
+
+            conn.commit();
         } catch (Exception e){
+            try {
+                conn.rollback();
+            } catch(SQLException ee){
+                System.out.println(ee);
+            }
             throw new IllegalStateException(e);
         } finally {
             close(conn, pstmt);

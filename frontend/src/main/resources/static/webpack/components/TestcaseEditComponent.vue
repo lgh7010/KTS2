@@ -110,6 +110,7 @@ export default {
       arrows_end_map: {},//키는 끝 action_GUID, 값은 시작 action_GUID
       removeActionGuidList: [],//페이지상에서 삭제되었지만 아직 DB에 반영되지 않은 액션노드 정보들
 
+      currentActionGUID: "",
       actionProperties: [],//액션 에디터에 나타날 프로퍼티들
     }
   },
@@ -176,7 +177,9 @@ export default {
       }
       var lastAction = this.getLastAction()
       var guid = guid()
-      lastAction.next_ACTION_GUID = guid;
+      if(lastAction != null){
+        lastAction.next_ACTION_GUID = guid;
+      }
       Vue.set(this.actionDic, guid, {
         action_GUID: guid,
         testcase_SEQ: this.currentTestcaseSeq,
@@ -203,7 +206,7 @@ export default {
     onClickRemove(action){
       //현재 노드의 이전 노드의 next_ACTION_GUID를 현재 노드의 다음 노드로 세팅(다음노드가 없다면 0으로 세팅)
       var beforeActionGuid = this.arrows_end_map[action.action_GUID]
-      if(beforeActionGuid){
+      if(beforeActionGuid && this.actionDic[beforeActionGuid]){
         var nextActionGuid = this.arrows_start_map[action.action_GUID]
         this.actionDic[beforeActionGuid].next_ACTION_GUID = (nextActionGuid) ? nextActionGuid : NULL_ACTION_NODE_GUID
       }
@@ -281,8 +284,10 @@ export default {
     //액션노드 편집 관련
     actionOpen(action){
       //현재 해당 노드에 포함된 속성정보를 불러온다.
-      axios.get("/properties", { params: {'ACTION_GUID': action.action_GUID}}).then(properties => {
+      this.currentActionGUID = action.action_GUID
+      axios.get("/properties", { params: {'ACTION_GUID': this.currentActionGUID}}).then(properties => {
         this.actionProperties = properties.data.context.properties
+        $("#actionIdSelection").val(action.action_ID)
 
         $("#actionEditorBackground").show()
         $("#actionEditor").show()
@@ -291,19 +296,30 @@ export default {
       })
     },
     actionClose(){
+      this.currentActionGUID = ""
       $("#actionEditorBackground").hide()
       $("#actionEditor").hide()
     },
     onChangeActionID(){
       //해당 액션의 템플릿의 속성정보를 불러온다.
-      axios.get("/propertiesTemplete", { params: {'ACTION_ID': $("#actionIdSelection").val()}}).then(templeteProperties => {
+      var ACTION_ID = $("#actionIdSelection").val()
+      this.actionDic[this.currentActionGUID].action_ID = ACTION_ID
+      axios.get("/propertiesTemplete", { params: {'ACTION_ID': ACTION_ID}}).then(templeteProperties => {
         this.actionProperties = templeteProperties.data.context.templeteProperties
+        //템플릿이라서 현재 property_SEQ값이 없다. actionProperties에 템플릿 리스트나 그냥 프로퍼티 리스트 둘 다 들어갈 수 있는데서 비롯된 문제.
+        //그냥 여기서 넣어준다. 0으로 넣어주면 된다.
+        for(var i = 0; i < this.actionProperties.length; i++){
+          this.actionProperties[i].property_SEQ = 0
+          this.actionProperties[i].action_GUID = this.currentActionGUID
+        }
       }).catch(error => {
         console.log(error)
       })
     },
     onClickActionSave(){
       axios.post("/saveProperties", {
+        "ACTION_GUID": this.currentActionGUID,
+        "ACTION_ID": this.actionDic[this.currentActionGUID].action_ID,
         "PROPERTIES": this.actionProperties
       }).then(response => {
         alert('저장 완료')

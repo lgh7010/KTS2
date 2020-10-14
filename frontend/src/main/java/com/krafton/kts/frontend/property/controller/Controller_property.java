@@ -71,8 +71,8 @@ public class Controller_property {
     ){
         try {
             JSONObject requestJsonObj = new JSONObject(requestJsonStr);
-            JSONArray array = requestJsonObj.getJSONArray("PROPERTIES");
 
+            JSONArray array = requestJsonObj.getJSONArray("PROPERTIES");
             List<KTS_PROPERTY> list = new ArrayList<>();
             for(int i = 0; i < array.length(); i++){
                 JSONObject propObj = array.getJSONObject(i);
@@ -82,11 +82,13 @@ public class Controller_property {
                 prop.setPROPERTY_NAME(propObj.getString("property_NAME"));
                 prop.setPROPERTY_VALUE(propObj.getString("property_VALUE"));
                 prop.setACTION_GUID(propObj.getString("action_GUID"));
-                prop.setDELETED(propObj.getString("deleted"));
                 list.add(prop);
             }
 
-            this.service_property.saveProperties(list);
+            String ACTION_GUID = requestJsonObj.getString("ACTION_GUID");
+            String ACTION_ID = requestJsonObj.getString("ACTION_ID");
+
+            this.service_property.saveProperties(list, ACTION_GUID, ACTION_ID);
 
             return new Response();
         } catch(Exception e){

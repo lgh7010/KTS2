@@ -10,5 +10,5 @@ import java.util.List;
 public interface Service_property {
     List<KTS_PROPERTY> findProperty(String ACTION_GUID);
     List<KTS_PROPERTY_TEMPLETE> findPropertyTemplete(String ACTION_ID);
-    void saveProperties(List<KTS_PROPERTY> list);
+    void saveProperties(List<KTS_PROPERTY> list, String ACTION_GUID, String ACTION_ID);
 }

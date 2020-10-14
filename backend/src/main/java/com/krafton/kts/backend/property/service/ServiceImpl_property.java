@@ -27,7 +27,7 @@ public class ServiceImpl_property implements Service_property {
     }
 
     @Override
-    public void saveProperties(List<KTS_PROPERTY> list) {
-        this.repo_property.saveProperties(list);
+    public void saveProperties(List<KTS_PROPERTY> list, String ACTION_GUID, String ACTION_ID) {
+        this.repo_property.saveProperties(list, ACTION_GUID, ACTION_ID);
     }
 }

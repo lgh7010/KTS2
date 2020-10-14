@@ -26,8 +26,9 @@
     </div>
 
     <div id="flowchart">
-      <button v-on:click="goBack()">닫기</button>
+      <button v-on:click="onClickSave()">저장</button>
       <button v-on:click="onClickAdd()">추가</button>
+      <button v-on:click="goBack()">닫기</button>
 
       <div v-for="action in this.actionDic"
            v-bind:id="action.action_SEQ" v-bind:action_SEQ="action.action_SEQ" v-bind:next_ACTION_SEQ="action.next_ACTION_SEQ"
@@ -36,7 +37,7 @@
         background-color:gray;
         position: absolute;">
         <button v-on:click="actionOpen(action)">편집</button>
-        <button>삭제</button>
+        <button v-on:click="onClickRemove(action)">삭제</button>
         <hr>
         {{action.description}}
       </div>
@@ -83,6 +84,7 @@ export default {
       arrows_start_map: {},//키는 시작 action_SEQ, 값은 끝 action_SEQ
       arrows_end_map: {},//키는 끝 action_SEQ, 값은 시작 action_SEQ
       dummySeq: -1,//편집시에 추가되어서 아직 DB에 저장되지 않은 노드들에게 임시로 붙일 시퀀스. 음수값을 가져야 한다.
+      removeActionDic: {},//페이지상에서 삭제되었지만 아직 DB에 반영되지 않은 액션노드 정보들
     }
   },
   created(){
@@ -155,7 +157,23 @@ export default {
         deleted: 'N',
       })
       this.dummySeq--
+    },
+    onClickSave(){
       console.log(this.actionDic)
+    },
+    onClickRemove(action){
+      //현재 노드의 이전 노드의 next_ACTION_SEQ를 현재 노드의 다음 노드로 세팅(다음노드가 없다면 0으로 세팅)
+      var beforeActionSeq = this.arrows_end_map[action.action_SEQ]
+      if(beforeActionSeq){
+        var nextActionSeq = this.arrows_start_map[action.action_SEQ]
+        this.actionDic[beforeActionSeq].next_ACTION_SEQ = (nextActionSeq) ? nextActionSeq : 0
+      }
+
+      this.removeActionDic[action.action_SEQ] = action
+
+      Vue.delete(this.actionDic, action.action_SEQ)
+      console.log(this.actionDic)
+      console.log(this.removeActionDic)
     },
 
     //SVG 관련

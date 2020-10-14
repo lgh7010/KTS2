@@ -111,11 +111,11 @@ export default {
       node.style.left = action.x_POS + "px"
 
       //드래그 설정
-      this.registDragableNode(node, this.arrows_start_map, this.arrows_end_map)
+      this.registDragableNode(action, node, this.arrows_start_map, this.arrows_end_map)
       this.registDragableArrow(document.getElementById("arrow_" + action.action_SEQ + "_" + action.next_ACTION_SEQ))
 
       //최초 위치 설정
-      this.nodePositionSet(node, action.y_POS, action.x_POS)
+      this.nodePositionSet(action, node, action.y_POS, action.x_POS)
     }
   },
   methods: {
@@ -168,7 +168,7 @@ export default {
       this.arrows_start_map[jarrow.attr('action_SEQ')] = jarrow.attr('next_ACTION_SEQ')
       this.arrows_end_map[jarrow.attr('next_ACTION_SEQ')] = jarrow.attr('action_SEQ')
     },
-    registDragableNode(node, arrows_start_map, arrows_end_map){
+    registDragableNode(action, node){
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0
       var self = this
       node.onmousedown = dragMouseDown
@@ -196,7 +196,7 @@ export default {
         pos4 = e.clientY
 
         // set the element's new position:
-        self.nodePositionSet(node, (node.offsetTop - pos2), (node.offsetLeft - pos1))
+        self.nodePositionSet(action, node, (node.offsetTop - pos2), (node.offsetLeft - pos1))
       }
       function closeDragElement(){
         // stop moving when mouse button is released:
@@ -204,8 +204,10 @@ export default {
         document.onmousemove = null
       }
     },
-    nodePositionSet(node, newTop, newLeft) {
+    nodePositionSet(action, node, newTop, newLeft) {
       var jnode = $(node)
+      action.x_POS = newLeft
+      action.y_POS = newTop
       node.style.top = newTop + "px"
       node.style.left = newLeft + "px"
 

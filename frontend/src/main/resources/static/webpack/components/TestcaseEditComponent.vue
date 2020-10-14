@@ -21,7 +21,7 @@
         margin-top: -250px;
         background-color: white;
         z-index:11;">
-      이게 액션에디터의 내용이다옹
+      
       <button v-on:click="actionClose">닫기</button>
     </div>
 

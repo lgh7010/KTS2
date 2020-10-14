@@ -4,6 +4,10 @@ import com.krafton.kts.backend.action.repository.RepoJdbc_action;
 import com.krafton.kts.backend.action.repository.Repo_action;
 import com.krafton.kts.backend.action.service.ServiceImpl_action;
 import com.krafton.kts.backend.action.service.Service_action;
+import com.krafton.kts.backend.property.repository.RepoJdbc_property;
+import com.krafton.kts.backend.property.repository.Repo_property;
+import com.krafton.kts.backend.property.service.ServiceImpl_property;
+import com.krafton.kts.backend.property.service.Service_property;
 import com.krafton.kts.backend.test.repository.Repo_test;
 import com.krafton.kts.backend.test.repository.RepoJdbc_test;
 import com.krafton.kts.backend.test.service.ServiceImpl_test;
@@ -69,5 +73,15 @@ public class SpringConstructionClass {
     @Bean
     public Service_action service_action(){
         return new ServiceImpl_action(repo_action());
+    }
+
+    //property
+    @Bean
+    public Repo_property repo_property(){
+        return new RepoJdbc_property(dataSource);
+    }
+    @Bean
+    public Service_property service_property(){
+        return new ServiceImpl_property(repo_property());
     }
 }

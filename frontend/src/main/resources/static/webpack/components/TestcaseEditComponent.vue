@@ -320,8 +320,7 @@ export default {
       })
     },
     onPropertyChange(prop){
-      var index = this.actionProperties.indexOf(prop)
-      this.actionProperties[index].property_VALUE = document.getElementById(prop.property_SEQ).value
+      prop.property_VALUE = document.getElementById(prop.property_SEQ).value
     }
   }
 }

@@ -157,7 +157,6 @@ export default {
       this.testRelTestcaseList_with_name_and_desc.push({
         relation_SEQ: 0,
         test_SEQ : (this.currentTest != null) ? this.currentTest.test_SEQ : 0,
-        //list_INDEX : this.testRelTestcaseList_with_name_and_desc.length,
         testcase_SEQ : testcase.testcase_SEQ,
         name : testcase.name,
         description : testcase.description

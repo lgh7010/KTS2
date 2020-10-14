@@ -43,9 +43,7 @@
           <tbody>
             <tr v-for="prop in this.actionProperties">
               <td>{{prop.property_NAME}}</td>
-              <td><input type="text"
-                         v-bind:id="prop.property_SEQ" v-bind:name="prop.property_NAME" v-bind:value="prop.property_VALUE"
-                         v-on:input="onPropertyChange(prop)"></td>
+              <td><input type="text" v-bind:id="prop.property_SEQ" v-bind:value="prop.property_VALUE" v-on:input="onPropertyChange(prop)"></td>
             </tr>
           </tbody>
         </table>
@@ -192,8 +190,6 @@ export default {
       })
     },
     onClickSave(){
-      console.log(this.actionDic)
-
       axios.post("/saveActionDic", {
         "ACTION_DIC": this.actionDic,
         "REMOVE_ACTION_GUID_LIST": this.removeActionGuidList
@@ -211,9 +207,7 @@ export default {
         var nextActionGuid = this.arrows_start_map[action.action_GUID]
         this.actionDic[beforeActionGuid].next_ACTION_GUID = (nextActionGuid) ? nextActionGuid : NULL_ACTION_NODE_GUID
       }
-
       this.removeActionGuidList.push(action.action_GUID)
-
       Vue.delete(this.actionDic, action.action_GUID)
     },
 
@@ -222,7 +216,6 @@ export default {
       if(!arrow){
         return
       }
-
       var jarrow = $(arrow)
       this.arrows_start_map[jarrow.attr('action_GUID')] = jarrow.attr('next_ACTION_GUID')
       this.arrows_end_map[jarrow.attr('next_ACTION_GUID')] = jarrow.attr('action_GUID')

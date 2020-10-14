@@ -34,4 +34,9 @@ public class ServiceImpl_action implements Service_action{
         }
         return ret;
     }
+
+    @Override
+    public void saveActionList(List<KTS_ACTION> list, List<String> removeList) {
+        this.repo_action.saveActionList(list, removeList);
+    }
 }

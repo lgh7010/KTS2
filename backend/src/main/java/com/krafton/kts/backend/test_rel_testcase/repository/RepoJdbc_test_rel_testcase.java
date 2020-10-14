@@ -106,8 +106,7 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
                         builder.append(",");
                     }
                 }
-                String ttt = "(" + builder.toString() + ")";
-                pstmt = conn.prepareStatement("UPDATE TEST_REL_TESTCASE SET DELETED = 'Y' WHERE RELATION_SEQ IN " + ttt);
+                pstmt = conn.prepareStatement("UPDATE TEST_REL_TESTCASE SET DELETED = 'Y' WHERE RELATION_SEQ IN (" + builder.toString() + ")");
                 pstmt.executeUpdate();
             }
 

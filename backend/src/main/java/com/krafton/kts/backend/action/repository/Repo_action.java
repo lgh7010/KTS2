@@ -11,4 +11,5 @@ public interface Repo_action {
 
     List<KTS_ACTION> findActionsByTESTCASE_SEQ(int TESTCASE_SEQ);
     List<KTS_ACTION_TEMPLETE> findAllTemplete();
+    void saveActionList(List<KTS_ACTION> list, List<String> removeList);
 }

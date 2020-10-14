@@ -31,7 +31,7 @@
       <button v-on:click="goBack()">닫기</button>
 
       <div v-for="action in this.actionDic"
-           v-bind:id="action.action_SEQ" v-bind:action_SEQ="action.action_SEQ" v-bind:next_ACTION_SEQ="action.next_ACTION_SEQ"
+           v-bind:id="action.action_GUID" v-bind:action_GUID="action.action_GUID" v-bind:next_ACTION_GUID="action.next_ACTION_GUID"
            class="node" style="width:400px;
         height:100px;
         background-color:gray;
@@ -49,9 +49,9 @@
           <path d="M 0 0 L 10 5 L 0 10 z" fill="black"/>
         </marker>
       </defs>
-      <line v-for="action in this.actionDic" v-if="action.next_ACTION_SEQ != 0"
-            v-bind:id="'arrow_'+action.action_SEQ+'_'+action.next_ACTION_SEQ"
-            v-bind:action_SEQ="action.action_SEQ" v-bind:next_ACTION_SEQ="action.next_ACTION_SEQ"
+      <line v-for="action in this.actionDic" v-if="action.next_ACTION_GUID != 'None'"
+            v-bind:id="'arrow_'+action.action_GUID+'_'+action.next_ACTION_GUID"
+            v-bind:action_GUID="action.action_GUID" v-bind:next_ACTION_GUID="action.next_ACTION_GUID"
             v-bind:x1="action.x_POS+200" v-bind:y1="action.y_POS"
             v-bind:x2="action.x_POS+200" v-bind:y2="action.y_POS+100"
             class="arrow" stroke-width="7" stroke="black" marker-end="url(#arrow)"/>
@@ -66,7 +66,7 @@ import axios from "axios";
 import Vue from 'vue'
 window.jQuery = window.$ = jQuery
 
-let NULL_ACTION_NODE_SEQ = 0
+let NULL_ACTION_NODE_GUID = "None"
 let ACTION_NODE_WIDTH_HALF = 200
 let ACTION_NODE_HEIGHT = 100
 let DEFAULT_NODE_TOP = 500
@@ -76,15 +76,14 @@ export default {
   name: "TestcaseEditComponent",
   data(){
     return {
-      actionDic: {},//현재 페이지에서 관리중인 액션노드의 딕셔너리. 키값은 ACTION_SEQ
+      actionDic: {},//현재 페이지에서 관리중인 액션노드의 딕셔너리. 키값은 ACTION_GUID
       actionTempleteDic: {},//액션 템플릿의 딕셔너리. 최초 페이지 생성시 불러온다.
       currentTestcaseSeq: this.$route.params.TESTCASE_SEQ,//현재 이 에디터에서 편집중인 테스트케이스의 시퀀스
       currentAction: null,//현재 열려있는 액션 에디터의 주체가 되는 액션노드.
       nodes: {},//액션노드들의 html 엘리먼트를 보관하는 딕셔너리
-      arrows_start_map: {},//키는 시작 action_SEQ, 값은 끝 action_SEQ
-      arrows_end_map: {},//키는 끝 action_SEQ, 값은 시작 action_SEQ
-      dummySeq: -1,//편집시에 추가되어서 아직 DB에 저장되지 않은 노드들에게 임시로 붙일 시퀀스. 음수값을 가져야 한다.
-      removeActionDic: {},//페이지상에서 삭제되었지만 아직 DB에 반영되지 않은 액션노드 정보들
+      arrows_start_map: {},//키는 시작 action_GUID, 값은 끝 action_GUID
+      arrows_end_map: {},//키는 끝 action_GUID, 값은 시작 action_GUID
+      removeActionGuidList: [],//페이지상에서 삭제되었지만 아직 DB에 반영되지 않은 액션노드 정보들
     }
   },
   created(){
@@ -97,24 +96,24 @@ export default {
   mounted(){
     axios.get("/actionDic", { params: {'TESTCASE_SEQ': this.currentTestcaseSeq}}).then(response => {
       this.actionDic = response.data.context.actionDic
+      console.log(this.actionDic)
     }).catch(error => {
       console.log(error)
     })
   },
   updated(){
-    for(let ACTION_SEQ in this.actionDic){
-      //this.addNode(this.actionDic[ACTION_SEQ])
-      var action = this.actionDic[ACTION_SEQ]
-      var node = document.getElementById(action.action_SEQ)
+    for(let ACTION_GUID in this.actionDic){
+      var action = this.actionDic[ACTION_GUID]
+      var node = document.getElementById(action.action_GUID)
 
       //노드 등록 및 위치 설정
-      this.nodes[action.action_SEQ] = node
+      this.nodes[action.action_GUID] = node
       node.style.top = action.y_POS + "px"
       node.style.left = action.x_POS + "px"
 
       //드래그 설정
       this.registDragableNode(action, node, this.arrows_start_map, this.arrows_end_map)
-      this.registDragableArrow(document.getElementById("arrow_" + action.action_SEQ + "_" + action.next_ACTION_SEQ))
+      this.registDragableArrow(document.getElementById("arrow_" + action.action_GUID + "_" + action.next_ACTION_GUID))
 
       //최초 위치 설정
       this.nodePositionSet(action, node, action.y_POS, action.x_POS)
@@ -126,54 +125,68 @@ export default {
       this.$router.go(-1)
     },
     getFirstAction(){
-      for(let ACTION_SEQ in this.actionDic){
-        if(this.actionDic[ACTION_SEQ].is_START == 'Y'){
-          return this.actionDic[ACTION_SEQ]
+      for(let ACTION_GUID in this.actionDic){
+        if(this.actionDic[ACTION_GUID].is_START == 'Y'){
+          return this.actionDic[ACTION_GUID]
         }
       }
       return null
     },
     getLastAction(){
-      for(let ACTION_SEQ in this.actionDic){
-        if(this.actionDic[ACTION_SEQ].next_ACTION_SEQ == NULL_ACTION_NODE_SEQ){
-          return this.actionDic[ACTION_SEQ]
+      for(let ACTION_GUID in this.actionDic){
+        if(this.actionDic[ACTION_GUID].next_ACTION_GUID == NULL_ACTION_NODE_GUID){
+          return this.actionDic[ACTION_GUID]
         }
       }
       return null
     },
     onClickAdd(){
+      function guid() {
+        function _p8(s) {
+          var p = (Math.random().toString(16)+"000000000").substr(2,8);
+          return s ? "-" + p.substr(0,4) + "-" + p.substr(4,4) : p ;
+        }
+        return _p8() + _p8(true) + _p8(true) + _p8();
+      }
       var lastAction = this.getLastAction()
-      lastAction.next_ACTION_SEQ = this.dummySeq;
-      Vue.set(this.actionDic, this.dummySeq, {
-        action_SEQ: this.dummySeq,
+      var guid = guid()
+      lastAction.next_ACTION_GUID = guid;
+      Vue.set(this.actionDic, guid, {
+        action_GUID: guid,
         testcase_SEQ: this.currentTestcaseSeq,
         is_START: 'N',
-        next_ACTION_SEQ: NULL_ACTION_NODE_SEQ,
+        next_ACTION_GUID: NULL_ACTION_NODE_GUID,
         action_ID: 'Empty',
         x_POS: DEFAULT_NODE_LEFT,
         y_POS: DEFAULT_NODE_TOP,
-        property_JSON:this.actionTempleteDic['Empty'].templete_PROPERTY_JSON,
         description: "",
         deleted: 'N',
       })
-      this.dummySeq--
     },
     onClickSave(){
       console.log(this.actionDic)
+
+      axios.post("/saveActionDic", {
+        "ACTION_DIC": this.actionDic,
+        "REMOVE_ACTION_GUID_LIST": this.removeActionGuidList
+      }).then(response => {
+        alert("저장 완료")
+        console.log(response)
+      }).catch(error => {
+        console.log(error)
+      })
     },
     onClickRemove(action){
-      //현재 노드의 이전 노드의 next_ACTION_SEQ를 현재 노드의 다음 노드로 세팅(다음노드가 없다면 0으로 세팅)
-      var beforeActionSeq = this.arrows_end_map[action.action_SEQ]
-      if(beforeActionSeq){
-        var nextActionSeq = this.arrows_start_map[action.action_SEQ]
-        this.actionDic[beforeActionSeq].next_ACTION_SEQ = (nextActionSeq) ? nextActionSeq : 0
+      //현재 노드의 이전 노드의 next_ACTION_GUID를 현재 노드의 다음 노드로 세팅(다음노드가 없다면 0으로 세팅)
+      var beforeActionGuid = this.arrows_end_map[action.action_GUID]
+      if(beforeActionGuid){
+        var nextActionGuid = this.arrows_start_map[action.action_GUID]
+        this.actionDic[beforeActionGuid].next_ACTION_GUID = (nextActionGuid) ? nextActionGuid : NULL_ACTION_NODE_GUID
       }
 
-      this.removeActionDic[action.action_SEQ] = action
+      this.removeActionGuidList.push(action.action_GUID)
 
-      Vue.delete(this.actionDic, action.action_SEQ)
-      console.log(this.actionDic)
-      console.log(this.removeActionDic)
+      Vue.delete(this.actionDic, action.action_GUID)
     },
 
     //SVG 관련
@@ -183,8 +196,8 @@ export default {
       }
 
       var jarrow = $(arrow)
-      this.arrows_start_map[jarrow.attr('action_SEQ')] = jarrow.attr('next_ACTION_SEQ')
-      this.arrows_end_map[jarrow.attr('next_ACTION_SEQ')] = jarrow.attr('action_SEQ')
+      this.arrows_start_map[jarrow.attr('action_GUID')] = jarrow.attr('next_ACTION_GUID')
+      this.arrows_end_map[jarrow.attr('next_ACTION_GUID')] = jarrow.attr('action_GUID')
     },
     registDragableNode(action, node){
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0
@@ -230,15 +243,15 @@ export default {
       node.style.left = newLeft + "px"
 
       //들어오는 화살표 위치 조정
-      var startAt = this.arrows_end_map[jnode.attr('action_SEQ')]
-      var endAt = jnode.attr('action_SEQ')
+      var startAt = this.arrows_end_map[jnode.attr('action_GUID')]
+      var endAt = jnode.attr('action_GUID')
       var jarrow = $("#arrow_" + startAt + "_" + endAt)
       jarrow.attr('x2', newLeft + ACTION_NODE_WIDTH_HALF)
       jarrow.attr('y2', newTop - ACTION_NODE_HEIGHT)
 
       //나가는 화살표 위치 조정
-      startAt = jnode.attr('action_SEQ')
-      endAt = this.arrows_start_map[jnode.attr('action_SEQ')]
+      startAt = jnode.attr('action_GUID')
+      endAt = this.arrows_start_map[jnode.attr('action_GUID')]
       jarrow = $("#arrow_" + startAt + "_" + endAt)
       jarrow.attr('x1', newLeft + ACTION_NODE_WIDTH_HALF)
       jarrow.attr('y1', newTop)

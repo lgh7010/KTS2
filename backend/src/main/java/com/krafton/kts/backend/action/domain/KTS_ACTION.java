@@ -4,14 +4,13 @@ import lombok.Data;
 
 @Data
 public class KTS_ACTION {
-    private int ACTION_SEQ;
+    private String ACTION_GUID;
     private int TESTCASE_SEQ;
     private String IS_START;
-    private int NEXT_ACTION_SEQ;
+    private String NEXT_ACTION_GUID;
     private String ACTION_ID;
     private float X_POS;
     private float Y_POS;
     private String DESCRIPTION;
-    private String PROPERTY_JSON;
     private String DELETED;
 }

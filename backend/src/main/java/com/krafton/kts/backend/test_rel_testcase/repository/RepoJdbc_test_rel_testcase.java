@@ -47,11 +47,6 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
     }
 
     @Override
-    public List<TEST_REL_TESTCASE> findTestRelTestcaseByTESTCASE_GUID(String testcaseGuid) {
-        return null;
-    }
-
-    @Override
     public void saveTestRelTestcase(List<TEST_REL_TESTCASE> rels, int testSeq, Boolean createNewTest, String testName, String testDescription, List<Integer> removeRelationSeqList) {
         Connection conn = null;
         PreparedStatement pstmt = null;

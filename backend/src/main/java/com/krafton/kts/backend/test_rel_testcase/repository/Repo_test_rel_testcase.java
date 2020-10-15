@@ -10,7 +10,6 @@ import java.util.List;
 public interface Repo_test_rel_testcase {
 
     List<TEST_REL_TESTCASE> findTestRelTestcaseByTEST_SEQ(int testSeq);
-    List<TEST_REL_TESTCASE> findTestRelTestcaseByTESTCASE_GUID(String testcaseGuid);
     void saveTestRelTestcase(List<TEST_REL_TESTCASE> rels, int testSeq, Boolean createNewTest, String testName, String testDescription, List<Integer> removeRelationSeqList);
     List<TestRelTestcaseDerived> findTestRelTestcaseDerived(int testSeq);
 }

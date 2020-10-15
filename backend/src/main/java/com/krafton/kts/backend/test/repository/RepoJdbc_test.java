@@ -19,11 +19,6 @@ public class RepoJdbc_test extends JdbcCommon implements Repo_test {
     }
 
     @Override
-    public KTS_TEST saveTest(KTS_TEST test) {
-        return null;
-    }
-
-    @Override
     public void removeTest(int testSeq) {
         Connection conn = null;
         PreparedStatement pstmt = null;
@@ -81,11 +76,6 @@ public class RepoJdbc_test extends JdbcCommon implements Repo_test {
         } finally {
             close(conn, pstmt, rs);
         }
-    }
-
-    @Override
-    public Optional<KTS_TEST> findTestByNAME(String name) {
-        return Optional.empty();
     }
 
     @Override

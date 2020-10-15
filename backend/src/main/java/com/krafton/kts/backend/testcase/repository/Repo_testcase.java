@@ -9,7 +9,6 @@ import java.util.Optional;
 @Repository
 public interface Repo_testcase {
 
-    Optional<KTS_TESTCASE> findTestcaseByTESTCASE_GUID(String testcaseGuid);
     List<KTS_TESTCASE> findAllTestcase();
     List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int testSeq);
     void removeTestcase(String testcaseGuid);

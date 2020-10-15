@@ -18,15 +18,6 @@ public class ServiceImpl_test_rel_testcase implements Service_test_rel_testcase 
     }
 
     @Override
-    public List<TEST_REL_TESTCASE> findTestRelTestcaseByTEST_SEQ(int testSeq) {
-        if(testSeq < 1){
-            List<TEST_REL_TESTCASE> list = new ArrayList<>();
-            return list;
-        }
-        return this.repo_test_rel_testcase.findTestRelTestcaseByTEST_SEQ(testSeq);
-    }
-
-    @Override
     public void saveTestRelTestcase(List<TEST_REL_TESTCASE> rels, int testSeq, String testName, String testDescription, List<Integer> removeTestcaseGuidList) {
         this.repo_test_rel_testcase.saveTestRelTestcase(rels, testSeq, testSeq > 0 ? false : true, testName, testDescription, removeTestcaseGuidList);
     }

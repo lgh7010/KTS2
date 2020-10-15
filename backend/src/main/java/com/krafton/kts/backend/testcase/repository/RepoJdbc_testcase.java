@@ -154,36 +154,6 @@ public class RepoJdbc_testcase extends JdbcCommon implements Repo_testcase {
     }
 
     @Override
-    public Optional<KTS_TESTCASE> findTestcaseByTESTCASE_GUID(String testcaseGuid) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-
-        try {
-            conn = getConnection();
-            pstmt = conn.prepareStatement("select * from KTS_TESTCASE where testcaseGuid = ? and deleted = 'N'");
-            pstmt.setString(1, testcaseGuid);
-            rs = pstmt.executeQuery();
-
-            if(rs.next()){
-                KTS_TESTCASE tc = new KTS_TESTCASE();
-                tc.setTestcaseGuid(rs.getString("testcaseGuid"));
-                tc.setName(rs.getString("name"));
-                tc.setDescription(rs.getString("description"));
-                return Optional.of(tc);
-            } else {
-                Optional.empty();
-            }
-        } catch (Exception e){
-            throw new IllegalStateException(e);
-        } finally {
-            close(conn, pstmt, rs);
-        }
-
-        return Optional.empty();
-    }
-
-    @Override
     public List<KTS_TESTCASE> findAllTestcase() {
         Connection conn = null;
         PreparedStatement pstmt = null;

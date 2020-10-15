@@ -34,25 +34,6 @@ public class Controller_testcase {
         }
     }
 
-    @GetMapping("/testcaseDic")
-    @ResponseBody
-    public Response testcaseDic(@RequestParam(value = "testSeq") int testSeq){
-        try {
-            List<KTS_TESTCASE> list = this.service_testcase.findTestcasesByTEST_SEQ(testSeq);
-            Map<String, KTS_TESTCASE> ret = new HashMap<>();
-            for (Iterator<KTS_TESTCASE> iter = list.iterator(); iter.hasNext();){
-                KTS_TESTCASE tc = iter.next();
-                ret.put(tc.getTestcaseGuid(), tc);
-            }
-
-            Response response = new Response();
-            response.putContext("testcaseDic", ret);
-            return response;
-        } catch(Exception e) {
-            return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
-        }
-    }
-
     @PostMapping("/removeTestcase")
     @ResponseBody
     public Response removeTestcase(@RequestBody String requestJsonStr){

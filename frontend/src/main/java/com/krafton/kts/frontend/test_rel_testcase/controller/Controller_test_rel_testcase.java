@@ -19,18 +19,6 @@ public class Controller_test_rel_testcase {
 
     private final Service_test_rel_testcase service_test_rel_testcase;
 
-    @GetMapping("/testRelTestcaseList")
-    @ResponseBody
-    public Response testRelTestcaseList(@RequestParam(value = "testSeq") int testSeq){
-        try {
-            Response response = new Response();
-            response.putContext("testRelTestcaseList", this.service_test_rel_testcase.findTestRelTestcaseByTEST_SEQ(testSeq));
-            return response;
-        } catch(Exception e){
-            return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
-        }
-    }
-
     @PostMapping("/testRelTestcaseSave")
     @ResponseBody
     public Response testRelTestcaseSave(@RequestBody String requestJsonStr){

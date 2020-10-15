@@ -3,6 +3,7 @@ package com.krafton.kts.backend.test.service;
 import com.krafton.kts.backend.test.domain.command.RemoveTestCommand;
 import com.krafton.kts.backend.test.repository.Repo_test;
 import com.krafton.kts.backend.test.domain.db.KTS_TEST;
+import com.krafton.kts.backend.test.service.internal.RemoveTestService;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -11,10 +12,12 @@ import java.util.Optional;
 public class ServiceImpl_test implements Service_test {
 
     private Repo_test testRepo;
+    private RemoveTestService removeTestService;
 
     @Autowired
-    public ServiceImpl_test(Repo_test testInfoRepo){
+    public ServiceImpl_test(Repo_test testInfoRepo, RemoveTestService removeTestService){
         this.testRepo = testInfoRepo;
+        this.removeTestService = removeTestService;
     }
 
     @Override
@@ -39,6 +42,6 @@ public class ServiceImpl_test implements Service_test {
         if(command.getTestSeq() < 1){
             return;
         }
-        this.testRepo.removeTest(command.getTestSeq());
+        this.removeTestService.RemoveTest(command);
     }
 }

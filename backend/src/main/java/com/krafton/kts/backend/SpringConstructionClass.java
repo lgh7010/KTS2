@@ -12,6 +12,8 @@ import com.krafton.kts.backend.test.repository.Repo_test;
 import com.krafton.kts.backend.test.repository.RepoJdbc_test;
 import com.krafton.kts.backend.test.service.ServiceImpl_test;
 import com.krafton.kts.backend.test.service.Service_test;
+import com.krafton.kts.backend.test.service.internal.RemoveTestService;
+import com.krafton.kts.backend.test.service.internal.RemoveTestServiceJDBC;
 import com.krafton.kts.backend.test_rel_testcase.repository.RepoJdbc_test_rel_testcase;
 import com.krafton.kts.backend.test_rel_testcase.repository.Repo_test_rel_testcase;
 import com.krafton.kts.backend.test_rel_testcase.service.ServiceImpl_test_rel_testcase;
@@ -41,8 +43,12 @@ public class SpringConstructionClass {
         return new RepoJdbc_test(dataSource);
     }
     @Bean
+    public RemoveTestService removeTest(){
+        return new RemoveTestServiceJDBC(dataSource);
+    }
+    @Bean
     public Service_test service_test(){
-        return new ServiceImpl_test(repo_test());
+        return new ServiceImpl_test(repo_test(), removeTest());
     }
 
     //testcase

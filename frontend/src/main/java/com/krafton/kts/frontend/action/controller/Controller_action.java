@@ -2,15 +2,14 @@ package com.krafton.kts.frontend.action.controller;
 
 import com.krafton.kts.backend.action.domain.KTS_ACTION;
 import com.krafton.kts.backend.action.service.Service_action;
-import com.krafton.kts.backend.test_rel_testcase.domain.TEST_REL_TESTCASE;
 import com.krafton.kts.backend.testcase.domain.KTS_TESTCASE;
+import com.krafton.kts.backend.testcase.service.Service_testcase;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;
+import lombok.RequiredArgsConstructor;
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -18,14 +17,11 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @Controller
+@RequiredArgsConstructor
 public class Controller_action {
 
     private final Service_action service_action;
-
-    @Autowired
-    public Controller_action(Service_action service_action){
-        this.service_action = service_action;
-    }
+    private final Service_testcase service_testcase;
 
     @GetMapping("/actionDic")
     @ResponseBody
@@ -101,7 +97,15 @@ public class Controller_action {
                 removeList.add(removeActionSeqArray.getString(i));
             }
 
+            JSONObject testcaseObj = requestJsonObj.getJSONObject("TESTCASE");
+            KTS_TESTCASE tc = new KTS_TESTCASE();
+            tc.setTESTCASE_SEQ(testcaseObj.getInt("testcase_SEQ"));
+            tc.setNAME(testcaseObj.getString("name"));
+            tc.setDESCRIPTION(testcaseObj.getString("description"));
+            tc.setDELETED(testcaseObj.getString("deleted"));
+
             this.service_action.saveActionList(list, removeList);
+            this.service_testcase.updateTestcase(tc);
 
             return new Response();
         } catch(Exception e){

@@ -76,4 +76,16 @@ public class Controller_testcase {
             return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
         }
     }
+
+    @GetMapping("/testcase")
+    @ResponseBody
+    public Response testcase(@RequestParam(value = "TESTCASE_SEQ") int TESTCASE_SEQ){
+        try {
+            Response response = new Response();
+            response.putContext("testcase", this.service_testcase.findTestcase(TESTCASE_SEQ));
+            return response;
+        } catch (Exception e){
+            return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
+        }
+    }
 }

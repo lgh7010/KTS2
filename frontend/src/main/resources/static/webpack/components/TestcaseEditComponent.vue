@@ -52,6 +52,8 @@
     </div>
 
     <div id="flowchart">
+      <td><input id="testcaseName" type="text"></td>
+      <td><input id="testcaseDescription" type="text"></td>
       <button v-on:click="onClickSave()">저장</button>
       <button v-on:click="onClickAdd()">추가</button>
       <button v-on:click="goBack()">닫기</button>
@@ -104,7 +106,7 @@ export default {
     return {
       actionDic: {},//현재 페이지에서 관리중인 액션노드의 딕셔너리. 키값은 ACTION_GUID
       actionTempleteDic: {},//액션 템플릿의 딕셔너리. 최초 페이지 생성시 불러온다.
-      currentTestcaseSeq: this.$route.params.TESTCASE_SEQ,//현재 이 에디터에서 편집중인 테스트케이스의 시퀀스
+      currentTestcase: {},//현재 에디터에서 편집중인 테스트케이스
 
       arrows_start_map: {},//키는 시작 action_GUID, 값은 끝 action_GUID
       arrows_end_map: {},//키는 끝 action_GUID, 값은 시작 action_GUID
@@ -122,9 +124,15 @@ export default {
     })
   },
   mounted(){
-    axios.get("/actionDic", { params: {'TESTCASE_SEQ': this.currentTestcaseSeq}}).then(response => {
-      this.actionDic = response.data.context.actionDic
-      console.log(this.actionDic)
+    axios.get("/actionDic", { params: {'TESTCASE_SEQ': this.$route.params.TESTCASE_SEQ}}).then(responseActionDic => {
+      axios.get("/testcase", { params: {'TESTCASE_SEQ': this.$route.params.TESTCASE_SEQ}}).then(responseTestcase => {
+        this.currentTestcase = responseTestcase.data.context.testcase
+        $("#testcaseName").val(this.currentTestcase.name)
+        $("#testcaseDescription").val(this.currentTestcase.description)
+        this.actionDic = responseActionDic.data.context.actionDic
+      }).catch(error => {
+        console.log(error)
+      })
     }).catch(error => {
       console.log(error)
     })
@@ -182,7 +190,7 @@ export default {
       }
       Vue.set(this.actionDic, guid, {
         action_GUID: guid,
-        testcase_SEQ: this.currentTestcaseSeq,
+        testcase_SEQ: this.currentTestcase.testcase_SEQ,
         is_START: 'N',
         next_ACTION_GUID: NULL_ACTION_NODE_GUID,
         action_ID: 'Empty',
@@ -193,9 +201,13 @@ export default {
       })
     },
     onClickSave(){
+      this.currentTestcase.name = $("#testcaseName").val()
+      this.currentTestcase.description = $("#testcaseDescription").val()
+      console.log(this.currentTestcase)
       axios.post("/saveActionDic", {
         "ACTION_DIC": this.actionDic,
-        "REMOVE_ACTION_GUID_LIST": this.removeActionGuidList
+        "REMOVE_ACTION_GUID_LIST": this.removeActionGuidList,
+        "TESTCASE": this.currentTestcase,
       }).then(response => {
         alert("저장 완료")
         console.log(response)

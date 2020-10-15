@@ -108,6 +108,51 @@ public class RepoJdbc_testcase extends JdbcCommon implements Repo_testcase {
     }
 
     @Override
+    public KTS_TESTCASE findTestcase(int TESTCASE_SEQ) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement("SELECT * FROM KTS_TESTCASE WHERE TESTCASE_SEQ = ? AND DELETED = 'N'");
+            pstmt.setInt(1, TESTCASE_SEQ);
+            rs = pstmt.executeQuery();
+
+            rs.next();
+            KTS_TESTCASE tc = new KTS_TESTCASE();
+            tc.setTESTCASE_SEQ(rs.getInt("TESTCASE_SEQ"));
+            tc.setNAME(rs.getString("NAME"));
+            tc.setDESCRIPTION(rs.getString("DESCRIPTION"));
+            tc.setDELETED(rs.getString("DELETED"));
+            return tc;
+        } catch (Exception e){
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt, rs);
+        }
+    }
+
+    @Override
+    public void updateTestcase(KTS_TESTCASE tc) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement("UPDATE KTS_TESTCASE SET NAME = ?, DESCRIPTION = ? WHERE TESTCASE_SEQ = ?");
+            pstmt.setString(1, tc.getNAME());
+            pstmt.setString(2, tc.getDESCRIPTION());
+            pstmt.setInt(3, tc.getTESTCASE_SEQ());
+            pstmt.executeUpdate();
+        } catch (Exception e){
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt);
+        }
+    }
+
+    @Override
     public Optional<KTS_TESTCASE> findTestcaseByTESTCASE_SEQ(int TESTCASE_SEQ) {
         Connection conn = null;
         PreparedStatement pstmt = null;

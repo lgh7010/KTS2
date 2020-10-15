@@ -25,4 +25,9 @@ public class ServiceImpl_testcase implements Service_testcase {
         return this.repo_testcase.findTestcasesByTEST_SEQ(TEST_SEQ);
     }
 
+    @Override
+    public void removeTestcase(int TESTCASE_SEQ) {
+        this.repo_testcase.removeTestcase(TESTCASE_SEQ);
+    }
+
 }

@@ -52,7 +52,11 @@ export default {
   },
   methods: {
     onClickRemove: function(TESTCASE_SEQ){
-      console.log(TESTCASE_SEQ)
+      axios.post('/removeTestcase', {'TESTCASE_SEQ': TESTCASE_SEQ}).then(resposne => {
+        console.log(resposne)
+      }).catch(error => {
+        console.log(error)
+      })
     }
   }
 }

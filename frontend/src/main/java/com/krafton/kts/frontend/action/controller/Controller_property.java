@@ -1,10 +1,8 @@
-package com.krafton.kts.frontend.property.controller;
+package com.krafton.kts.frontend.action.controller;
 
-import com.krafton.kts.backend.action.domain.KTS_ACTION;
-import com.krafton.kts.backend.property.domain.KTS_PROPERTY;
-import com.krafton.kts.backend.property.domain.KTS_PROPERTY_TEMPLETE;
-import com.krafton.kts.backend.property.service.Service_property;
-import com.krafton.kts.backend.test_rel_testcase.domain.TEST_REL_TESTCASE;
+import com.krafton.kts.backend.action.domain.KTS_PROPERTY;
+import com.krafton.kts.backend.action.domain.KTS_PROPERTY_TEMPLETE;
+import com.krafton.kts.backend.action.service.Service_property;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;
 import org.json.JSONArray;

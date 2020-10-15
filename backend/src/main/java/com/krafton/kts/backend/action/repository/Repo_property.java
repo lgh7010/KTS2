@@ -1,7 +1,7 @@
-package com.krafton.kts.backend.property.repository;
+package com.krafton.kts.backend.action.repository;
 
-import com.krafton.kts.backend.property.domain.KTS_PROPERTY;
-import com.krafton.kts.backend.property.domain.KTS_PROPERTY_TEMPLETE;
+import com.krafton.kts.backend.action.domain.KTS_PROPERTY;
+import com.krafton.kts.backend.action.domain.KTS_PROPERTY_TEMPLETE;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

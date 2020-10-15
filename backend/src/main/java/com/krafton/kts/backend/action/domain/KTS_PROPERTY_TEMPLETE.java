@@ -1,4 +1,4 @@
-package com.krafton.kts.backend.property.domain;
+package com.krafton.kts.backend.action.domain;
 
 import lombok.Data;
 

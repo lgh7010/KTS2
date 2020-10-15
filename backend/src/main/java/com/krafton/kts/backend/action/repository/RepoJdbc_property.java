@@ -1,9 +1,8 @@
-package com.krafton.kts.backend.property.repository;
+package com.krafton.kts.backend.action.repository;
 
-import com.krafton.kts.backend.action.domain.KTS_ACTION;
 import com.krafton.kts.backend.common.JdbcCommon;
-import com.krafton.kts.backend.property.domain.KTS_PROPERTY;
-import com.krafton.kts.backend.property.domain.KTS_PROPERTY_TEMPLETE;
+import com.krafton.kts.backend.action.domain.KTS_PROPERTY;
+import com.krafton.kts.backend.action.domain.KTS_PROPERTY_TEMPLETE;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -11,7 +10,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class RepoJdbc_property extends JdbcCommon implements Repo_property {
@@ -105,7 +103,7 @@ public class RepoJdbc_property extends JdbcCommon implements Repo_property {
                     + " ON DUPLICATE KEY UPDATE PROPERTY_NAME = VALUES(PROPERTY_NAME), PROPERTY_VALUE = VALUES(PROPERTY_VALUE), ACTION_GUID = VALUES(ACTION_GUID)");
             pstmt.executeUpdate();
 
-            //step 3. 액션의 액션ID 변경 -> 이거 도메인 규정 위반이다. 근데 어떻게 고치지?
+            //step 3. 액션의 액션ID 변경
             pstmt = conn.prepareStatement("UPDATE KTS_ACTION SET ACTION_ID = ? WHERE ACTION_GUID = ?");
             pstmt.setString(1, ACTION_ID);
             pstmt.setString(2, ACTION_GUID);

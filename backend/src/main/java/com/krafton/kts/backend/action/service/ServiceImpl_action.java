@@ -20,8 +20,8 @@ public class ServiceImpl_action implements Service_action{
     }
 
     @Override
-    public List<KTS_ACTION> findActionsByTESTCASE_SEQ(int TESTCASE_SEQ) {
-        return repo_action.findActionsByTESTCASE_SEQ(TESTCASE_SEQ);
+    public List<KTS_ACTION> findActionsByTESTCASE_GUID(String TESTCASE_GUID) {
+        return repo_action.findActionsByTESTCASE_GUID(TESTCASE_GUID);
     }
 
     @Override

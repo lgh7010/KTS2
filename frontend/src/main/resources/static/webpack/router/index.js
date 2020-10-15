@@ -26,7 +26,7 @@ const router = new Router({
             component: TestcaseListComponent
         },
         {
-            path: '/testcase/edit/:TESTCASE_SEQ',
+            path: '/testcase/edit/:TESTCASE_GUID',
             name: 'TestcaseEdit',
             component: TestcaseEditComponent
         }

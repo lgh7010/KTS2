@@ -73,7 +73,7 @@
           <td>
             <button v-on:click="moveUp(index)">위로</button>
             <button v-on:click="moveDown(index)">아래로</button>
-            <router-link :to="{name: 'TestcaseEdit', params: {TESTCASE_SEQ: rel.testcase_SEQ}}"><button>편집</button></router-link>
+            <router-link :to="{name: 'TestcaseEdit', params: {TESTCASE_GUID: rel.testcase_GUID}}"><button>편집</button></router-link>
             <button v-on:click="removeTestcase(index)">제거</button>
           </td>
         </tr>
@@ -101,12 +101,16 @@ export default {
       testRelTestcaseList_with_name_and_desc: [],
       testcaseList: [],
       currentTest: null,
-      removeTestcaseSeqList: [],
+      removeRelationSeqList: [],
     }
   },
   mounted: function() {
     axios.get("/test", { params: {'TEST_SEQ': this.$route.params.TEST_SEQ}}).then(responseTest => {
-      this.currentTest = responseTest.data.context.test
+      this.currentTest = (responseTest.data.context != null && responseTest.data.context.test != null) ? responseTest.data.context.test : {
+        test_SEQ: 0,
+        name: "",
+        description: "",
+      }
       document.getElementById("testName").value = this.currentTest.name
       document.getElementById("testDescription").value = this.currentTest.description
 
@@ -122,9 +126,9 @@ export default {
               relation_SEQ: testRelTestcaseList[i].relation_SEQ,
               test_SEQ : testRelTestcaseList[i].test_SEQ,
               //list_INDEX : testRelTestcaseList[i].list_INDEX,
-              testcase_SEQ : testRelTestcaseList[i].testcase_SEQ,
-              name : testcaseDic[testRelTestcaseList[i].testcase_SEQ].name,
-              description : testcaseDic[testRelTestcaseList[i].testcase_SEQ].description
+              testcase_GUID : testRelTestcaseList[i].testcase_GUID,
+              name : testcaseDic[testRelTestcaseList[i].testcase_GUID].name,
+              description : testcaseDic[testRelTestcaseList[i].testcase_GUID].description
             })
           }
           this.testRelTestcaseList_with_name_and_desc = list
@@ -157,7 +161,7 @@ export default {
       this.testRelTestcaseList_with_name_and_desc.push({
         relation_SEQ: 0,
         test_SEQ : (this.currentTest != null) ? this.currentTest.test_SEQ : 0,
-        testcase_SEQ : testcase.testcase_SEQ,
+        testcase_GUID : testcase.testcase_GUID,
         name : testcase.name,
         description : testcase.description
       })
@@ -168,7 +172,7 @@ export default {
         "TEST_SEQ": (this.currentTest != null) ? this.currentTest.test_SEQ : 0,
         "TEST_NAME": document.getElementById("testName").value,
         "TEST_DESCRIPTION": document.getElementById("testDescription").value,
-        "REMOVE_TESTCASE_SEQ_LIST": this.removeTestcaseSeqList,
+        "REMOVE_RELATION_SEQ_LIST": this.removeRelationSeqList,
       }).then(response => {
         alert("저장 완료")
         console.log(response)
@@ -189,9 +193,9 @@ export default {
       this.testRelTestcaseList_with_name_and_desc[listIndex] = this.testRelTestcaseList_with_name_and_desc.splice(listIndex + 1, 1, this.testRelTestcaseList_with_name_and_desc[listIndex])[0]
     },
     removeTestcase: function(listIndex){
-      this.removeTestcaseSeqList.push(this.testRelTestcaseList_with_name_and_desc[listIndex].relation_SEQ)
+      this.removeRelationSeqList.push(this.testRelTestcaseList_with_name_and_desc[listIndex].relation_SEQ)
       this.testRelTestcaseList_with_name_and_desc.splice(listIndex, 1)
-      console.log(this.removeTestcaseSeqList)
+      console.log(this.removeRelationSeqList)
     }
   }
 }

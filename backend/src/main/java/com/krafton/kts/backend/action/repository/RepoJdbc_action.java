@@ -18,22 +18,22 @@ public class RepoJdbc_action extends JdbcCommon implements Repo_action {
     }
 
     @Override
-    public List<KTS_ACTION> findActionsByTESTCASE_SEQ(int TESTCASE_SEQ) {
+    public List<KTS_ACTION> findActionsByTESTCASE_GUID(String TESTCASE_GUID) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement("select * from KTS_ACTION where TESTCASE_SEQ = ? AND DELETED = 'N'");
-            pstmt.setInt(1, TESTCASE_SEQ);
+            pstmt = conn.prepareStatement("select * from KTS_ACTION where TESTCASE_GUID = ? AND DELETED = 'N'");
+            pstmt.setString(1, TESTCASE_GUID);
             rs = pstmt.executeQuery();
 
             List<KTS_ACTION> list = new ArrayList<>();
             while(rs.next()){
                 KTS_ACTION action = new KTS_ACTION();
                 action.setACTION_GUID(rs.getString("ACTION_GUID"));
-                action.setTESTCASE_SEQ(rs.getInt("TESTCASE_SEQ"));
+                action.setTESTCASE_GUID(rs.getString("TESTCASE_GUID"));
                 action.setIS_START(rs.getString("IS_START"));
                 action.setNEXT_ACTION_GUID(rs.getString("NEXT_ACTION_GUID"));
                 action.setACTION_ID(rs.getString("ACTION_ID"));
@@ -91,13 +91,13 @@ public class RepoJdbc_action extends JdbcCommon implements Repo_action {
             String values = "";
             for(int i = 0; i < list.stream().count(); i++){
                 KTS_ACTION action = list.get(i);
-                values += "('" + action.getACTION_GUID() + "', " + action.getTESTCASE_SEQ() + ", '" + action.getIS_START() + "', '" + action.getNEXT_ACTION_GUID() + "', '" + action.getACTION_ID() + "', " + action.getX_POS() + ", " + action.getY_POS() + ", '" + action.getDESCRIPTION() + "')";
+                values += "('" + action.getACTION_GUID() + "', '" + action.getTESTCASE_GUID() + "', '" + action.getIS_START() + "', '" + action.getNEXT_ACTION_GUID() + "', '" + action.getACTION_ID() + "', " + action.getX_POS() + ", " + action.getY_POS() + ", '" + action.getDESCRIPTION() + "')";
                 if(i < list.stream().count()-1){
                     values += ",";
                 }
             }
-            pstmt = conn.prepareStatement("INSERT INTO KTS_ACTION (ACTION_GUID, TESTCASE_SEQ, IS_START, NEXT_ACTION_GUID, ACTION_ID, X_POS, Y_POS, DESCRIPTION) VALUES " + values
-                    + " ON DUPLICATE KEY UPDATE TESTCASE_SEQ = VALUES(TESTCASE_SEQ), IS_START = VALUES(IS_START), NEXT_ACTION_GUID = VALUES(NEXT_ACTION_GUID), ACTION_ID = VALUES(ACTION_ID), X_POS = VALUES(X_POS), Y_POS = VALUES(Y_POS), DESCRIPTION = VALUES(DESCRIPTION)");
+            pstmt = conn.prepareStatement("INSERT INTO KTS_ACTION (ACTION_GUID, TESTCASE_GUID, IS_START, NEXT_ACTION_GUID, ACTION_ID, X_POS, Y_POS, DESCRIPTION) VALUES " + values
+                    + " ON DUPLICATE KEY UPDATE TESTCASE_GUID = VALUES(TESTCASE_GUID), IS_START = VALUES(IS_START), NEXT_ACTION_GUID = VALUES(NEXT_ACTION_GUID), ACTION_ID = VALUES(ACTION_ID), X_POS = VALUES(X_POS), Y_POS = VALUES(Y_POS), DESCRIPTION = VALUES(DESCRIPTION)");
             pstmt.executeUpdate();
 
             //step 2. removeList에 SEQ가 존재하는 ACTION들의 DELETED를 Y로 변경

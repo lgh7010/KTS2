@@ -27,11 +27,11 @@ public class Controller_action {
     @ResponseBody
     public Response actionDic(
             HttpServletRequest req,
-            @RequestParam(value = "TESTCASE_SEQ") int TESTCASE_SEQ,
+            @RequestParam(value = "TESTCASE_GUID") String TESTCASE_GUID,
             HttpServletResponse res
     ){
         try {
-            List<KTS_ACTION> list = this.service_action.findActionsByTESTCASE_SEQ(TESTCASE_SEQ);
+            List<KTS_ACTION> list = this.service_action.findActionsByTESTCASE_GUID(TESTCASE_GUID);
             Map<String, KTS_ACTION> ret = new HashMap<>();
             for (Iterator<KTS_ACTION> iter = list.iterator(); iter.hasNext();){
                 KTS_ACTION tc = iter.next();
@@ -79,7 +79,7 @@ public class Controller_action {
 
                 KTS_ACTION action = new KTS_ACTION();
                 action.setACTION_GUID(actionObject.getString("action_GUID"));
-                action.setTESTCASE_SEQ(actionObject.getInt("testcase_SEQ"));
+                action.setTESTCASE_GUID(actionObject.getString("testcase_GUID"));
                 action.setIS_START(actionObject.getString("is_START"));
                 action.setNEXT_ACTION_GUID(actionObject.getString("next_ACTION_GUID"));
                 action.setACTION_ID(actionObject.getString("action_ID"));
@@ -99,7 +99,7 @@ public class Controller_action {
 
             JSONObject testcaseObj = requestJsonObj.getJSONObject("TESTCASE");
             KTS_TESTCASE tc = new KTS_TESTCASE();
-            tc.setTESTCASE_SEQ(testcaseObj.getInt("testcase_SEQ"));
+            tc.setTESTCASE_GUID(testcaseObj.getString("testcase_GUID"));
             tc.setNAME(testcaseObj.getString("name"));
             tc.setDESCRIPTION(testcaseObj.getString("description"));
             tc.setDELETED("N");

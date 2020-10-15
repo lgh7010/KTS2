@@ -32,7 +32,7 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
                 rel.setRELATION_SEQ(rs.getInt("RELATION_SEQ"));
                 rel.setTEST_SEQ(rs.getInt("TEST_SEQ"));
                 //rel.setLIST_INDEX(rs.getInt("LIST_INDEX"));
-                rel.setTESTCASE_SEQ(rs.getInt("TESTCASE_SEQ"));
+                rel.setTESTCASE_GUID(rs.getString("TESTCASE_GUID"));
                 rel.setDELETED(rs.getString("DELETED"));
 
                 rels.add(rel);
@@ -47,12 +47,12 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
     }
 
     @Override
-    public List<TEST_REL_TESTCASE> findTestRelTestcaseByTESTCASE_SEQ(int TESTCASE_SEQ) {
+    public List<TEST_REL_TESTCASE> findTestRelTestcaseByTESTCASE_GUID(String TESTCASE_GUID) {
         return null;
     }
 
     @Override
-    public void saveTestRelTestcase(List<TEST_REL_TESTCASE> rels, int TEST_SEQ, Boolean createNewTest, String testName, String testDescription, List<Integer> removeTestcaseSeqList) {
+    public void saveTestRelTestcase(List<TEST_REL_TESTCASE> rels, int TEST_SEQ, Boolean createNewTest, String testName, String testDescription, List<Integer> removeRelationSeqList) {
         Connection conn = null;
         PreparedStatement pstmt = null;
 
@@ -84,22 +84,24 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
             }
 
             //step 2. 관계 생성
-            String values = "";
-            for(int listIndex = 0; listIndex < rels.stream().count(); listIndex++){
-                TEST_REL_TESTCASE rel = rels.get(listIndex);
-                values += "(" + rel.getRELATION_SEQ() + ", " + TEST_SEQ + ", " + listIndex + ", " + rel.getTESTCASE_SEQ() + ")";
-                if(listIndex < rels.stream().count()-1){
-                    values += ",";
+            if(rels.stream().count() > 0){
+                String values = "";
+                for(int listIndex = 0; listIndex < rels.stream().count(); listIndex++){
+                    TEST_REL_TESTCASE rel = rels.get(listIndex);
+                    values += "(" + rel.getRELATION_SEQ() + ", " + TEST_SEQ + ", " + listIndex + ", '" + rel.getTESTCASE_GUID() + "')";
+                    if(listIndex < rels.stream().count()-1){
+                        values += ",";
+                    }
                 }
+                pstmt = conn.prepareStatement("INSERT INTO TEST_REL_TESTCASE (RELATION_SEQ, TEST_SEQ, LIST_INDEX, TESTCASE_GUID) VALUES " + values
+                        + " ON DUPLICATE KEY UPDATE RELATION_SEQ = RELATION_SEQ, LIST_INDEX = VALUES(LIST_INDEX)");
+                pstmt.executeUpdate();
             }
-            pstmt = conn.prepareStatement("INSERT INTO TEST_REL_TESTCASE (RELATION_SEQ, TEST_SEQ, LIST_INDEX, TESTCASE_SEQ) VALUES " + values
-            + " ON DUPLICATE KEY UPDATE RELATION_SEQ = RELATION_SEQ, LIST_INDEX = VALUES(LIST_INDEX)");
-            pstmt.executeUpdate();
 
             //step 3. 삭제된 관계 DELETED=Y로 전환
-            if(removeTestcaseSeqList != null && removeTestcaseSeqList.stream().count() > 0){
+            if(removeRelationSeqList != null && removeRelationSeqList.stream().count() > 0){
                 StringBuilder builder = new StringBuilder();
-                Iterator<Integer> iter = removeTestcaseSeqList.iterator();
+                Iterator<Integer> iter = removeRelationSeqList.iterator();
                 while(iter.hasNext()){
                     builder.append(iter.next());
                     if(iter.hasNext()){

@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class KTS_ACTION {
     private String ACTION_GUID;
-    private int TESTCASE_SEQ;
+    private String TESTCASE_GUID;
     private String IS_START;
     private String NEXT_ACTION_GUID;
     private String ACTION_ID;

@@ -2,7 +2,7 @@
   <div>
 
     <div>
-      <router-link :to="{name: 'TestcaseEdit', params: {TESTCASE_SEQ: 0}}"><button>추가</button></router-link>
+      <router-link :to="{name: 'TestcaseEdit', params: {TESTCASE_GUID: 'DUMMY'}}"><button>추가</button></router-link>
     </div>
 
     <div>
@@ -19,8 +19,8 @@
           <td>{{testcase.name}}</td>
           <td>{{testcase.description}}</td>
           <td>
-            <router-link :to="{name: 'TestcaseEdit', params: {TESTCASE_SEQ: testcase.testcase_SEQ}}"><button>편집</button></router-link>
-            <button v-on:click="onClickRemove(testcase.testcase_SEQ)">삭제</button>
+            <router-link :to="{name: 'TestcaseEdit', params: {TESTCASE_GUID: testcase.testcase_GUID}}"><button>편집</button></router-link>
+            <button v-on:click="onClickRemove(testcase.testcase_GUID)">삭제</button>
           </td>
         </tr>
 
@@ -51,8 +51,8 @@ export default {
     })
   },
   methods: {
-    onClickRemove: function(TESTCASE_SEQ){
-      axios.post('/removeTestcase', {'TESTCASE_SEQ': TESTCASE_SEQ}).then(resposne => {
+    onClickRemove: function(TESTCASE_GUID){
+      axios.post('/removeTestcase', {'TESTCASE_GUID': TESTCASE_GUID}).then(resposne => {
         console.log(resposne)
       }).catch(error => {
         console.log(error)

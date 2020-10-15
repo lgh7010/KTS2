@@ -124,9 +124,15 @@ export default {
     })
   },
   mounted(){
-    axios.get("/actionDic", { params: {'TESTCASE_SEQ': this.$route.params.TESTCASE_SEQ}}).then(responseActionDic => {
-      axios.get("/testcase", { params: {'TESTCASE_SEQ': this.$route.params.TESTCASE_SEQ}}).then(responseTestcase => {
-        this.currentTestcase = responseTestcase.data.context.testcase
+    axios.get("/actionDic", { params: {'TESTCASE_GUID': this.$route.params.TESTCASE_GUID}}).then(responseActionDic => {
+      axios.get("/testcase", { params: {'TESTCASE_GUID': this.$route.params.TESTCASE_GUID}}).then(responseTestcase => {
+        console.log(responseTestcase)
+        this.currentTestcase = (responseTestcase.data.context != null && responseTestcase.data.context.testcase != null) ? responseTestcase.data.context.testcase : {
+          testcase_GUID: this.guid(),
+          name: "",
+          description: "",
+        }
+
         $("#testcaseName").val(this.currentTestcase.name)
         $("#testcaseDescription").val(this.currentTestcase.description)
         this.actionDic = responseActionDic.data.context.actionDic
@@ -155,6 +161,14 @@ export default {
     }
   },
   methods: {
+    guid(){
+      function _p8(s) {
+        var p = (Math.random().toString(16)+"000000000").substr(2,8);
+        return s ? "-" + p.substr(0,4) + "-" + p.substr(4,4) : p ;
+      }
+      return _p8() + _p8(true) + _p8(true) + _p8();
+    },
+
     //제어 관련
     goBack(){
       this.currentTestcase = null
@@ -177,21 +191,14 @@ export default {
       return null
     },
     onClickAdd(){
-      function guid() {
-        function _p8(s) {
-          var p = (Math.random().toString(16)+"000000000").substr(2,8);
-          return s ? "-" + p.substr(0,4) + "-" + p.substr(4,4) : p ;
-        }
-        return _p8() + _p8(true) + _p8(true) + _p8();
-      }
       var lastAction = this.getLastAction()
-      var guid = guid()
+      var guid = this.guid()
       if(lastAction != null){
         lastAction.next_ACTION_GUID = guid;
       }
       Vue.set(this.actionDic, guid, {
         action_GUID: guid,
-        testcase_SEQ: (this.currentTestcase != null) ? this.currentTestcase.testcase_SEQ : 0,
+        testcase_GUID: this.currentTestcase.testcase_GUID,
         is_START: 'N',
         next_ACTION_GUID: NULL_ACTION_NODE_GUID,
         action_ID: 'Empty',
@@ -202,13 +209,8 @@ export default {
       })
     },
     onClickTestcaseSave(){
-      if(!this.currentTestcase){
-        this.currentTestcase = {
-          testcase_SEQ: 0,
-          name: $("#testcaseName").val(),
-          description: $("#testcaseDescription").val()
-        }
-      }
+      this.currentTestcase.name = $("#testcaseName").val()
+      this.currentTestcase.description = $("#testcaseDescription").val()
       console.log(this.currentTestcase)
       axios.post("/saveActionDic", {
         "ACTION_DIC": this.actionDic,

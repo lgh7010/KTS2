@@ -47,10 +47,10 @@ public class Controller_testcase {
     ){
         try {
             List<KTS_TESTCASE> list = this.service_testcase.findTestcasesByTEST_SEQ(TEST_SEQ);
-            Map<Integer, KTS_TESTCASE> ret = new HashMap<>();
+            Map<String, KTS_TESTCASE> ret = new HashMap<>();
             for (Iterator<KTS_TESTCASE> iter = list.iterator(); iter.hasNext();){
                 KTS_TESTCASE tc = iter.next();
-                ret.put(tc.getTESTCASE_SEQ(), tc);
+                ret.put(tc.getTESTCASE_GUID(), tc);
             }
 
             Response response = new Response();
@@ -70,7 +70,7 @@ public class Controller_testcase {
     ){
         try {
             JSONObject requestJsonObj = new JSONObject(requestJsonStr);
-            this.service_testcase.removeTestcase(requestJsonObj.getInt("TESTCASE_SEQ"));
+            this.service_testcase.removeTestcase(requestJsonObj.getString("TESTCASE_GUID"));
             return new Response();
         } catch(Exception e){
             return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
@@ -79,10 +79,10 @@ public class Controller_testcase {
 
     @GetMapping("/testcase")
     @ResponseBody
-    public Response testcase(@RequestParam(value = "TESTCASE_SEQ") int TESTCASE_SEQ){
+    public Response testcase(@RequestParam(value = "TESTCASE_GUID") String TESTCASE_GUID){
         try {
             Response response = new Response();
-            response.putContext("testcase", this.service_testcase.findTestcase(TESTCASE_SEQ));
+            response.putContext("testcase", this.service_testcase.findTestcase(TESTCASE_GUID));
             return response;
         } catch (Exception e){
             return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());

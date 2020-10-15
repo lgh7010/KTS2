@@ -65,16 +65,16 @@ public class Controller_test_rel_testcase {
                 //elem.setTEST_SEQ(relObj.getInt("test_SEQ"));
                 elem.setTEST_SEQ(testSeq);
                 elem.setLIST_INDEX(listIndex);
-                elem.setTESTCASE_SEQ(relObj.getInt("testcase_SEQ"));
+                elem.setTESTCASE_GUID(relObj.getString("testcase_GUID"));
                 list.add(elem);
             }
 
-            JSONArray removeTestcaseSeqListArray = requestJsonObj.getJSONArray("REMOVE_TESTCASE_SEQ_LIST");
-            List<Integer> removeTestcaseSeqList = new ArrayList<>();
-            for(int i = 0; i < removeTestcaseSeqListArray.length(); i++){
-                removeTestcaseSeqList.add(removeTestcaseSeqListArray.getInt(i));
+            JSONArray removeRelationSeqArray = requestJsonObj.getJSONArray("REMOVE_RELATION_SEQ_LIST");
+            List<Integer> removeRelationSeqList = new ArrayList<>();
+            for(int i = 0; i < removeRelationSeqArray.length(); i++){
+                removeRelationSeqList.add(removeRelationSeqArray.getInt(i));
             }
-            this.service_test_rel_testcase.saveTestRelTestcase(list, testSeq, testName, testDescription, removeTestcaseSeqList);
+            this.service_test_rel_testcase.saveTestRelTestcase(list, testSeq, testName, testDescription, removeRelationSeqList);
 
             return new Response();
         } catch(Exception e){

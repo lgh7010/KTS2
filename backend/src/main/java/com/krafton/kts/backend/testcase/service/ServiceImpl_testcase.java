@@ -26,13 +26,13 @@ public class ServiceImpl_testcase implements Service_testcase {
     }
 
     @Override
-    public void removeTestcase(int TESTCASE_SEQ) {
-        this.repo_testcase.removeTestcase(TESTCASE_SEQ);
+    public void removeTestcase(String TESTCASE_GUID) {
+        this.repo_testcase.removeTestcase(TESTCASE_GUID);
     }
 
     @Override
-    public KTS_TESTCASE findTestcase(int TESTCASE_SEQ) {
-        return this.repo_testcase.findTestcase(TESTCASE_SEQ);
+    public KTS_TESTCASE findTestcase(String TESTCASE_GUID) {
+        return this.repo_testcase.findTestcase(TESTCASE_GUID);
     }
 
     @Override

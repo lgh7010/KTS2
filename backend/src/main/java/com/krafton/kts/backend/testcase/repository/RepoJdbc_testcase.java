@@ -134,16 +134,17 @@ public class RepoJdbc_testcase extends JdbcCommon implements Repo_testcase {
     }
 
     @Override
-    public void updateTestcase(KTS_TESTCASE tc) {
+    public void addTestcase(KTS_TESTCASE tc) {
         Connection conn = null;
         PreparedStatement pstmt = null;
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement("UPDATE KTS_TESTCASE SET NAME = ?, DESCRIPTION = ? WHERE TESTCASE_SEQ = ?");
-            pstmt.setString(1, tc.getNAME());
-            pstmt.setString(2, tc.getDESCRIPTION());
-            pstmt.setInt(3, tc.getTESTCASE_SEQ());
+            pstmt = conn.prepareStatement("INSERT INTO KTS_TESTCASE (TESTCASE_SEQ, NAME, DESCRIPTION, DELETED) VALUES (?, ?, ?, 'N') " +
+                    "ON DUPLICATE KEY UPDATE NAME = VALUES(NAME), DESCRIPTION = VALUES(DESCRIPTION)");
+            pstmt.setInt(1, tc.getTESTCASE_SEQ());
+            pstmt.setString(2, tc.getNAME());
+            pstmt.setString(3, tc.getDESCRIPTION());
             pstmt.executeUpdate();
         } catch (Exception e){
             throw new IllegalStateException(e);

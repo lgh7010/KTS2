@@ -14,5 +14,5 @@ public interface Repo_testcase {
     List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int TEST_SEQ);
     void removeTestcase(int TESTCASE_SEQ);
     KTS_TESTCASE findTestcase(int TESTCASE_SEQ);
-    void updateTestcase(KTS_TESTCASE tc);
+    void addTestcase(KTS_TESTCASE tc);
 }

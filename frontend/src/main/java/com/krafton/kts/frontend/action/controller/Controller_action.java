@@ -102,10 +102,10 @@ public class Controller_action {
             tc.setTESTCASE_SEQ(testcaseObj.getInt("testcase_SEQ"));
             tc.setNAME(testcaseObj.getString("name"));
             tc.setDESCRIPTION(testcaseObj.getString("description"));
-            tc.setDELETED(testcaseObj.getString("deleted"));
+            tc.setDELETED("N");
 
             this.service_action.saveActionList(list, removeList);
-            this.service_testcase.updateTestcase(tc);
+            this.service_testcase.addTestcase(tc);
 
             return new Response();
         } catch(Exception e){

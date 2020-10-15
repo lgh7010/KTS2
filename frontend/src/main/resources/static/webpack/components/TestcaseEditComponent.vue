@@ -54,7 +54,7 @@
     <div id="flowchart">
       <td><input id="testcaseName" type="text"></td>
       <td><input id="testcaseDescription" type="text"></td>
-      <button v-on:click="onClickSave()">저장</button>
+      <button v-on:click="onClickTestcaseSave()">저장</button>
       <button v-on:click="onClickAdd()">추가</button>
       <button v-on:click="goBack()">닫기</button>
 
@@ -106,7 +106,7 @@ export default {
     return {
       actionDic: {},//현재 페이지에서 관리중인 액션노드의 딕셔너리. 키값은 ACTION_GUID
       actionTempleteDic: {},//액션 템플릿의 딕셔너리. 최초 페이지 생성시 불러온다.
-      currentTestcase: {},//현재 에디터에서 편집중인 테스트케이스
+      currentTestcase: null,//현재 에디터에서 편집중인 테스트케이스
 
       arrows_start_map: {},//키는 시작 action_GUID, 값은 끝 action_GUID
       arrows_end_map: {},//키는 끝 action_GUID, 값은 시작 action_GUID
@@ -157,6 +157,7 @@ export default {
   methods: {
     //제어 관련
     goBack(){
+      this.currentTestcase = null
       this.$router.go(-1)
     },
     getFirstAction(){
@@ -190,7 +191,7 @@ export default {
       }
       Vue.set(this.actionDic, guid, {
         action_GUID: guid,
-        testcase_SEQ: this.currentTestcase.testcase_SEQ,
+        testcase_SEQ: (this.currentTestcase != null) ? this.currentTestcase.testcase_SEQ : 0,
         is_START: 'N',
         next_ACTION_GUID: NULL_ACTION_NODE_GUID,
         action_ID: 'Empty',
@@ -200,9 +201,14 @@ export default {
         deleted: 'N',
       })
     },
-    onClickSave(){
-      this.currentTestcase.name = $("#testcaseName").val()
-      this.currentTestcase.description = $("#testcaseDescription").val()
+    onClickTestcaseSave(){
+      if(!this.currentTestcase){
+        this.currentTestcase = {
+          testcase_SEQ: 0,
+          name: $("#testcaseName").val(),
+          description: $("#testcaseDescription").val()
+        }
+      }
       console.log(this.currentTestcase)
       axios.post("/saveActionDic", {
         "ACTION_DIC": this.actionDic,

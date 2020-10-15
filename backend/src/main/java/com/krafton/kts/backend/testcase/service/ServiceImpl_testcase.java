@@ -36,8 +36,8 @@ public class ServiceImpl_testcase implements Service_testcase {
     }
 
     @Override
-    public void updateTestcase(KTS_TESTCASE tc) {
-        this.repo_testcase.updateTestcase(tc);
+    public void addTestcase(KTS_TESTCASE tc) {
+        this.repo_testcase.addTestcase(tc);
     }
 
 }

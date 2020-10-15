@@ -1,8 +1,8 @@
 package com.krafton.kts.backend.action.service;
 
-import com.krafton.kts.backend.action.domain.KTS_PROPERTY;
-import com.krafton.kts.backend.action.domain.KTS_PROPERTY_TEMPLATE;
-import com.krafton.kts.backend.action.domain.SavePropertiesCommand;
+import com.krafton.kts.backend.action.domain.db.KTS_PROPERTY;
+import com.krafton.kts.backend.action.domain.db.KTS_PROPERTY_TEMPLATE;
+import com.krafton.kts.backend.action.domain.command.SavePropertiesCommand;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

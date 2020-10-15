@@ -1,8 +1,8 @@
 package com.krafton.kts.backend.testcase.service;
 
-import com.krafton.kts.backend.testcase.domain.RemoveTestcaseCommand;
+import com.krafton.kts.backend.testcase.domain.command.RemoveTestcaseCommand;
 import com.krafton.kts.backend.testcase.repository.Repo_testcase;
-import com.krafton.kts.backend.testcase.domain.KTS_TESTCASE;
+import com.krafton.kts.backend.testcase.domain.db.KTS_TESTCASE;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

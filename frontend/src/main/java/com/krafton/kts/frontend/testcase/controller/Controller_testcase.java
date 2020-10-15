@@ -1,16 +1,12 @@
 package com.krafton.kts.frontend.testcase.controller;
 
-import com.krafton.kts.backend.testcase.domain.RemoveTestcaseCommand;
+import com.krafton.kts.backend.testcase.domain.command.RemoveTestcaseCommand;
 import com.krafton.kts.backend.testcase.service.Service_testcase;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;
 import lombok.RequiredArgsConstructor;
-import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Controller
 @RequiredArgsConstructor

@@ -1,8 +1,7 @@
 package com.krafton.kts.backend.testcase.service;
 
-import com.krafton.kts.backend.test.domain.KTS_TEST;
-import com.krafton.kts.backend.testcase.domain.KTS_TESTCASE;
-import com.krafton.kts.backend.testcase.domain.RemoveTestcaseCommand;
+import com.krafton.kts.backend.testcase.domain.db.KTS_TESTCASE;
+import com.krafton.kts.backend.testcase.domain.command.RemoveTestcaseCommand;
 import org.springframework.stereotype.Service;
 
 import java.util.List;

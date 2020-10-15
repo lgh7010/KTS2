@@ -1,6 +1,6 @@
 package com.krafton.kts.frontend.test_rel_testcase.controller;
 
-import com.krafton.kts.backend.test_rel_testcase.domain.TestRelTestcaseSaveCommand;
+import com.krafton.kts.backend.test_rel_testcase.domain.command.TestRelTestcaseSaveCommand;
 import com.krafton.kts.backend.test_rel_testcase.service.Service_test_rel_testcase;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;

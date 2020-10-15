@@ -1,11 +1,10 @@
 package com.krafton.kts.backend.testcase.repository;
 
-import com.krafton.kts.backend.testcase.domain.KTS_TESTCASE;
-import com.krafton.kts.backend.testcase.domain.RemoveTestcaseCommand;
+import com.krafton.kts.backend.testcase.domain.db.KTS_TESTCASE;
+import com.krafton.kts.backend.testcase.domain.command.RemoveTestcaseCommand;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
-import java.util.Optional;
 
 @Repository
 public interface Repo_testcase {

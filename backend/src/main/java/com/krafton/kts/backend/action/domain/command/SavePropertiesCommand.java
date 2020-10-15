@@ -1,5 +1,6 @@
-package com.krafton.kts.backend.action.domain;
+package com.krafton.kts.backend.action.domain.command;
 
+import com.krafton.kts.backend.action.domain.db.KTS_PROPERTY;
 import lombok.Data;
 
 import java.util.List;

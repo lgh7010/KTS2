@@ -1,6 +1,6 @@
 package com.krafton.kts.backend.test.repository;
 
-import com.krafton.kts.backend.test.domain.KTS_TEST;
+import com.krafton.kts.backend.test.domain.db.KTS_TEST;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

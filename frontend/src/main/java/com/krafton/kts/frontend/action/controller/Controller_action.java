@@ -1,15 +1,12 @@
 package com.krafton.kts.frontend.action.controller;
 
-import com.krafton.kts.backend.action.domain.KTS_ACTION;
-import com.krafton.kts.backend.action.domain.SaveCurrentTestcaseActionsCommand;
+import com.krafton.kts.backend.action.domain.db.KTS_ACTION;
+import com.krafton.kts.backend.action.domain.command.SaveCurrentTestcaseActionsCommand;
 import com.krafton.kts.backend.action.service.Service_action;
-import com.krafton.kts.backend.testcase.domain.KTS_TESTCASE;
 import com.krafton.kts.backend.testcase.service.Service_testcase;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;
 import lombok.RequiredArgsConstructor;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 

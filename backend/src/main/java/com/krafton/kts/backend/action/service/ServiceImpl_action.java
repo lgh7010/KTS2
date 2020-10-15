@@ -1,7 +1,7 @@
 package com.krafton.kts.backend.action.service;
 
-import com.krafton.kts.backend.action.domain.KTS_ACTION;
-import com.krafton.kts.backend.action.domain.KTS_ACTION_TEMPLATE;
+import com.krafton.kts.backend.action.domain.db.KTS_ACTION;
+import com.krafton.kts.backend.action.domain.db.KTS_ACTION_TEMPLATE;
 import com.krafton.kts.backend.action.repository.Repo_action;
 import org.springframework.beans.factory.annotation.Autowired;
 

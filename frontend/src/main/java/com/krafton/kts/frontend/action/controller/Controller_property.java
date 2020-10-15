@@ -1,17 +1,12 @@
 package com.krafton.kts.frontend.action.controller;
 
-import com.krafton.kts.backend.action.domain.KTS_PROPERTY;
-import com.krafton.kts.backend.action.domain.SavePropertiesCommand;
+import com.krafton.kts.backend.action.domain.command.SavePropertiesCommand;
 import com.krafton.kts.backend.action.service.Service_property;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;
-import org.json.JSONArray;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.*;
 
 @Controller
 public class Controller_property {

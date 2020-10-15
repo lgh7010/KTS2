@@ -1,4 +1,4 @@
-package com.krafton.kts.backend.test_rel_testcase.domain;
+package com.krafton.kts.backend.test_rel_testcase.domain.db;
 
 import lombok.Data;
 

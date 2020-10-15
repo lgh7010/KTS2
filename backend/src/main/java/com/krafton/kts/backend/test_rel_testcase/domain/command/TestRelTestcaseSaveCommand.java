@@ -1,5 +1,6 @@
-package com.krafton.kts.backend.test_rel_testcase.domain;
+package com.krafton.kts.backend.test_rel_testcase.domain.command;
 
+import com.krafton.kts.backend.test_rel_testcase.domain.db.TEST_REL_TESTCASE;
 import lombok.Data;
 
 import java.util.List;

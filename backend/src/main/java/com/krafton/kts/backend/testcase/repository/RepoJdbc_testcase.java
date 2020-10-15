@@ -1,15 +1,14 @@
 package com.krafton.kts.backend.testcase.repository;
 
 import com.krafton.kts.backend.common.JdbcCommon;
-import com.krafton.kts.backend.testcase.domain.KTS_TESTCASE;
-import com.krafton.kts.backend.testcase.domain.RemoveTestcaseCommand;
+import com.krafton.kts.backend.testcase.domain.db.KTS_TESTCASE;
+import com.krafton.kts.backend.testcase.domain.command.RemoveTestcaseCommand;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Optional;
 
 public class RepoJdbc_testcase extends JdbcCommon implements Repo_testcase {
 

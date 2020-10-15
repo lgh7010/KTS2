@@ -1,8 +1,7 @@
 package com.krafton.kts.backend.test_rel_testcase.service;
 
-import com.krafton.kts.backend.test_rel_testcase.domain.TEST_REL_TESTCASE;
-import com.krafton.kts.backend.test_rel_testcase.domain.TestRelTestcaseDerived;
-import com.krafton.kts.backend.test_rel_testcase.domain.TestRelTestcaseSaveCommand;
+import com.krafton.kts.backend.test_rel_testcase.domain.db.TestRelTestcaseDerived;
+import com.krafton.kts.backend.test_rel_testcase.domain.command.TestRelTestcaseSaveCommand;
 import com.krafton.kts.backend.test_rel_testcase.repository.Repo_test_rel_testcase;
 import org.springframework.beans.factory.annotation.Autowired;
 

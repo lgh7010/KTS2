@@ -1,16 +1,12 @@
 package com.krafton.kts.frontend.test.controller;
 
-import com.krafton.kts.backend.test.domain.RemoveTestCommand;
+import com.krafton.kts.backend.test.domain.command.RemoveTestCommand;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;
 import com.krafton.kts.backend.test.service.Service_test;
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 @Controller
 public class Controller_test {

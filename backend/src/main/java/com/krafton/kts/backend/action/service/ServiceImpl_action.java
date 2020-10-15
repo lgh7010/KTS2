@@ -1,7 +1,7 @@
 package com.krafton.kts.backend.action.service;
 
 import com.krafton.kts.backend.action.domain.KTS_ACTION;
-import com.krafton.kts.backend.action.domain.KTS_ACTION_TEMPLETE;
+import com.krafton.kts.backend.action.domain.KTS_ACTION_TEMPLATE;
 import com.krafton.kts.backend.action.repository.Repo_action;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -25,11 +25,11 @@ public class ServiceImpl_action implements Service_action{
     }
 
     @Override
-    public Map<String, KTS_ACTION_TEMPLETE> findAllTemplete() {
-        List<KTS_ACTION_TEMPLETE> list = this.repo_action.findAllTemplete();
-        Map<String, KTS_ACTION_TEMPLETE> ret = new HashMap<>();
-        for (Iterator<KTS_ACTION_TEMPLETE> iter = list.iterator(); iter.hasNext();){
-            KTS_ACTION_TEMPLETE tp = iter.next();
+    public Map<String, KTS_ACTION_TEMPLATE> findAllTemplate() {
+        List<KTS_ACTION_TEMPLATE> list = this.repo_action.findAllTemplate();
+        Map<String, KTS_ACTION_TEMPLATE> ret = new HashMap<>();
+        for (Iterator<KTS_ACTION_TEMPLATE> iter = list.iterator(); iter.hasNext();){
+            KTS_ACTION_TEMPLATE tp = iter.next();
             ret.put(tp.getActionId(), tp);
         }
         return ret;

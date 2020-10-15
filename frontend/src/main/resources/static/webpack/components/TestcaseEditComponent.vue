@@ -24,8 +24,8 @@
 
       <div>
         <select id="actionIdSelection" @change="onChangeActionID()">
-          <option v-for="actionTemplete in this.actionTempleteDic" v-bind:value="actionTemplete.actionId">
-            {{actionTemplete.actionId}}
+          <option v-for="actionTemplate in this.actionTemplateDic" v-bind:value="actionTemplate.actionId">
+            {{actionTemplate.actionId}}
           </option>
         </select>
         <button v-on:click="onClickActionSave">저장</button>
@@ -105,7 +105,7 @@ export default {
   data(){
     return {
       actionDic: {},//현재 페이지에서 관리중인 액션노드의 딕셔너리. 키값은 ACTION_GUID
-      actionTempleteDic: {},//액션 템플릿의 딕셔너리. 최초 페이지 생성시 불러온다.
+      actionTemplateDic: {},//액션 템플릿의 딕셔너리. 최초 페이지 생성시 불러온다.
       currentTestcase: null,//현재 에디터에서 편집중인 테스트케이스
 
       arrowsStartMap: {},//키는 시작 action_GUID, 값은 끝 action_GUID
@@ -117,8 +117,8 @@ export default {
     }
   },
   created(){
-    axios.get("/actionTempleteDic").then(response => {
-      this.actionTempleteDic = response.data.context.actionTempleteDic
+    axios.get("/actionTemplateDic").then(response => {
+      this.actionTemplateDic = response.data.context.actionTemplateDic
     }).catch(error => {
       console.log(error)
     })
@@ -324,7 +324,7 @@ export default {
       //해당 액션의 템플릿의 속성정보를 불러온다.
       var actionId = $("#actionIdSelection").val()
       this.actionDic[this.currentActionGuid].actionId = actionId
-      axios.get("/propertiesTemplete", { params: {'actionId': actionId}}).then(response => {
+      axios.get("/propertiesTemplate", { params: {'actionId': actionId}}).then(response => {
         this.actionProperties = response.data.context.list
         //템플릿이라서 현재 property_SEQ값이 없다. actionProperties에 템플릿 리스트나 그냥 프로퍼티 리스트 둘 다 들어갈 수 있는데서 비롯된 문제.
         //그냥 여기서 넣어준다. 0으로 넣어주면 된다.

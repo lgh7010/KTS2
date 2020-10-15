@@ -1,7 +1,7 @@
 package com.krafton.kts.backend.action.service;
 
 import com.krafton.kts.backend.action.domain.KTS_PROPERTY;
-import com.krafton.kts.backend.action.domain.KTS_PROPERTY_TEMPLETE;
+import com.krafton.kts.backend.action.domain.KTS_PROPERTY_TEMPLATE;
 import com.krafton.kts.backend.action.repository.Repo_property;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -22,8 +22,8 @@ public class ServiceImpl_property implements Service_property {
     }
 
     @Override
-    public List<KTS_PROPERTY_TEMPLETE> findPropertyTemplete(String actionId) {
-        return this.repo_property.findPropertyTemplete(actionId);
+    public List<KTS_PROPERTY_TEMPLATE> findPropertyTemplate(String actionId) {
+        return this.repo_property.findPropertyTemplate(actionId);
     }
 
     @Override

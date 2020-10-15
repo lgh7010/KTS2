@@ -1,7 +1,7 @@
 package com.krafton.kts.backend.action.repository;
 
 import com.krafton.kts.backend.action.domain.KTS_ACTION;
-import com.krafton.kts.backend.action.domain.KTS_ACTION_TEMPLETE;
+import com.krafton.kts.backend.action.domain.KTS_ACTION_TEMPLATE;
 import com.krafton.kts.backend.common.JdbcCommon;
 
 import javax.sql.DataSource;
@@ -50,22 +50,22 @@ public class RepoJdbc_action extends JdbcCommon implements Repo_action {
     }
 
     @Override
-    public List<KTS_ACTION_TEMPLETE> findAllTemplete() {
+    public List<KTS_ACTION_TEMPLATE> findAllTemplate() {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement("SELECT * FROM KTS_ACTION_TEMPLETE");
+            pstmt = conn.prepareStatement("SELECT * FROM KTS_ACTION_TEMPLATE");
             rs = pstmt.executeQuery();
 
-            List<KTS_ACTION_TEMPLETE> list = new ArrayList<>();
+            List<KTS_ACTION_TEMPLATE> list = new ArrayList<>();
             while(rs.next()){
-                KTS_ACTION_TEMPLETE tp = new KTS_ACTION_TEMPLETE();
+                KTS_ACTION_TEMPLATE tp = new KTS_ACTION_TEMPLATE();
                 tp.setActionId(rs.getString("actionId"));
                 tp.setType(rs.getString("type"));
-                tp.setTempleteDescription(rs.getString("templeteDescription"));
+                tp.setTemplateDescription(rs.getString("templateDescription"));
                 list.add(tp);
             }
             return list;

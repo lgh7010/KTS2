@@ -1,7 +1,7 @@
 package com.krafton.kts.backend.action.service;
 
 import com.krafton.kts.backend.action.domain.KTS_ACTION;
-import com.krafton.kts.backend.action.domain.KTS_ACTION_TEMPLETE;
+import com.krafton.kts.backend.action.domain.KTS_ACTION_TEMPLATE;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,6 +11,6 @@ import java.util.Map;
 public interface Service_action {
 
     List<KTS_ACTION> findActionsByTESTCASE_GUID(String testcaseGuid);
-    Map<String, KTS_ACTION_TEMPLETE> findAllTemplete();
+    Map<String, KTS_ACTION_TEMPLATE> findAllTemplate();
     void saveActionList(List<KTS_ACTION> list, List<String> removeList);
 }

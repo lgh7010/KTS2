@@ -40,12 +40,12 @@ public class Controller_action {
         }
     }
 
-    @GetMapping("/actionTempleteDic")
+    @GetMapping("/actionTemplateDic")
     @ResponseBody
-    public Response actionTempleteDic(){
+    public Response actionTemplateDic(){
         try {
             Response response = new Response();
-            response.putContext("actionTempleteDic", this.service_action.findAllTemplete());
+            response.putContext("actionTemplateDic", this.service_action.findAllTemplate());
             return response;
         } catch(Exception e){
             return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());

@@ -2,7 +2,7 @@ package com.krafton.kts.backend.action.repository;
 
 import com.krafton.kts.backend.common.JdbcCommon;
 import com.krafton.kts.backend.action.domain.KTS_PROPERTY;
-import com.krafton.kts.backend.action.domain.KTS_PROPERTY_TEMPLETE;
+import com.krafton.kts.backend.action.domain.KTS_PROPERTY_TEMPLATE;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -49,20 +49,20 @@ public class RepoJdbc_property extends JdbcCommon implements Repo_property {
     }
 
     @Override
-    public List<KTS_PROPERTY_TEMPLETE> findPropertyTemplete(String actionId) {
+    public List<KTS_PROPERTY_TEMPLATE> findPropertyTemplate(String actionId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement("select * from KTS_PROPERTY_TEMPLETE where actionId = ? ");
+            pstmt = conn.prepareStatement("select * from KTS_PROPERTY_TEMPLATE where actionId = ? ");
             pstmt.setString(1, actionId);
             rs = pstmt.executeQuery();
 
-            List<KTS_PROPERTY_TEMPLETE> list = new ArrayList<>();
+            List<KTS_PROPERTY_TEMPLATE> list = new ArrayList<>();
             while(rs.next()){
-                KTS_PROPERTY_TEMPLETE prop = new KTS_PROPERTY_TEMPLETE();
+                KTS_PROPERTY_TEMPLATE prop = new KTS_PROPERTY_TEMPLATE();
                 prop.setActionId(rs.getString("actionId"));
                 prop.setPropertyName(rs.getString("propertyName"));
                 prop.setPropertyValue(rs.getString("propertyValue"));

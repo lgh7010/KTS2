@@ -5,9 +5,9 @@ import lombok.Data;
 @Data
 public class KTS_PROPERTY {
 
-    private int PROPERTY_SEQ;
-    private String PROPERTY_NAME;
-    private String PROPERTY_VALUE;
-    private String ACTION_GUID;
-    private String DELETED;
+    private int propertySeq;
+    private String propertyName;
+    private String propertyValue;
+    private String actionGuid;
+    private String deleted;
 }

@@ -10,8 +10,8 @@ import java.util.List;
 public interface Service_testcase {
 
     List<KTS_TESTCASE> findAll();
-    List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int TEST_SEQ);
-    void removeTestcase(String TESTCASE_GUID);
-    KTS_TESTCASE findTestcase(String TESTCASE_GUID);
-    void addTestcase(KTS_TESTCASE tc);
+    List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int testSeq);
+    void removeTestcase(String testcaseGuid);
+    KTS_TESTCASE findTestcase(String testcaseGuid);
+    void addTestcase(KTS_TESTCASE testcase);
 }

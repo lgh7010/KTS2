@@ -17,26 +17,26 @@ public class RepoJdbc_testcase extends JdbcCommon implements Repo_testcase {
     }
 
     @Override
-    public List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int TEST_SEQ) {
+    public List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int testSeq) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement("SELECT * FROM KTS_TESTCASE WHERE TESTCASE_GUID IN (" +
-                    "SELECT TESTCASE_GUID FROM TEST_REL_TESTCASE WHERE TEST_SEQ = ?" +
+            pstmt = conn.prepareStatement("SELECT * FROM KTS_TESTCASE WHERE testcaseGuid IN (" +
+                    "SELECT testcaseGuid FROM TEST_REL_TESTCASE WHERE testSeq = ?" +
                     ")");
-            pstmt.setInt(1, TEST_SEQ);
+            pstmt.setInt(1, testSeq);
             rs = pstmt.executeQuery();
 
             List<KTS_TESTCASE> list = new ArrayList<>();
             while(rs.next()){
                 KTS_TESTCASE tc = new KTS_TESTCASE();
-                tc.setTESTCASE_GUID(rs.getString("TESTCASE_GUID"));
-                tc.setNAME(rs.getString("NAME"));
-                tc.setDESCRIPTION(rs.getString("DESCRIPTION"));
-                tc.setDELETED(rs.getString("DELETED"));
+                tc.setTestcaseGuid(rs.getString("testcaseGuid"));
+                tc.setName(rs.getString("name"));
+                tc.setDescription(rs.getString("description"));
+                tc.setDeleted(rs.getString("deleted"));
 
                 list.add(tc);
             }
@@ -49,7 +49,7 @@ public class RepoJdbc_testcase extends JdbcCommon implements Repo_testcase {
     }
 
     @Override
-    public void removeTestcase(String TESTCASE_GUID) {
+    public void removeTestcase(String testcaseGuid) {
         Connection conn = null;
         PreparedStatement pstmt = null;
 
@@ -58,14 +58,14 @@ public class RepoJdbc_testcase extends JdbcCommon implements Repo_testcase {
             conn.setAutoCommit(false);//트랜잭션 처리
 
             //step 1. TEST_REL_TESTCASE 에서 해당 TESTCASE_GUID를 가지는 로우 삭제 처리
-            pstmt = conn.prepareStatement("UPDATE TEST_REL_TESTCASE SET DELETED = 'Y' WHERE TESTCASE_GUID = ?");
-            pstmt.setString(1, TESTCASE_GUID);
+            pstmt = conn.prepareStatement("UPDATE TEST_REL_TESTCASE SET deleted = 'Y' WHERE testcaseGuid = ?");
+            pstmt.setString(1, testcaseGuid);
             pstmt.executeUpdate();
 
             //step 2. KTS_ACTION과 KTS_PROPERTY를 조인하여, 현재 삭제해야 하는 TESTCASE_GUID에 해당하는 ACTION들에 포함된 PROPERTY들의 PROPERTY_SEQ 리스트 확보
-            pstmt = conn.prepareStatement("SELECT PROPERTY_SEQ FROM KTS_PROPERTY WHERE ACTION_GUID IN (" +
-                    "SELECT ACTION_GUID FROM KTS_ACTION WHERE TESTCASE_GUID = ? AND DELETED = 'N' GROUP BY ACTION_GUID)");
-            pstmt.setString(1, TESTCASE_GUID);
+            pstmt = conn.prepareStatement("SELECT propertySeq FROM KTS_PROPERTY WHERE actionGuid IN (" +
+                    "SELECT actionGuid FROM KTS_ACTION WHERE testcaseGuid = ? AND deleted = 'N' GROUP BY actionGuid)");
+            pstmt.setString(1, testcaseGuid);
             ResultSet rs = pstmt.executeQuery();
             List<Integer> propertySeqList = new ArrayList<>();
             while(rs.next()){
@@ -81,17 +81,17 @@ public class RepoJdbc_testcase extends JdbcCommon implements Repo_testcase {
             }
 
             //step 3. KTS_PROPERTY에서 위에서 구한 SEQ에 해당하는 PROPERTY들 삭제 처리
-            pstmt = conn.prepareStatement("UPDATE KTS_PROPERTY SET DELETED = 'Y' WHERE PROPERTY_SEQ IN (" + builder.toString() + ")");
+            pstmt = conn.prepareStatement("UPDATE KTS_PROPERTY SET deleted = 'Y' WHERE propertySeq IN (" + builder.toString() + ")");
             pstmt.executeUpdate();
 
             //step 4. KTS_ACTION에서 해당 TESTCASE_GUID를 가지는 로우 삭제 처리
-            pstmt = conn.prepareStatement("UPDATE KTS_ACTION SET DELETED = 'Y' WHERE TESTCASE_GUID = ?");
-            pstmt.setString(1, TESTCASE_GUID);
+            pstmt = conn.prepareStatement("UPDATE KTS_ACTION SET deleted = 'Y' WHERE testcaseGuid = ?");
+            pstmt.setString(1, testcaseGuid);
             pstmt.executeUpdate();
 
             //step 5. KTS_TESTCASE에서 해당 테스트케이스 삭제
-            pstmt = conn.prepareStatement("UPDATE KTS_TESTCASE SET DELETED = 'Y' WHERE TESTCASE_GUID = ?");
-            pstmt.setString(1, TESTCASE_GUID);
+            pstmt = conn.prepareStatement("UPDATE KTS_TESTCASE SET deleted = 'Y' WHERE testcaseGuid = ?");
+            pstmt.setString(1, testcaseGuid);
             pstmt.executeUpdate();
 
             conn.commit();
@@ -108,23 +108,23 @@ public class RepoJdbc_testcase extends JdbcCommon implements Repo_testcase {
     }
 
     @Override
-    public KTS_TESTCASE findTestcase(String TESTCASE_GUID) {
+    public KTS_TESTCASE findTestcase(String testcaseGuid) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement("SELECT * FROM KTS_TESTCASE WHERE TESTCASE_GUID = ? AND DELETED = 'N'");
-            pstmt.setString(1, TESTCASE_GUID);
+            pstmt = conn.prepareStatement("SELECT * FROM KTS_TESTCASE WHERE testcaseGuid = ? AND deleted = 'N'");
+            pstmt.setString(1, testcaseGuid);
             rs = pstmt.executeQuery();
 
             rs.next();
             KTS_TESTCASE tc = new KTS_TESTCASE();
-            tc.setTESTCASE_GUID(rs.getString("TESTCASE_GUID"));
-            tc.setNAME(rs.getString("NAME"));
-            tc.setDESCRIPTION(rs.getString("DESCRIPTION"));
-            tc.setDELETED(rs.getString("DELETED"));
+            tc.setTestcaseGuid(rs.getString("testcaseGuid"));
+            tc.setName(rs.getString("name"));
+            tc.setDescription(rs.getString("description"));
+            tc.setDeleted(rs.getString("deleted"));
             return tc;
         } catch (Exception e){
             throw new IllegalStateException(e);
@@ -134,17 +134,17 @@ public class RepoJdbc_testcase extends JdbcCommon implements Repo_testcase {
     }
 
     @Override
-    public void addTestcase(KTS_TESTCASE tc) {
+    public void addTestcase(KTS_TESTCASE testcase) {
         Connection conn = null;
         PreparedStatement pstmt = null;
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement("INSERT INTO KTS_TESTCASE (TESTCASE_GUID, NAME, DESCRIPTION, DELETED) VALUES (?, ?, ?, 'N') " +
-                    "ON DUPLICATE KEY UPDATE NAME = VALUES(NAME), DESCRIPTION = VALUES(DESCRIPTION)");
-            pstmt.setString(1, tc.getTESTCASE_GUID());
-            pstmt.setString(2, tc.getNAME());
-            pstmt.setString(3, tc.getDESCRIPTION());
+            pstmt = conn.prepareStatement("INSERT INTO KTS_TESTCASE (testcaseGuid, name, description, deleted) VALUES (?, ?, ?, 'N') " +
+                    "ON DUPLICATE KEY UPDATE name = VALUES(name), description = VALUES(description)");
+            pstmt.setString(1, testcase.getTestcaseGuid());
+            pstmt.setString(2, testcase.getName());
+            pstmt.setString(3, testcase.getDescription());
             pstmt.executeUpdate();
         } catch (Exception e){
             throw new IllegalStateException(e);
@@ -154,22 +154,22 @@ public class RepoJdbc_testcase extends JdbcCommon implements Repo_testcase {
     }
 
     @Override
-    public Optional<KTS_TESTCASE> findTestcaseByTESTCASE_GUID(String TESTCASE_GUID) {
+    public Optional<KTS_TESTCASE> findTestcaseByTESTCASE_GUID(String testcaseGuid) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement("select * from KTS_TESTCASE where TESTCASE_GUID = ? and DELETED = 'N'");
-            pstmt.setString(1, TESTCASE_GUID);
+            pstmt = conn.prepareStatement("select * from KTS_TESTCASE where testcaseGuid = ? and deleted = 'N'");
+            pstmt.setString(1, testcaseGuid);
             rs = pstmt.executeQuery();
 
             if(rs.next()){
                 KTS_TESTCASE tc = new KTS_TESTCASE();
-                tc.setTESTCASE_GUID(rs.getString("TESTCASE_GUID"));
-                tc.setNAME(rs.getString("NAME"));
-                tc.setDESCRIPTION(rs.getString("DESCRIPTION"));
+                tc.setTestcaseGuid(rs.getString("testcaseGuid"));
+                tc.setName(rs.getString("name"));
+                tc.setDescription(rs.getString("description"));
                 return Optional.of(tc);
             } else {
                 Optional.empty();
@@ -191,16 +191,16 @@ public class RepoJdbc_testcase extends JdbcCommon implements Repo_testcase {
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement("select * from KTS_TESTCASE where DELETED = 'N'");
+            pstmt = conn.prepareStatement("select * from KTS_TESTCASE where deleted = 'N'");
             rs = pstmt.executeQuery();
 
             List<KTS_TESTCASE> testcases = new ArrayList<>();
             while(rs.next()){
                 KTS_TESTCASE test = new KTS_TESTCASE();
-                test.setTESTCASE_GUID(rs.getString("TESTCASE_GUID"));
-                test.setNAME(rs.getString("NAME"));
-                test.setDESCRIPTION(rs.getString("DESCRIPTION"));
-                test.setDELETED(rs.getString("DELETED"));
+                test.setTestcaseGuid(rs.getString("testcaseGuid"));
+                test.setName(rs.getString("name"));
+                test.setDescription(rs.getString("description"));
+                test.setDeleted(rs.getString("deleted"));
 
                 testcases.add(test);
             }

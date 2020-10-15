@@ -16,7 +16,7 @@ const router = new Router({
             component: TestListComponent
         },
         {
-            path: '/test/edit/:TEST_SEQ',
+            path: '/test/edit/:testSeq',
             name: 'TestEdit',
             component: TestEditComponent
         },
@@ -26,7 +26,7 @@ const router = new Router({
             component: TestcaseListComponent
         },
         {
-            path: '/testcase/edit/:TESTCASE_GUID',
+            path: '/testcase/edit/:testcaseGuid',
             name: 'TestcaseEdit',
             component: TestcaseEditComponent
         }

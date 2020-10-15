@@ -9,7 +9,7 @@ import java.util.List;
 @Repository
 public interface Repo_action {
 
-    List<KTS_ACTION> findActionsByTESTCASE_GUID(String TESTCASE_GUID);
+    List<KTS_ACTION> findActionsByTESTCASE_GUID(String testcaseGuid);
     List<KTS_ACTION_TEMPLETE> findAllTemplete();
     void saveActionList(List<KTS_ACTION> list, List<String> removeList);
 }

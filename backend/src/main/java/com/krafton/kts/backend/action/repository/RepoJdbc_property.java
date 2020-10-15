@@ -19,25 +19,25 @@ public class RepoJdbc_property extends JdbcCommon implements Repo_property {
     }
 
     @Override
-    public List<KTS_PROPERTY> findProperty(String ACTION_GUID) {
+    public List<KTS_PROPERTY> findProperty(String actionGuid) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement("select * from KTS_PROPERTY where ACTION_GUID = ? AND DELETED = 'N'");
-            pstmt.setString(1, ACTION_GUID);
+            pstmt = conn.prepareStatement("select * from KTS_PROPERTY where actionGuid = ? AND deleted = 'N'");
+            pstmt.setString(1, actionGuid);
             rs = pstmt.executeQuery();
 
             List<KTS_PROPERTY> list = new ArrayList<>();
             while(rs.next()){
                 KTS_PROPERTY prop = new KTS_PROPERTY();
-                prop.setPROPERTY_SEQ(rs.getInt("PROPERTY_SEQ"));
-                prop.setPROPERTY_NAME(rs.getString("PROPERTY_NAME"));
-                prop.setPROPERTY_VALUE(rs.getString("PROPERTY_VALUE"));
-                prop.setACTION_GUID(rs.getString("ACTION_GUID"));
-                prop.setDELETED(rs.getString("DELETED"));
+                prop.setPropertySeq(rs.getInt("propertySeq"));
+                prop.setPropertyName(rs.getString("propertyName"));
+                prop.setPropertyValue(rs.getString("propertyValue"));
+                prop.setActionGuid(rs.getString("actionGuid"));
+                prop.setDeleted(rs.getString("deleted"));
                 list.add(prop);
             }
             return list;
@@ -49,23 +49,23 @@ public class RepoJdbc_property extends JdbcCommon implements Repo_property {
     }
 
     @Override
-    public List<KTS_PROPERTY_TEMPLETE> findPropertyTemplete(String ACTION_ID) {
+    public List<KTS_PROPERTY_TEMPLETE> findPropertyTemplete(String actionId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement("select * from KTS_PROPERTY_TEMPLETE where ACTION_ID = ? ");
-            pstmt.setString(1, ACTION_ID);
+            pstmt = conn.prepareStatement("select * from KTS_PROPERTY_TEMPLETE where actionId = ? ");
+            pstmt.setString(1, actionId);
             rs = pstmt.executeQuery();
 
             List<KTS_PROPERTY_TEMPLETE> list = new ArrayList<>();
             while(rs.next()){
                 KTS_PROPERTY_TEMPLETE prop = new KTS_PROPERTY_TEMPLETE();
-                prop.setACTION_ID(rs.getString("ACTION_ID"));
-                prop.setPROPERTY_NAME(rs.getString("PROPERTY_NAME"));
-                prop.setPROPERTY_VALUE(rs.getString("PROPERTY_VALUE"));
+                prop.setActionId(rs.getString("actionId"));
+                prop.setPropertyName(rs.getString("propertyName"));
+                prop.setPropertyValue(rs.getString("propertyValue"));
                 list.add(prop);
             }
             return list;
@@ -77,7 +77,7 @@ public class RepoJdbc_property extends JdbcCommon implements Repo_property {
     }
 
     @Override
-    public void saveProperties(List<KTS_PROPERTY> list, String ACTION_GUID, String ACTION_ID) {
+    public void saveProperties(List<KTS_PROPERTY> list, String actionGuid, String actionId) {
         Connection conn = null;
         PreparedStatement pstmt = null;
 
@@ -86,27 +86,27 @@ public class RepoJdbc_property extends JdbcCommon implements Repo_property {
             conn.setAutoCommit(false);//트랜잭션 처리
 
             //step 1. 기존 프로퍼티 정보 삭제(DELETED = Y로 변경)
-            pstmt = conn.prepareStatement("UPDATE KTS_PROPERTY SET DELETED = 'Y' WHERE ACTION_GUID = ?");
-            pstmt.setString(1, ACTION_GUID);
+            pstmt = conn.prepareStatement("UPDATE KTS_PROPERTY SET deleted = 'Y' WHERE actionGuid = ?");
+            pstmt.setString(1, actionGuid);
             pstmt.executeUpdate();
 
             //step 2. 프로퍼티 정보 저장
             String values = "";
             for(int i = 0; i < list.stream().count(); i++){
                 KTS_PROPERTY prop = list.get(i);
-                values += "(" + prop.getPROPERTY_SEQ() + ", '" + prop.getPROPERTY_NAME() + "', '" + prop.getPROPERTY_VALUE() + "', '" + prop.getACTION_GUID() + "')";
+                values += "(" + prop.getPropertySeq() + ", '" + prop.getPropertyName() + "', '" + prop.getPropertyValue() + "', '" + prop.getActionGuid() + "')";
                 if(i < list.stream().count()-1){
                     values += ",";
                 }
             }
-            pstmt = conn.prepareStatement("INSERT INTO KTS_PROPERTY (PROPERTY_SEQ, PROPERTY_NAME, PROPERTY_VALUE, ACTION_GUID) VALUES " + values
-                    + " ON DUPLICATE KEY UPDATE PROPERTY_NAME = VALUES(PROPERTY_NAME), PROPERTY_VALUE = VALUES(PROPERTY_VALUE), ACTION_GUID = VALUES(ACTION_GUID)");
+            pstmt = conn.prepareStatement("INSERT INTO KTS_PROPERTY (propertySeq, propertyName, propertyValue, actionGuid) VALUES " + values
+                    + " ON DUPLICATE KEY UPDATE propertyName = VALUES(propertyName), propertyValue = VALUES(propertyValue), actionGuid = VALUES(actionGuid)");
             pstmt.executeUpdate();
 
             //step 3. 액션의 액션ID 변경
-            pstmt = conn.prepareStatement("UPDATE KTS_ACTION SET ACTION_ID = ? WHERE ACTION_GUID = ?");
-            pstmt.setString(1, ACTION_ID);
-            pstmt.setString(2, ACTION_GUID);
+            pstmt = conn.prepareStatement("UPDATE KTS_ACTION SET actionId = ? WHERE actionGuid = ?");
+            pstmt.setString(1, actionId);
+            pstmt.setString(2, actionGuid);
             pstmt.executeUpdate();
 
             conn.commit();

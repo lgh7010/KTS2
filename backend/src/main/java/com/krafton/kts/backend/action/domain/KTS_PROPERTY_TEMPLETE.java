@@ -5,7 +5,7 @@ import lombok.Data;
 @Data
 public class KTS_PROPERTY_TEMPLETE {
 
-    private String ACTION_ID;
-    private String PROPERTY_NAME;
-    private String PROPERTY_VALUE;
+    private String actionId;
+    private String propertyName;
+    private String propertyValue;
 }

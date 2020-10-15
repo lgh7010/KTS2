@@ -24,8 +24,8 @@
 
       <div>
         <select id="actionIdSelection" @change="onChangeActionID()">
-          <option v-for="actionTemplete in this.actionTempleteDic" v-bind:value="actionTemplete.action_ID">
-            {{actionTemplete.action_ID}}
+          <option v-for="actionTemplete in this.actionTempleteDic" v-bind:value="actionTemplete.actionId">
+            {{actionTemplete.actionId}}
           </option>
         </select>
         <button v-on:click="onClickActionSave">저장</button>
@@ -42,8 +42,8 @@
           </thead>
           <tbody>
             <tr v-for="prop in this.actionProperties">
-              <td>{{prop.property_NAME}}</td>
-              <td><input type="text" v-bind:id="prop.property_SEQ" v-bind:value="prop.property_VALUE" v-on:input="onPropertyChange(prop)"></td>
+              <td>{{prop.propertyName}}</td>
+              <td><input type="text" v-bind:id="prop.propertySeq" v-bind:value="prop.propertyValue" v-on:input="onPropertyChange(prop)"></td>
             </tr>
           </tbody>
         </table>
@@ -59,7 +59,7 @@
       <button v-on:click="goBack()">닫기</button>
 
       <div v-for="action in this.actionDic"
-           v-bind:id="action.action_GUID" v-bind:action_GUID="action.action_GUID" v-bind:next_ACTION_GUID="action.next_ACTION_GUID"
+           v-bind:id="action.actionGuid" v-bind:actionGuid="action.actionGuid" v-bind:nextActionGuid="action.nextActionGuid"
            class="node" style="width:400px;
         height:100px;
         background-color:gray;
@@ -77,11 +77,11 @@
           <path d="M 0 0 L 10 5 L 0 10 z" fill="black"/>
         </marker>
       </defs>
-      <line v-for="action in this.actionDic" v-if="action.next_ACTION_GUID != 'None'"
-            v-bind:id="'arrow_'+action.action_GUID+'_'+action.next_ACTION_GUID"
-            v-bind:action_GUID="action.action_GUID" v-bind:next_ACTION_GUID="action.next_ACTION_GUID"
-            v-bind:x1="action.x_POS+200" v-bind:y1="action.y_POS"
-            v-bind:x2="action.x_POS+200" v-bind:y2="action.y_POS+100"
+      <line v-for="action in this.actionDic" v-if="action.nextActionGuid != 'None'"
+            v-bind:id="'arrow_'+action.actionGuid+'_'+action.nextActionGuid"
+            v-bind:actionGuid="action.actionGuid" v-bind:nextActionGuid="action.nextActionGuid"
+            v-bind:x1="action.x+200" v-bind:y1="action.y"
+            v-bind:x2="action.x+200" v-bind:y2="action.y+100"
             class="arrow" stroke-width="7" stroke="black" marker-end="url(#arrow)"/>
     </svg>
 
@@ -108,11 +108,11 @@ export default {
       actionTempleteDic: {},//액션 템플릿의 딕셔너리. 최초 페이지 생성시 불러온다.
       currentTestcase: null,//현재 에디터에서 편집중인 테스트케이스
 
-      arrows_start_map: {},//키는 시작 action_GUID, 값은 끝 action_GUID
-      arrows_end_map: {},//키는 끝 action_GUID, 값은 시작 action_GUID
+      arrowsStartMap: {},//키는 시작 action_GUID, 값은 끝 action_GUID
+      arrowsEndMap: {},//키는 끝 action_GUID, 값은 시작 action_GUID
       removeActionGuidList: [],//페이지상에서 삭제되었지만 아직 DB에 반영되지 않은 액션노드 정보들
 
-      currentActionGUID: "",
+      currentActionGuid: "",
       actionProperties: [],//액션 에디터에 나타날 프로퍼티들
     }
   },
@@ -124,11 +124,11 @@ export default {
     })
   },
   mounted(){
-    axios.get("/actionDic", { params: {'TESTCASE_GUID': this.$route.params.TESTCASE_GUID}}).then(responseActionDic => {
-      axios.get("/testcase", { params: {'TESTCASE_GUID': this.$route.params.TESTCASE_GUID}}).then(responseTestcase => {
+    axios.get("/actionDic", { params: {'testcaseGuid': this.$route.params.testcaseGuid}}).then(responseActionDic => {
+      axios.get("/testcase", { params: {'testcaseGuid': this.$route.params.testcaseGuid}}).then(responseTestcase => {
         console.log(responseTestcase)
         this.currentTestcase = (responseTestcase.data.context != null && responseTestcase.data.context.testcase != null) ? responseTestcase.data.context.testcase : {
-          testcase_GUID: this.guid(),
+          testcaseGuid: this.guid(),
           name: "",
           description: "",
         }
@@ -144,20 +144,20 @@ export default {
     })
   },
   updated(){
-    for(let ACTION_GUID in this.actionDic){
-      var action = this.actionDic[ACTION_GUID]
-      var node = document.getElementById(action.action_GUID)
+    for(let actionGuid in this.actionDic){
+      var action = this.actionDic[actionGuid]
+      var node = document.getElementById(action.actionGuid)
 
       //노드 등록 및 위치 설정
-      node.style.top = action.y_POS + "px"
-      node.style.left = action.x_POS + "px"
+      node.style.top = action.y + "px"
+      node.style.left = action.x + "px"
 
       //드래그 설정
-      this.registDragableNode(action, node, this.arrows_start_map, this.arrows_end_map)
-      this.registDragableArrow(document.getElementById("arrow_" + action.action_GUID + "_" + action.next_ACTION_GUID))
+      this.registDragableNode(action, node, this.arrowsStartMap, this.arrowsEndMap)
+      this.registDragableArrow(document.getElementById("arrow_" + action.actionGuid + "_" + action.nextActionGuid))
 
       //최초 위치 설정
-      this.nodePositionSet(action, node, action.y_POS, action.x_POS)
+      this.nodePositionSet(action, node, action.y, action.x)
     }
   },
   methods: {
@@ -175,17 +175,17 @@ export default {
       this.$router.go(-1)
     },
     getFirstAction(){
-      for(let ACTION_GUID in this.actionDic){
-        if(this.actionDic[ACTION_GUID].is_START == 'Y'){
-          return this.actionDic[ACTION_GUID]
+      for(let actionGuid in this.actionDic){
+        if(this.actionDic[actionGuid].isStart == 'Y'){
+          return this.actionDic[actionGuid]
         }
       }
       return null
     },
     getLastAction(){
-      for(let ACTION_GUID in this.actionDic){
-        if(this.actionDic[ACTION_GUID].next_ACTION_GUID == NULL_ACTION_NODE_GUID){
-          return this.actionDic[ACTION_GUID]
+      for(let actionGuid in this.actionDic){
+        if(this.actionDic[actionGuid].nextActionGuid == NULL_ACTION_NODE_GUID){
+          return this.actionDic[actionGuid]
         }
       }
       return null
@@ -194,16 +194,16 @@ export default {
       var lastAction = this.getLastAction()
       var guid = this.guid()
       if(lastAction != null){
-        lastAction.next_ACTION_GUID = guid;
+        lastAction.nextActionGuid = guid;
       }
       Vue.set(this.actionDic, guid, {
-        action_GUID: guid,
-        testcase_GUID: this.currentTestcase.testcase_GUID,
-        is_START: 'N',
-        next_ACTION_GUID: NULL_ACTION_NODE_GUID,
-        action_ID: 'Empty',
-        x_POS: DEFAULT_NODE_LEFT,
-        y_POS: DEFAULT_NODE_TOP,
+        actionGuid: guid,
+        testcaseGuid: this.currentTestcase.testcaseGuid,
+        isStart: 'N',
+        nextActionGuid: NULL_ACTION_NODE_GUID,
+        actionId: 'Empty',
+        x: DEFAULT_NODE_LEFT,
+        y: DEFAULT_NODE_TOP,
         description: "",
         deleted: 'N',
       })
@@ -213,9 +213,9 @@ export default {
       this.currentTestcase.description = $("#testcaseDescription").val()
       console.log(this.currentTestcase)
       axios.post("/saveActionDic", {
-        "ACTION_DIC": this.actionDic,
-        "REMOVE_ACTION_GUID_LIST": this.removeActionGuidList,
-        "TESTCASE": this.currentTestcase,
+        "actionDic": this.actionDic,
+        "removeActionGuidList": this.removeActionGuidList,
+        "testcase": this.currentTestcase,
       }).then(response => {
         alert("저장 완료")
         console.log(response)
@@ -225,13 +225,13 @@ export default {
     },
     onClickRemove(action){
       //현재 노드의 이전 노드의 next_ACTION_GUID를 현재 노드의 다음 노드로 세팅(다음노드가 없다면 0으로 세팅)
-      var beforeActionGuid = this.arrows_end_map[action.action_GUID]
+      var beforeActionGuid = this.arrowsEndMap[action.actionGuid]
       if(beforeActionGuid && this.actionDic[beforeActionGuid]){
-        var nextActionGuid = this.arrows_start_map[action.action_GUID]
-        this.actionDic[beforeActionGuid].next_ACTION_GUID = (nextActionGuid) ? nextActionGuid : NULL_ACTION_NODE_GUID
+        var nextActionGuid = this.arrowsStartMap[action.actionGuid]
+        this.actionDic[beforeActionGuid].nextActionGuid = (nextActionGuid) ? nextActionGuid : NULL_ACTION_NODE_GUID
       }
-      this.removeActionGuidList.push(action.action_GUID)
-      Vue.delete(this.actionDic, action.action_GUID)
+      this.removeActionGuidList.push(action.actionGuid)
+      Vue.delete(this.actionDic, action.actionGuid)
     },
 
     //SVG 관련
@@ -240,8 +240,8 @@ export default {
         return
       }
       var jarrow = $(arrow)
-      this.arrows_start_map[jarrow.attr('action_GUID')] = jarrow.attr('next_ACTION_GUID')
-      this.arrows_end_map[jarrow.attr('next_ACTION_GUID')] = jarrow.attr('action_GUID')
+      this.arrowsStartMap[jarrow.attr('actionGuid')] = jarrow.attr('nextActionGuid')
+      this.arrowsEndMap[jarrow.attr('nextActionGuid')] = jarrow.attr('actionGuid')
     },
     registDragableNode(action, node){
       var pos1 = 0, pos2 = 0, pos3 = 0, pos4 = 0
@@ -281,21 +281,21 @@ export default {
     },
     nodePositionSet(action, node, newTop, newLeft) {
       var jnode = $(node)
-      action.x_POS = newLeft
-      action.y_POS = newTop
+      action.x = newLeft
+      action.y = newTop
       node.style.top = newTop + "px"
       node.style.left = newLeft + "px"
 
       //들어오는 화살표 위치 조정
-      var startAt = this.arrows_end_map[jnode.attr('action_GUID')]
-      var endAt = jnode.attr('action_GUID')
+      var startAt = this.arrowsEndMap[jnode.attr('actionGuid')]
+      var endAt = jnode.attr('actionGuid')
       var jarrow = $("#arrow_" + startAt + "_" + endAt)
       jarrow.attr('x2', newLeft + ACTION_NODE_WIDTH_HALF)
       jarrow.attr('y2', newTop - ACTION_NODE_HEIGHT)
 
       //나가는 화살표 위치 조정
-      startAt = jnode.attr('action_GUID')
-      endAt = this.arrows_start_map[jnode.attr('action_GUID')]
+      startAt = jnode.attr('actionGuid')
+      endAt = this.arrowsStartMap[jnode.attr('actionGuid')]
       jarrow = $("#arrow_" + startAt + "_" + endAt)
       jarrow.attr('x1', newLeft + ACTION_NODE_WIDTH_HALF)
       jarrow.attr('y1', newTop)
@@ -304,10 +304,10 @@ export default {
     //액션노드 편집 관련
     actionOpen(action){
       //현재 해당 노드에 포함된 속성정보를 불러온다.
-      this.currentActionGUID = action.action_GUID
-      axios.get("/properties", { params: {'ACTION_GUID': this.currentActionGUID}}).then(properties => {
-        this.actionProperties = properties.data.context.properties
-        $("#actionIdSelection").val(action.action_ID)
+      this.currentActionGuid = action.actionGuid
+      axios.get("/properties", { params: {'actionGuid': this.currentActionGuid}}).then(response => {
+        this.actionProperties = response.data.context.list
+        $("#actionIdSelection").val(action.actionId)
 
         $("#actionEditorBackground").show()
         $("#actionEditor").show()
@@ -316,21 +316,21 @@ export default {
       })
     },
     actionClose(){
-      this.currentActionGUID = ""
+      this.currentActionGuid = ""
       $("#actionEditorBackground").hide()
       $("#actionEditor").hide()
     },
     onChangeActionID(){
       //해당 액션의 템플릿의 속성정보를 불러온다.
-      var ACTION_ID = $("#actionIdSelection").val()
-      this.actionDic[this.currentActionGUID].action_ID = ACTION_ID
-      axios.get("/propertiesTemplete", { params: {'ACTION_ID': ACTION_ID}}).then(templeteProperties => {
-        this.actionProperties = templeteProperties.data.context.templeteProperties
+      var actionId = $("#actionIdSelection").val()
+      this.actionDic[this.currentActionGuid].actionId = actionId
+      axios.get("/propertiesTemplete", { params: {'actionId': actionId}}).then(response => {
+        this.actionProperties = response.data.context.list
         //템플릿이라서 현재 property_SEQ값이 없다. actionProperties에 템플릿 리스트나 그냥 프로퍼티 리스트 둘 다 들어갈 수 있는데서 비롯된 문제.
         //그냥 여기서 넣어준다. 0으로 넣어주면 된다.
         for(var i = 0; i < this.actionProperties.length; i++){
-          this.actionProperties[i].property_SEQ = 0
-          this.actionProperties[i].action_GUID = this.currentActionGUID
+          this.actionProperties[i].propertySeq = 0
+          this.actionProperties[i].actionGuid = this.currentActionGuid
         }
       }).catch(error => {
         console.log(error)
@@ -338,9 +338,9 @@ export default {
     },
     onClickActionSave(){
       axios.post("/saveProperties", {
-        "ACTION_GUID": this.currentActionGUID,
-        "ACTION_ID": this.actionDic[this.currentActionGUID].action_ID,
-        "PROPERTIES": this.actionProperties
+        "actionGuid": this.currentActionGuid,
+        "actionId": this.actionDic[this.currentActionGuid].actionId,
+        "properties": this.actionProperties
       }).then(response => {
         alert('저장 완료')
         console.log(response)
@@ -349,7 +349,7 @@ export default {
       })
     },
     onPropertyChange(prop){
-      prop.property_VALUE = document.getElementById(prop.property_SEQ).value
+      prop.propertyValue = document.getElementById(prop.propertySeq).value
     }
   }
 }

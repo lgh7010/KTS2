@@ -4,8 +4,8 @@ import lombok.Data;
 
 @Data
 public class KTS_TEST {
-    private int TEST_SEQ;
-    private String NAME;
-    private String DESCRIPTION;
-    private String DELETED;
+    private int testSeq;
+    private String name;
+    private String description;
+    private String deleted;
 }

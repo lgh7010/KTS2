@@ -10,7 +10,7 @@ import java.util.Map;
 @Service
 public interface Service_action {
 
-    List<KTS_ACTION> findActionsByTESTCASE_GUID(String TESTCASE_GUID);
+    List<KTS_ACTION> findActionsByTESTCASE_GUID(String testcaseGuid);
     Map<String, KTS_ACTION_TEMPLETE> findAllTemplete();
     void saveActionList(List<KTS_ACTION> list, List<String> removeList);
 }

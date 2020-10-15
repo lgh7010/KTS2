@@ -17,17 +17,17 @@ public class ServiceImpl_property implements Service_property {
     }
 
     @Override
-    public List<KTS_PROPERTY> findProperty(String ACTION_GUID) {
-        return this.repo_property.findProperty(ACTION_GUID);
+    public List<KTS_PROPERTY> findProperty(String actionGuid) {
+        return this.repo_property.findProperty(actionGuid);
     }
 
     @Override
-    public List<KTS_PROPERTY_TEMPLETE> findPropertyTemplete(String ACTION_ID) {
-        return this.repo_property.findPropertyTemplete(ACTION_ID);
+    public List<KTS_PROPERTY_TEMPLETE> findPropertyTemplete(String actionId) {
+        return this.repo_property.findPropertyTemplete(actionId);
     }
 
     @Override
-    public void saveProperties(List<KTS_PROPERTY> list, String ACTION_GUID, String ACTION_ID) {
-        this.repo_property.saveProperties(list, ACTION_GUID, ACTION_ID);
+    public void saveProperties(List<KTS_PROPERTY> list, String actionGuid, String actionId) {
+        this.repo_property.saveProperties(list, actionGuid, actionId);
     }
 }

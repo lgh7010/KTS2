@@ -66,14 +66,14 @@
         </tr>
         </thead>
         <tbody>
-        <tr v-for="(rel, index) in this.testRelTestcaseList_with_name_and_desc">
+        <tr v-for="(rel, index) in this.testRelTestcaseDerived">
           <td>{{index}}</td>
           <td>{{rel.name}}</td>
           <td>{{rel.description}}</td>
           <td>
             <button v-on:click="moveUp(index)">위로</button>
             <button v-on:click="moveDown(index)">아래로</button>
-            <router-link :to="{name: 'TestcaseEdit', params: {TESTCASE_GUID: rel.testcase_GUID}}"><button>편집</button></router-link>
+            <router-link :to="{name: 'TestcaseEdit', params: {testcaseGuid: rel.testcaseGuid}}"><button>편집</button></router-link>
             <button v-on:click="removeTestcase(index)">제거</button>
           </td>
         </tr>
@@ -98,14 +98,14 @@ export default {
   name: "testEditComponent",
   data: function(){
     return {
-      testRelTestcaseList_with_name_and_desc: [],
+      testRelTestcaseDerived: [],
       testcaseList: [],
       currentTest: null,
       removeRelationSeqList: [],
     }
   },
   mounted: function() {
-    axios.get("/test", { params: {'TEST_SEQ': this.$route.params.TEST_SEQ}}).then(responseTest => {
+    axios.get("/test", { params: {'testSeq': this.$route.params.testSeq}}).then(responseTest => {
       this.currentTest = (responseTest.data.context != null && responseTest.data.context.test != null) ? responseTest.data.context.test : {
         test_SEQ: 0,
         name: "",
@@ -114,30 +114,36 @@ export default {
       document.getElementById("testName").value = this.currentTest.name
       document.getElementById("testDescription").value = this.currentTest.description
 
-      //쿼리 한번으로 해결하려면 TEST_REL_TESTCASE에 'NAME'과 'DESCRIPTION'을 더한 도메인 클래스를 따로 또 추가해야 해서 이런식으로 처리함.
-      //편의성과 일관성 사이의 Tradeoff에서 결정한 사항.
-      axios.get("/testRelTestcaseList", { params: {'TEST_SEQ': this.currentTest.test_SEQ}}).then(responseRel => {
-        var testRelTestcaseList = responseRel.data.context.testRelTestcaseList
-        axios.get("/testcaseDic", { params: {'TEST_SEQ': this.currentTest.test_SEQ}}).then(responseDic => {
-          var testcaseDic = responseDic.data.context.testcaseDic
-          var list = []
-          for(var i = 0; i < testRelTestcaseList.length; i++){
-            list.push({
-              relation_SEQ: testRelTestcaseList[i].relation_SEQ,
-              test_SEQ : testRelTestcaseList[i].test_SEQ,
-              //list_INDEX : testRelTestcaseList[i].list_INDEX,
-              testcase_GUID : testRelTestcaseList[i].testcase_GUID,
-              name : testcaseDic[testRelTestcaseList[i].testcase_GUID].name,
-              description : testcaseDic[testRelTestcaseList[i].testcase_GUID].description
-            })
-          }
-          this.testRelTestcaseList_with_name_and_desc = list
-        }).catch(error => {
-          console.log(error)
-        })
+
+      axios.get("/testRelTestcaseDerived", { params: {'testSeq': this.currentTest.testSeq}}).then(response => {
+        this.testRelTestcaseDerived = response.data.context.list
       }).catch(error => {
         console.log(error)
       })
+
+      //쿼리 한번으로 해결하려면 TEST_REL_TESTCASE에 'NAME'과 'DESCRIPTION'을 더한 도메인 클래스를 따로 또 추가해야 해서 이런식으로 처리함.
+      //편의성과 일관성 사이의 Tradeoff에서 결정한 사항.
+      // axios.get("/testRelTestcaseList", { params: {'testSeq': this.currentTest.testSeq}}).then(responseRel => {
+      //   var testRelTestcaseList = responseRel.data.context.testRelTestcaseList
+      //   axios.get("/testcaseDic", { params: {'testSeq': this.currentTest.testSeq}}).then(responseDic => {
+      //     var testcaseDic = responseDic.data.context.testcaseDic
+      //     var list = []
+      //     for(var i = 0; i < testRelTestcaseList.length; i++){
+      //       list.push({
+      //         relationSeq: testRelTestcaseList[i].relationSeq,
+      //         testSeq : testRelTestcaseList[i].testSeq,
+      //         testcaseGuid : testRelTestcaseList[i].testcaseGuid,
+      //         name : testcaseDic[testRelTestcaseList[i].testcaseGuid].name,
+      //         description : testcaseDic[testRelTestcaseList[i].testcaseGuid].description
+      //       })
+      //     }
+      //     this.testRelTestcaseDerived = list
+      //   }).catch(error => {
+      //     console.log(error)
+      //   })
+      // }).catch(error => {
+      //   console.log(error)
+      // })
     }).catch(error => {
       console.log(error)
     })
@@ -158,21 +164,21 @@ export default {
       $("#addTestcaseToTestLayer").hide()
     },
     onClickTestcaseAddToTest: function(testcase){
-      this.testRelTestcaseList_with_name_and_desc.push({
-        relation_SEQ: 0,
-        test_SEQ : (this.currentTest != null) ? this.currentTest.test_SEQ : 0,
-        testcase_GUID : testcase.testcase_GUID,
+      this.testRelTestcaseDerived.push({
+        relationSeq: 0,
+        testSeq : (this.currentTest != null) ? this.currentTest.testSeq : 0,
+        testcaseGuid : testcase.testcaseGuid,
         name : testcase.name,
-        description : testcase.description
+        description : testcase.description,
       })
     },
     onClickSave: function(){
       axios.post("/testRelTestcaseSave", {
-        "REL_LIST": this.testRelTestcaseList_with_name_and_desc,
-        "TEST_SEQ": (this.currentTest != null) ? this.currentTest.test_SEQ : 0,
-        "TEST_NAME": document.getElementById("testName").value,
-        "TEST_DESCRIPTION": document.getElementById("testDescription").value,
-        "REMOVE_RELATION_SEQ_LIST": this.removeRelationSeqList,
+        "relationList": this.testRelTestcaseDerived,
+        "testSeq": (this.currentTest != null) ? this.currentTest.testSeq : 0,
+        "testName": document.getElementById("testName").value,
+        "testDescription": document.getElementById("testDescription").value,
+        "removeRelationSeqList": this.removeRelationSeqList,
       }).then(response => {
         alert("저장 완료")
         console.log(response)
@@ -184,17 +190,17 @@ export default {
       if(listIndex < 1){
         return
       }
-      this.testRelTestcaseList_with_name_and_desc[listIndex] = this.testRelTestcaseList_with_name_and_desc.splice(listIndex - 1, 1, this.testRelTestcaseList_with_name_and_desc[listIndex])[0]
+      this.testRelTestcaseDerived[listIndex] = this.testRelTestcaseDerived.splice(listIndex - 1, 1, this.testRelTestcaseDerived[listIndex])[0]
     },
     moveDown: function(listIndex){
-      if(listIndex > this.testRelTestcaseList_with_name_and_desc.length - 2){
+      if(listIndex > this.testRelTestcaseDerived.length - 2){
         return
       }
-      this.testRelTestcaseList_with_name_and_desc[listIndex] = this.testRelTestcaseList_with_name_and_desc.splice(listIndex + 1, 1, this.testRelTestcaseList_with_name_and_desc[listIndex])[0]
+      this.testRelTestcaseDerived[listIndex] = this.testRelTestcaseDerived.splice(listIndex + 1, 1, this.testRelTestcaseDerived[listIndex])[0]
     },
     removeTestcase: function(listIndex){
-      this.removeRelationSeqList.push(this.testRelTestcaseList_with_name_and_desc[listIndex].relation_SEQ)
-      this.testRelTestcaseList_with_name_and_desc.splice(listIndex, 1)
+      this.removeRelationSeqList.push(this.testRelTestcaseDerived[listIndex].relation_SEQ)
+      this.testRelTestcaseDerived.splice(listIndex, 1)
       console.log(this.removeRelationSeqList)
     }
   }

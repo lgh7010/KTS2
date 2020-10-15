@@ -4,8 +4,8 @@ import com.krafton.kts.backend.testcase.domain.KTS_TESTCASE;
 import com.krafton.kts.backend.testcase.service.Service_testcase;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;
+import lombok.RequiredArgsConstructor;
 import org.json.JSONObject;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,14 +14,10 @@ import javax.servlet.http.HttpServletResponse;
 import java.util.*;
 
 @Controller
+@RequiredArgsConstructor
 public class Controller_testcase {
 
     private final Service_testcase service_testcase;
-
-    @Autowired
-    public Controller_testcase(Service_testcase testcaseListService){
-        this.service_testcase = testcaseListService;
-    }
 
     @GetMapping("/testcaseList")
     @ResponseBody
@@ -40,17 +36,13 @@ public class Controller_testcase {
 
     @GetMapping("/testcaseDic")
     @ResponseBody
-    public Response testcaseDic(
-            HttpServletRequest req,
-            @RequestParam(value = "TEST_SEQ") int TEST_SEQ,
-            HttpServletResponse res
-    ){
+    public Response testcaseDic(@RequestParam(value = "testSeq") int testSeq){
         try {
-            List<KTS_TESTCASE> list = this.service_testcase.findTestcasesByTEST_SEQ(TEST_SEQ);
+            List<KTS_TESTCASE> list = this.service_testcase.findTestcasesByTEST_SEQ(testSeq);
             Map<String, KTS_TESTCASE> ret = new HashMap<>();
             for (Iterator<KTS_TESTCASE> iter = list.iterator(); iter.hasNext();){
                 KTS_TESTCASE tc = iter.next();
-                ret.put(tc.getTESTCASE_GUID(), tc);
+                ret.put(tc.getTestcaseGuid(), tc);
             }
 
             Response response = new Response();
@@ -63,14 +55,10 @@ public class Controller_testcase {
 
     @PostMapping("/removeTestcase")
     @ResponseBody
-    public Response removeTestcase(
-            HttpServletRequest req,
-            @RequestBody String requestJsonStr,
-            HttpServletResponse res
-    ){
+    public Response removeTestcase(@RequestBody String requestJsonStr){
         try {
             JSONObject requestJsonObj = new JSONObject(requestJsonStr);
-            this.service_testcase.removeTestcase(requestJsonObj.getString("TESTCASE_GUID"));
+            this.service_testcase.removeTestcase(requestJsonObj.getString("testcaseGuid"));
             return new Response();
         } catch(Exception e){
             return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
@@ -79,10 +67,10 @@ public class Controller_testcase {
 
     @GetMapping("/testcase")
     @ResponseBody
-    public Response testcase(@RequestParam(value = "TESTCASE_GUID") String TESTCASE_GUID){
+    public Response testcase(@RequestParam(value = "testcaseGuid") String testcaseGuid){
         try {
             Response response = new Response();
-            response.putContext("testcase", this.service_testcase.findTestcase(TESTCASE_GUID));
+            response.putContext("testcase", this.service_testcase.findTestcase(testcaseGuid));
             return response;
         } catch (Exception e){
             return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());

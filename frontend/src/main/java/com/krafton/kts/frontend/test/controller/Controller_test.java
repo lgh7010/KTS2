@@ -1,5 +1,6 @@
 package com.krafton.kts.frontend.test.controller;
 
+import com.krafton.kts.backend.test.domain.RemoveTestCommand;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;
 import com.krafton.kts.backend.test.service.Service_test;
@@ -23,33 +24,25 @@ public class Controller_test {
 
     @GetMapping("/testList")
     @ResponseBody
-    public Response testList(
-            HttpServletRequest req,
-            HttpServletResponse res
-    ){
+    public Response testList(){
         Response response = new Response();
-        response.putContext("testList", this.testListService.findAll());
+        response.putContext("list", this.testListService.findAll());
         return response;
     }
 
     @GetMapping("/test")
     @ResponseBody
-    public Response test(
-            HttpServletRequest req,
-            @RequestParam int TEST_SEQ,
-            HttpServletResponse res
-    ){
+    public Response test(@RequestParam int testSeq){
         Response response = new Response();
-        response.putContext("test", this.testListService.find(TEST_SEQ));
+        response.putContext("test", this.testListService.find(testSeq));
         return response;
     }
 
     @PostMapping("/removeTest")
     @ResponseBody
-    public Response removeTest(HttpServletRequest req, @RequestBody String requestJsonStr, HttpServletResponse res){
+    public Response removeTest(@RequestBody RemoveTestCommand command){
         try {
-            JSONObject requestJsonObj = new JSONObject(requestJsonStr);
-            this.testListService.removeTest(requestJsonObj.getInt("TEST_SEQ"));
+            this.testListService.removeTest(command);
             return new Response();
         } catch(Exception e){
             return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());

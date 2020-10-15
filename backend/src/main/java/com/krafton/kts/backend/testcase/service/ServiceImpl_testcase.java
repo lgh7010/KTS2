@@ -21,23 +21,23 @@ public class ServiceImpl_testcase implements Service_testcase {
     }
 
     @Override
-    public List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int TEST_SEQ) {
-        return this.repo_testcase.findTestcasesByTEST_SEQ(TEST_SEQ);
+    public List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int testSeq) {
+        return this.repo_testcase.findTestcasesByTEST_SEQ(testSeq);
     }
 
     @Override
-    public void removeTestcase(String TESTCASE_GUID) {
-        this.repo_testcase.removeTestcase(TESTCASE_GUID);
+    public void removeTestcase(String testcaseGuid) {
+        this.repo_testcase.removeTestcase(testcaseGuid);
     }
 
     @Override
-    public KTS_TESTCASE findTestcase(String TESTCASE_GUID) {
-        return this.repo_testcase.findTestcase(TESTCASE_GUID);
+    public KTS_TESTCASE findTestcase(String testcaseGuid) {
+        return this.repo_testcase.findTestcase(testcaseGuid);
     }
 
     @Override
-    public void addTestcase(KTS_TESTCASE tc) {
-        this.repo_testcase.addTestcase(tc);
+    public void addTestcase(KTS_TESTCASE testcase) {
+        this.repo_testcase.addTestcase(testcase);
     }
 
 }

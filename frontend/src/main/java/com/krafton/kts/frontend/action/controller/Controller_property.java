@@ -26,16 +26,10 @@ public class Controller_property {
 
     @GetMapping("/propertiesTemplete")
     @ResponseBody
-    public Response propertiesTemplete(
-            HttpServletRequest req,
-            @RequestParam(value = "ACTION_ID") String ACTION_ID,
-            HttpServletResponse res
-    ){
+    public Response propertiesTemplete(@RequestParam(value = "actionId") String actionId){
         try {
-            List<KTS_PROPERTY_TEMPLETE> list = this.service_property.findPropertyTemplete(ACTION_ID);
-
             Response response = new Response();
-            response.putContext("templeteProperties", list);
+            response.putContext("list", this.service_property.findPropertyTemplete(actionId));
             return response;
         } catch(Exception e) {
             return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
@@ -44,16 +38,10 @@ public class Controller_property {
 
     @GetMapping("/properties")
     @ResponseBody
-    public Response properties(
-            HttpServletRequest req,
-            @RequestParam(value = "ACTION_GUID") String ACTION_GUID,
-            HttpServletResponse res
-    ){
+    public Response properties(@RequestParam(value = "actionGuid") String actionGuid){
         try {
-            List<KTS_PROPERTY> list = this.service_property.findProperty(ACTION_GUID);
-
             Response response = new Response();
-            response.putContext("properties", list);
+            response.putContext("list", this.service_property.findProperty(actionGuid));
             return response;
         } catch(Exception e) {
             return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
@@ -62,31 +50,27 @@ public class Controller_property {
 
     @PostMapping("/saveProperties")
     @ResponseBody
-    public Response saveProperties(
-            HttpServletRequest req,
-            @RequestBody String requestJsonStr,
-            HttpServletResponse res
-    ){
+    public Response saveProperties(@RequestBody String requestJsonStr){
         try {
             JSONObject requestJsonObj = new JSONObject(requestJsonStr);
 
-            JSONArray array = requestJsonObj.getJSONArray("PROPERTIES");
+            JSONArray array = requestJsonObj.getJSONArray("properties");
             List<KTS_PROPERTY> list = new ArrayList<>();
             for(int i = 0; i < array.length(); i++){
                 JSONObject propObj = array.getJSONObject(i);
 
                 KTS_PROPERTY prop = new KTS_PROPERTY();
-                prop.setPROPERTY_SEQ(propObj.getInt("property_SEQ"));
-                prop.setPROPERTY_NAME(propObj.getString("property_NAME"));
-                prop.setPROPERTY_VALUE(propObj.getString("property_VALUE"));
-                prop.setACTION_GUID(propObj.getString("action_GUID"));
+                prop.setPropertySeq(propObj.getInt("propertySeq"));
+                prop.setPropertyName(propObj.getString("propertyName"));
+                prop.setPropertyValue(propObj.getString("propertyValue"));
+                prop.setActionGuid(propObj.getString("actionGuid"));
                 list.add(prop);
             }
 
-            String ACTION_GUID = requestJsonObj.getString("ACTION_GUID");
-            String ACTION_ID = requestJsonObj.getString("ACTION_ID");
+            String actionGuid = requestJsonObj.getString("actionGuid");
+            String actionId = requestJsonObj.getString("actionId");
 
-            this.service_property.saveProperties(list, ACTION_GUID, ACTION_ID);
+            this.service_property.saveProperties(list, actionGuid, actionId);
 
             return new Response();
         } catch(Exception e){

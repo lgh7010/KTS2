@@ -20,8 +20,8 @@ public class ServiceImpl_action implements Service_action{
     }
 
     @Override
-    public List<KTS_ACTION> findActionsByTESTCASE_GUID(String TESTCASE_GUID) {
-        return repo_action.findActionsByTESTCASE_GUID(TESTCASE_GUID);
+    public List<KTS_ACTION> findActionsByTESTCASE_GUID(String testcaseGuid) {
+        return repo_action.findActionsByTESTCASE_GUID(testcaseGuid);
     }
 
     @Override
@@ -30,7 +30,7 @@ public class ServiceImpl_action implements Service_action{
         Map<String, KTS_ACTION_TEMPLETE> ret = new HashMap<>();
         for (Iterator<KTS_ACTION_TEMPLETE> iter = list.iterator(); iter.hasNext();){
             KTS_ACTION_TEMPLETE tp = iter.next();
-            ret.put(tp.getACTION_ID(), tp);
+            ret.put(tp.getActionId(), tp);
         }
         return ret;
     }

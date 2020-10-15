@@ -4,19 +4,16 @@ import com.krafton.kts.backend.test.domain.command.RemoveTestCommand;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;
 import com.krafton.kts.backend.test.service.Service_test;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequiredArgsConstructor
 public class Controller_test {
 
     private final Service_test testListService;
-
-    @Autowired
-    public Controller_test(Service_test testListService){
-        this.testListService = testListService;
-    }
 
     @GetMapping("/findAllTest")
     @ResponseBody

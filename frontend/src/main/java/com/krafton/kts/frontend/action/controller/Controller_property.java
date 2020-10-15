@@ -4,18 +4,16 @@ import com.krafton.kts.backend.action.domain.command.SavePropertiesCommand;
 import com.krafton.kts.backend.action.service.Service_property;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
+@RequiredArgsConstructor
 public class Controller_property {
-    private final Service_property service_property;
 
-    @Autowired
-    public Controller_property(Service_property service_property){
-        this.service_property = service_property;
-    }
+    private final Service_property service_property;
 
     @GetMapping("/propertiesTemplate")
     @ResponseBody

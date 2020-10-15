@@ -8,9 +8,7 @@ import java.util.List;
 
 @Service
 public interface Service_test {
-
     List<KTS_TEST> findAllTest();
     KTS_TEST findTest(int testSeq);
     void removeTest(RemoveTestCommand command);
-
 }

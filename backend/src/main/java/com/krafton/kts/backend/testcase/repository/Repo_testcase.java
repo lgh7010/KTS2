@@ -8,7 +8,6 @@ import java.util.List;
 
 @Repository
 public interface Repo_testcase {
-
     List<KTS_TESTCASE> findAllTestcase();
     List<KTS_TESTCASE> findTestcasesByTEST_SEQ(int testSeq);
     void removeTestcase(RemoveTestcaseCommand command);

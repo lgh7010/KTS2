@@ -3,6 +3,7 @@ package com.krafton.kts.backend.test_rel_testcase.repository;
 import com.krafton.kts.backend.common.JdbcCommon;
 import com.krafton.kts.backend.test_rel_testcase.domain.TEST_REL_TESTCASE;
 import com.krafton.kts.backend.test_rel_testcase.domain.TestRelTestcaseDerived;
+import com.krafton.kts.backend.test_rel_testcase.domain.TestRelTestcaseSaveCommand;
 
 import javax.sql.DataSource;
 import java.sql.*;
@@ -47,7 +48,7 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
     }
 
     @Override
-    public void saveTestRelTestcase(List<TEST_REL_TESTCASE> rels, int testSeq, Boolean createNewTest, String testName, String testDescription, List<Integer> removeRelationSeqList) {
+    public void saveTestRelTestcase(TestRelTestcaseSaveCommand command) {
         Connection conn = null;
         PreparedStatement pstmt = null;
 
@@ -56,10 +57,11 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
             conn.setAutoCommit(false);//트랜잭션 처리
 
             //step 1. 테스트 생성
-            if(createNewTest){
+            int testSeq = command.getTestSeq();
+            if(testSeq <= 0){
                 pstmt = conn.prepareStatement("INSERT INTO KTS_TEST (name, description) VALUES (?, ?)", Statement.RETURN_GENERATED_KEYS);
-                pstmt.setString(1, testName);
-                pstmt.setString(2, testDescription);
+                pstmt.setString(1, command.getTestName());
+                pstmt.setString(2, command.getTestDescription());
                 pstmt.executeUpdate();
 
                 try (ResultSet generatedKeys = pstmt.getGeneratedKeys()) {
@@ -72,19 +74,19 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
             } else {
                 //테스트 정보 업데이트
                 pstmt = conn.prepareStatement("UPDATE KTS_TEST SET name = ?, description = ? WHERE testSeq = ?");
-                pstmt.setString(1, testName);
-                pstmt.setString(2, testDescription);
+                pstmt.setString(1, command.getTestName());
+                pstmt.setString(2, command.getTestDescription());
                 pstmt.setInt(3, testSeq);
                 pstmt.executeUpdate();
             }
 
             //step 2. 관계 생성
-            if(rels.stream().count() > 0){
+            if(command.getRelationList().stream().count() > 0){
                 String values = "";
-                for(int listIndex = 0; listIndex < rels.stream().count(); listIndex++){
-                    TEST_REL_TESTCASE rel = rels.get(listIndex);
+                for(int listIndex = 0; listIndex < command.getRelationList().stream().count(); listIndex++){
+                    TEST_REL_TESTCASE rel = command.getRelationList().get(listIndex);
                     values += "(" + rel.getRelationSeq() + ", " + testSeq + ", " + listIndex + ", '" + rel.getTestcaseGuid() + "')";
-                    if(listIndex < rels.stream().count()-1){
+                    if(listIndex < command.getRelationList().stream().count()-1){
                         values += ",";
                     }
                 }
@@ -94,9 +96,9 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
             }
 
             //step 3. 삭제된 관계 DELETED=Y로 전환
-            if(removeRelationSeqList != null && removeRelationSeqList.stream().count() > 0){
+            if(command.getRemoveRelationSeqList() != null && command.getRemoveRelationSeqList().stream().count() > 0){
                 StringBuilder builder = new StringBuilder();
-                Iterator<Integer> iter = removeRelationSeqList.iterator();
+                Iterator<Integer> iter = command.getRemoveRelationSeqList().iterator();
                 while(iter.hasNext()){
                     builder.append(iter.next());
                     if(iter.hasNext()){
@@ -129,7 +131,7 @@ public class RepoJdbc_test_rel_testcase extends JdbcCommon implements Repo_test_
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement("SELECT a.*, b.name, b.description FROM TEST_REL_TESTCASE a LEFT JOIN KTS_TESTCASE b ON a.testcaseGuid = b.testcaseGuid WHERE testSeq = ? ORDER BY listIndex");
+            pstmt = conn.prepareStatement("SELECT a.*, b.name, b.description FROM TEST_REL_TESTCASE a LEFT JOIN KTS_TESTCASE b ON a.testcaseGuid = b.testcaseGuid WHERE a.testSeq = ? AND a.deleted = 'N' ORDER BY listIndex");
             pstmt.setInt(1, testSeq);
             rs = pstmt.executeQuery();
             List<TestRelTestcaseDerived> rels = new ArrayList<>();

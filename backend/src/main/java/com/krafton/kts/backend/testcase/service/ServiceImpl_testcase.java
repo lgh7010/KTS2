@@ -1,5 +1,6 @@
 package com.krafton.kts.backend.testcase.service;
 
+import com.krafton.kts.backend.testcase.domain.RemoveTestcaseCommand;
 import com.krafton.kts.backend.testcase.repository.Repo_testcase;
 import com.krafton.kts.backend.testcase.domain.KTS_TESTCASE;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,8 +22,8 @@ public class ServiceImpl_testcase implements Service_testcase {
     }
 
     @Override
-    public void removeTestcase(String testcaseGuid) {
-        this.repo_testcase.removeTestcase(testcaseGuid);
+    public void removeTestcase(RemoveTestcaseCommand command) {
+        this.repo_testcase.removeTestcase(command);
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.krafton.kts.backend.action.repository;
 
+import com.krafton.kts.backend.action.domain.SavePropertiesCommand;
 import com.krafton.kts.backend.common.JdbcCommon;
 import com.krafton.kts.backend.action.domain.KTS_PROPERTY;
 import com.krafton.kts.backend.action.domain.KTS_PROPERTY_TEMPLATE;
@@ -77,7 +78,7 @@ public class RepoJdbc_property extends JdbcCommon implements Repo_property {
     }
 
     @Override
-    public void saveProperties(List<KTS_PROPERTY> list, String actionGuid, String actionId) {
+    public void saveProperties(SavePropertiesCommand command) {
         Connection conn = null;
         PreparedStatement pstmt = null;
 
@@ -87,15 +88,15 @@ public class RepoJdbc_property extends JdbcCommon implements Repo_property {
 
             //step 1. 기존 프로퍼티 정보 삭제(DELETED = Y로 변경)
             pstmt = conn.prepareStatement("UPDATE KTS_PROPERTY SET deleted = 'Y' WHERE actionGuid = ?");
-            pstmt.setString(1, actionGuid);
+            pstmt.setString(1, command.getActionGuid());
             pstmt.executeUpdate();
 
             //step 2. 프로퍼티 정보 저장
             String values = "";
-            for(int i = 0; i < list.stream().count(); i++){
-                KTS_PROPERTY prop = list.get(i);
+            for(int i = 0; i < command.getProperties().stream().count(); i++){
+                KTS_PROPERTY prop = command.getProperties().get(i);
                 values += "(" + prop.getPropertySeq() + ", '" + prop.getPropertyName() + "', '" + prop.getPropertyValue() + "', '" + prop.getActionGuid() + "')";
-                if(i < list.stream().count()-1){
+                if(i < command.getProperties().stream().count()-1){
                     values += ",";
                 }
             }
@@ -105,8 +106,8 @@ public class RepoJdbc_property extends JdbcCommon implements Repo_property {
 
             //step 3. 액션의 액션ID 변경
             pstmt = conn.prepareStatement("UPDATE KTS_ACTION SET actionId = ? WHERE actionGuid = ?");
-            pstmt.setString(1, actionId);
-            pstmt.setString(2, actionGuid);
+            pstmt.setString(1, command.getActionId());
+            pstmt.setString(2, command.getActionGuid());
             pstmt.executeUpdate();
 
             conn.commit();

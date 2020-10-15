@@ -2,6 +2,7 @@ package com.krafton.kts.backend.action.service;
 
 import com.krafton.kts.backend.action.domain.KTS_PROPERTY;
 import com.krafton.kts.backend.action.domain.KTS_PROPERTY_TEMPLATE;
+import com.krafton.kts.backend.action.domain.SavePropertiesCommand;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,5 +11,5 @@ import java.util.List;
 public interface Service_property {
     List<KTS_PROPERTY> findProperty(String actionGuid);
     List<KTS_PROPERTY_TEMPLATE> findPropertyTemplate(String actionId);
-    void saveProperties(List<KTS_PROPERTY> list, String actionGuid, String actionId);
+    void saveProperties(SavePropertiesCommand command);
 }

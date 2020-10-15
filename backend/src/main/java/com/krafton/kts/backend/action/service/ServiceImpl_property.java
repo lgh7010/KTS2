@@ -2,6 +2,7 @@ package com.krafton.kts.backend.action.service;
 
 import com.krafton.kts.backend.action.domain.KTS_PROPERTY;
 import com.krafton.kts.backend.action.domain.KTS_PROPERTY_TEMPLATE;
+import com.krafton.kts.backend.action.domain.SavePropertiesCommand;
 import com.krafton.kts.backend.action.repository.Repo_property;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -27,7 +28,7 @@ public class ServiceImpl_property implements Service_property {
     }
 
     @Override
-    public void saveProperties(List<KTS_PROPERTY> list, String actionGuid, String actionId) {
-        this.repo_property.saveProperties(list, actionGuid, actionId);
+    public void saveProperties(SavePropertiesCommand command) {
+        this.repo_property.saveProperties(command);
     }
 }

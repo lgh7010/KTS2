@@ -1,5 +1,6 @@
 package com.krafton.kts.frontend.testcase.controller;
 
+import com.krafton.kts.backend.testcase.domain.RemoveTestcaseCommand;
 import com.krafton.kts.backend.testcase.service.Service_testcase;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;
@@ -19,10 +20,7 @@ public class Controller_testcase {
 
     @GetMapping("/testcaseList")
     @ResponseBody
-    public Response testcaseList(
-            HttpServletRequest req,
-            HttpServletResponse res
-    ){
+    public Response testcaseList(){
         try {
             Response response = new Response();
             response.putContext("testcaseList", this.service_testcase.findAll());
@@ -34,10 +32,9 @@ public class Controller_testcase {
 
     @PostMapping("/removeTestcase")
     @ResponseBody
-    public Response removeTestcase(@RequestBody String requestJsonStr){
+    public Response removeTestcase(@RequestBody RemoveTestcaseCommand command){
         try {
-            JSONObject requestJsonObj = new JSONObject(requestJsonStr);
-            this.service_testcase.removeTestcase(requestJsonObj.getString("testcaseGuid"));
+            this.service_testcase.removeTestcase(command);
             return new Response();
         } catch(Exception e){
             return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());

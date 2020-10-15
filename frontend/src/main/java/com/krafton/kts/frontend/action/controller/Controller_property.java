@@ -1,6 +1,7 @@
 package com.krafton.kts.frontend.action.controller;
 
 import com.krafton.kts.backend.action.domain.KTS_PROPERTY;
+import com.krafton.kts.backend.action.domain.SavePropertiesCommand;
 import com.krafton.kts.backend.action.service.Service_property;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;
@@ -47,28 +48,9 @@ public class Controller_property {
 
     @PostMapping("/saveProperties")
     @ResponseBody
-    public Response saveProperties(@RequestBody String requestJsonStr){
+    public Response saveProperties(@RequestBody SavePropertiesCommand command){
         try {
-            JSONObject requestJsonObj = new JSONObject(requestJsonStr);
-
-            JSONArray array = requestJsonObj.getJSONArray("properties");
-            List<KTS_PROPERTY> list = new ArrayList<>();
-            for(int i = 0; i < array.length(); i++){
-                JSONObject propObj = array.getJSONObject(i);
-
-                KTS_PROPERTY prop = new KTS_PROPERTY();
-                prop.setPropertySeq(propObj.getInt("propertySeq"));
-                prop.setPropertyName(propObj.getString("propertyName"));
-                prop.setPropertyValue(propObj.getString("propertyValue"));
-                prop.setActionGuid(propObj.getString("actionGuid"));
-                list.add(prop);
-            }
-
-            String actionGuid = requestJsonObj.getString("actionGuid");
-            String actionId = requestJsonObj.getString("actionId");
-
-            this.service_property.saveProperties(list, actionGuid, actionId);
-
+            this.service_property.saveProperties(command);
             return new Response();
         } catch(Exception e){
             return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());

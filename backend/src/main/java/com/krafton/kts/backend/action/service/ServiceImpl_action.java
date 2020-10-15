@@ -5,10 +5,7 @@ import com.krafton.kts.backend.action.domain.KTS_ACTION_TEMPLATE;
 import com.krafton.kts.backend.action.repository.Repo_action;
 import org.springframework.beans.factory.annotation.Autowired;
 
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class ServiceImpl_action implements Service_action{
 
@@ -36,7 +33,12 @@ public class ServiceImpl_action implements Service_action{
     }
 
     @Override
-    public void saveActionList(List<KTS_ACTION> list, List<String> removeList) {
+    public void saveActionList(Map<String, KTS_ACTION> map, List<String> removeList) {
+        List<KTS_ACTION> list = new ArrayList<>();
+        for(Iterator<KTS_ACTION> iter = map.values().iterator(); iter.hasNext();){
+            KTS_ACTION action = iter.next();
+            list.add(action);
+        }
         this.repo_action.saveActionList(list, removeList);
     }
 }

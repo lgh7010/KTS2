@@ -24,7 +24,7 @@
 
       <div>
         <select id="actionIdSelection" @change="onChangeActionID()">
-          <option v-for="actionTemplate in this.actionTemplateDic" v-bind:value="actionTemplate.actionId">
+          <option v-for="actionTemplate in this.actionTemplates" v-bind:value="actionTemplate.actionId">
             {{actionTemplate.actionId}}
           </option>
         </select>
@@ -58,7 +58,7 @@
       <button v-on:click="onClickAdd()">추가</button>
       <button v-on:click="goBack()">닫기</button>
 
-      <div v-for="action in this.actionDic"
+      <div v-for="action in this.currentTestcaseActions"
            v-bind:id="action.actionGuid" v-bind:actionGuid="action.actionGuid" v-bind:nextActionGuid="action.nextActionGuid"
            class="node" style="width:400px;
         height:100px;
@@ -77,7 +77,7 @@
           <path d="M 0 0 L 10 5 L 0 10 z" fill="black"/>
         </marker>
       </defs>
-      <line v-for="action in this.actionDic" v-if="action.nextActionGuid != 'None'"
+      <line v-for="action in this.currentTestcaseActions" v-if="action.nextActionGuid != 'None'"
             v-bind:id="'arrow_'+action.actionGuid+'_'+action.nextActionGuid"
             v-bind:actionGuid="action.actionGuid" v-bind:nextActionGuid="action.nextActionGuid"
             v-bind:x1="action.x+200" v-bind:y1="action.y"
@@ -104,8 +104,8 @@ export default {
   name: "TestcaseEditComponent",
   data(){
     return {
-      actionDic: {},//현재 페이지에서 관리중인 액션노드의 딕셔너리. 키값은 ACTION_GUID
-      actionTemplateDic: {},//액션 템플릿의 딕셔너리. 최초 페이지 생성시 불러온다.
+      currentTestcaseActions: {},//현재 페이지에서 관리중인 액션노드의 딕셔너리. 키값은 ACTION_GUID
+      actionTemplates: {},//액션 템플릿의 딕셔너리. 최초 페이지 생성시 불러온다.
       currentTestcase: null,//현재 에디터에서 편집중인 테스트케이스
 
       arrowsStartMap: {},//키는 시작 action_GUID, 값은 끝 action_GUID
@@ -117,14 +117,14 @@ export default {
     }
   },
   created(){
-    axios.get("/actionTemplateDic").then(response => {
-      this.actionTemplateDic = response.data.context.actionTemplateDic
+    axios.get("/actionTemplates").then(response => {
+      this.actionTemplates = response.data.context.actionTemplates
     }).catch(error => {
       console.log(error)
     })
   },
   mounted(){
-    axios.get("/actionDic", { params: {'testcaseGuid': this.$route.params.testcaseGuid}}).then(responseActionDic => {
+    axios.get("/currentTestcaseActions", { params: {'testcaseGuid': this.$route.params.testcaseGuid}}).then(responseCurrentTestcaseActions => {
       axios.get("/testcase", { params: {'testcaseGuid': this.$route.params.testcaseGuid}}).then(responseTestcase => {
         console.log(responseTestcase)
         this.currentTestcase = (responseTestcase.data.context != null && responseTestcase.data.context.testcase != null) ? responseTestcase.data.context.testcase : {
@@ -135,7 +135,7 @@ export default {
 
         $("#testcaseName").val(this.currentTestcase.name)
         $("#testcaseDescription").val(this.currentTestcase.description)
-        this.actionDic = responseActionDic.data.context.actionDic
+        this.currentTestcaseActions = responseCurrentTestcaseActions.data.context.currentTestcaseActions
       }).catch(error => {
         console.log(error)
       })
@@ -144,8 +144,8 @@ export default {
     })
   },
   updated(){
-    for(let actionGuid in this.actionDic){
-      var action = this.actionDic[actionGuid]
+    for(let actionGuid in this.currentTestcaseActions){
+      var action = this.currentTestcaseActions[actionGuid]
       var node = document.getElementById(action.actionGuid)
 
       //노드 등록 및 위치 설정
@@ -175,17 +175,17 @@ export default {
       this.$router.go(-1)
     },
     getFirstAction(){
-      for(let actionGuid in this.actionDic){
-        if(this.actionDic[actionGuid].isStart == 'Y'){
-          return this.actionDic[actionGuid]
+      for(let actionGuid in this.currentTestcaseActions){
+        if(this.currentTestcaseActions[actionGuid].isStart == 'Y'){
+          return this.currentTestcaseActions[actionGuid]
         }
       }
       return null
     },
     getLastAction(){
-      for(let actionGuid in this.actionDic){
-        if(this.actionDic[actionGuid].nextActionGuid == NULL_ACTION_NODE_GUID){
-          return this.actionDic[actionGuid]
+      for(let actionGuid in this.currentTestcaseActions){
+        if(this.currentTestcaseActions[actionGuid].nextActionGuid == NULL_ACTION_NODE_GUID){
+          return this.currentTestcaseActions[actionGuid]
         }
       }
       return null
@@ -196,7 +196,7 @@ export default {
       if(lastAction != null){
         lastAction.nextActionGuid = guid;
       }
-      Vue.set(this.actionDic, guid, {
+      Vue.set(this.currentTestcaseActions, guid, {
         actionGuid: guid,
         testcaseGuid: this.currentTestcase.testcaseGuid,
         isStart: 'N',
@@ -212,8 +212,8 @@ export default {
       this.currentTestcase.name = $("#testcaseName").val()
       this.currentTestcase.description = $("#testcaseDescription").val()
       console.log(this.currentTestcase)
-      axios.post("/saveActionDic", {
-        "actionDic": this.actionDic,
+      axios.post("/saveCurrentTestcaseActions", {
+        "currentTestcaseActions": this.currentTestcaseActions,
         "removeActionGuidList": this.removeActionGuidList,
         "testcase": this.currentTestcase,
       }).then(response => {
@@ -226,12 +226,12 @@ export default {
     onClickRemove(action){
       //현재 노드의 이전 노드의 next_ACTION_GUID를 현재 노드의 다음 노드로 세팅(다음노드가 없다면 0으로 세팅)
       var beforeActionGuid = this.arrowsEndMap[action.actionGuid]
-      if(beforeActionGuid && this.actionDic[beforeActionGuid]){
+      if(beforeActionGuid && this.currentTestcaseActions[beforeActionGuid]){
         var nextActionGuid = this.arrowsStartMap[action.actionGuid]
-        this.actionDic[beforeActionGuid].nextActionGuid = (nextActionGuid) ? nextActionGuid : NULL_ACTION_NODE_GUID
+        this.currentTestcaseActions[beforeActionGuid].nextActionGuid = (nextActionGuid) ? nextActionGuid : NULL_ACTION_NODE_GUID
       }
       this.removeActionGuidList.push(action.actionGuid)
-      Vue.delete(this.actionDic, action.actionGuid)
+      Vue.delete(this.currentTestcaseActions, action.actionGuid)
     },
 
     //SVG 관련
@@ -323,7 +323,7 @@ export default {
     onChangeActionID(){
       //해당 액션의 템플릿의 속성정보를 불러온다.
       var actionId = $("#actionIdSelection").val()
-      this.actionDic[this.currentActionGuid].actionId = actionId
+      this.currentTestcaseActions[this.currentActionGuid].actionId = actionId
       axios.get("/propertiesTemplate", { params: {'actionId': actionId}}).then(response => {
         this.actionProperties = response.data.context.list
         //템플릿이라서 현재 property_SEQ값이 없다. actionProperties에 템플릿 리스트나 그냥 프로퍼티 리스트 둘 다 들어갈 수 있는데서 비롯된 문제.
@@ -339,7 +339,7 @@ export default {
     onClickActionSave(){
       axios.post("/saveProperties", {
         "actionGuid": this.currentActionGuid,
-        "actionId": this.actionDic[this.currentActionGuid].actionId,
+        "actionId": this.currentTestcaseActions[this.currentActionGuid].actionId,
         "properties": this.actionProperties
       }).then(response => {
         alert('저장 완료')

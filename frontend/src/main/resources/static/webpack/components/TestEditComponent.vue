@@ -107,7 +107,7 @@ export default {
   mounted: function() {
     axios.get("/test", { params: {'testSeq': this.$route.params.testSeq}}).then(responseTest => {
       this.currentTest = (responseTest.data.context != null && responseTest.data.context.test != null) ? responseTest.data.context.test : {
-        test_SEQ: 0,
+        testSeq: 0,
         name: "",
         description: "",
       }
@@ -120,30 +120,6 @@ export default {
       }).catch(error => {
         console.log(error)
       })
-
-      //쿼리 한번으로 해결하려면 TEST_REL_TESTCASE에 'NAME'과 'DESCRIPTION'을 더한 도메인 클래스를 따로 또 추가해야 해서 이런식으로 처리함.
-      //편의성과 일관성 사이의 Tradeoff에서 결정한 사항.
-      // axios.get("/testRelTestcaseList", { params: {'testSeq': this.currentTest.testSeq}}).then(responseRel => {
-      //   var testRelTestcaseList = responseRel.data.context.testRelTestcaseList
-      //   axios.get("/testcaseDic", { params: {'testSeq': this.currentTest.testSeq}}).then(responseDic => {
-      //     var testcaseDic = responseDic.data.context.testcaseDic
-      //     var list = []
-      //     for(var i = 0; i < testRelTestcaseList.length; i++){
-      //       list.push({
-      //         relationSeq: testRelTestcaseList[i].relationSeq,
-      //         testSeq : testRelTestcaseList[i].testSeq,
-      //         testcaseGuid : testRelTestcaseList[i].testcaseGuid,
-      //         name : testcaseDic[testRelTestcaseList[i].testcaseGuid].name,
-      //         description : testcaseDic[testRelTestcaseList[i].testcaseGuid].description
-      //       })
-      //     }
-      //     this.testRelTestcaseDerived = list
-      //   }).catch(error => {
-      //     console.log(error)
-      //   })
-      // }).catch(error => {
-      //   console.log(error)
-      // })
     }).catch(error => {
       console.log(error)
     })
@@ -199,7 +175,7 @@ export default {
       this.testRelTestcaseDerived[listIndex] = this.testRelTestcaseDerived.splice(listIndex + 1, 1, this.testRelTestcaseDerived[listIndex])[0]
     },
     removeTestcase: function(listIndex){
-      this.removeRelationSeqList.push(this.testRelTestcaseDerived[listIndex].relation_SEQ)
+      this.removeRelationSeqList.push(this.testRelTestcaseDerived[listIndex].relationSeq)
       this.testRelTestcaseDerived.splice(listIndex, 1)
       console.log(this.removeRelationSeqList)
     }

@@ -18,19 +18,19 @@ public class Controller_test {
         this.testListService = testListService;
     }
 
-    @GetMapping("/testList")
+    @GetMapping("/findAllTest")
     @ResponseBody
-    public Response testList(){
+    public Response findAllTest(){
         Response response = new Response();
-        response.putContext("list", this.testListService.findAll());
+        response.putContext("list", this.testListService.findAllTest());
         return response;
     }
 
-    @GetMapping("/test")
+    @GetMapping("/findTest")
     @ResponseBody
-    public Response test(@RequestParam int testSeq){
+    public Response findTest(@RequestParam int testSeq){
         Response response = new Response();
-        response.putContext("test", this.testListService.find(testSeq));
+        response.putContext("test", this.testListService.findTest(testSeq));
         return response;
     }
 

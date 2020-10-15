@@ -105,7 +105,7 @@ export default {
     }
   },
   mounted: function() {
-    axios.get("/test", { params: {'testSeq': this.$route.params.testSeq}}).then(responseTest => {
+    axios.get("/findTest", { params: {'testSeq': this.$route.params.testSeq}}).then(responseTest => {
       this.currentTest = (responseTest.data.context != null && responseTest.data.context.test != null) ? responseTest.data.context.test : {
         testSeq: 0,
         name: "",

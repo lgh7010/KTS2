@@ -42,7 +42,7 @@ export default {
     }
   },
   mounted: function(){
-    axios.get('/testList').then(response => {
+    axios.get('/findAllTest').then(response => {
       this.testList = response.data.context.list
     }).catch(error => {
       console.log(error)

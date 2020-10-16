@@ -3,7 +3,7 @@ package com.krafton.kts.frontend.domain.action.controller;
 import com.krafton.kts.backend.domain.action.domain.command.SavePropertiesCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
 import com.krafton.kts.backend.domain.action.service.ActionService;
-import com.krafton.kts.frontend.common.ERROR_CODE;
+import com.krafton.kts.frontend.common.ErrorCode;
 import com.krafton.kts.frontend.common.Response;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -32,7 +32,7 @@ public class ActionController {
             response.putContext("currentTestcaseActions", ret);
             return response;
         } catch(Exception e) {
-            return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
+            return new Response(ErrorCode.ERR_COMMON, e.getMessage());
         }
     }
 
@@ -44,7 +44,7 @@ public class ActionController {
             response.putContext("actionTemplates", this.actionService.getActionTemplate());
             return response;
         } catch(Exception e){
-            return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
+            return new Response(ErrorCode.ERR_COMMON, e.getMessage());
         }
     }
 
@@ -62,7 +62,7 @@ public class ActionController {
             response.putContext("list", this.actionService.getPropertyTemplate(actionId));
             return response;
         } catch(Exception e) {
-            return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
+            return new Response(ErrorCode.ERR_COMMON, e.getMessage());
         }
     }
 
@@ -74,7 +74,7 @@ public class ActionController {
             response.putContext("list", this.actionService.findProperty(actionGuid));
             return response;
         } catch(Exception e) {
-            return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
+            return new Response(ErrorCode.ERR_COMMON, e.getMessage());
         }
     }
 
@@ -85,7 +85,7 @@ public class ActionController {
             this.actionService.saveProperties(command);
             return new Response();
         } catch(Exception e){
-            return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
+            return new Response(ErrorCode.ERR_COMMON, e.getMessage());
         }
     }
 }

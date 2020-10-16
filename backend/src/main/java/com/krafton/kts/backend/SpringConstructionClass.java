@@ -1,7 +1,7 @@
 package com.krafton.kts.backend;
 
-import com.krafton.kts.backend.cross.service.SaveActionService;
-import com.krafton.kts.backend.cross.service.SaveActionServiceImpl;
+import com.krafton.kts.backend.cross.service.CrossDomainInterface;
+import com.krafton.kts.backend.cross.service.CrossDomainInterfaceImpl;
 import com.krafton.kts.backend.domain.action.service.ActionService;
 import com.krafton.kts.backend.domain.action.service.ActionServiceImpl;
 import com.krafton.kts.backend.domain.action.service.interfaces.*;
@@ -85,8 +85,8 @@ public class SpringConstructionClass {
 
     //cross
     @Bean
-    public SaveActionService saveActionService(){
-        return new SaveActionServiceImpl(
+    public CrossDomainInterface saveActionService(){
+        return new CrossDomainInterfaceImpl(
                 actionInterface(),
                 testcaseInterface()
         );

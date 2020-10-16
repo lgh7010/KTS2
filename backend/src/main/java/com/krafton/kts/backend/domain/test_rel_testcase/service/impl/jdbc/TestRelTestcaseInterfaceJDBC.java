@@ -1,9 +1,10 @@
-package com.krafton.kts.backend.domain.test_rel_testcase.service.impl;
+package com.krafton.kts.backend.domain.test_rel_testcase.service.impl.jdbc;
 
 import com.krafton.kts.backend.common.JdbcCommon;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.TestRelTestcaseSaveCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.db.TEST_REL_TESTCASE;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.db.TestRelTestcaseDerived;
+import com.krafton.kts.backend.domain.test_rel_testcase.service.impl.TestRelTestcaseInterface;
 
 import javax.sql.DataSource;
 import java.sql.*;

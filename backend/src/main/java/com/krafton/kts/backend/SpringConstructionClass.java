@@ -12,11 +12,11 @@ import com.krafton.kts.backend.domain.test.service.impl.mybatis.TestInterfaceMyb
 import com.krafton.kts.backend.domain.test_rel_testcase.service.TestRelTestcaseServiceImpl;
 import com.krafton.kts.backend.domain.test_rel_testcase.service.TestRelTestcaseService;
 import com.krafton.kts.backend.domain.test_rel_testcase.service.impl.TestRelTestcaseInterface;
-import com.krafton.kts.backend.domain.test_rel_testcase.service.impl.TestRelTestcaseInterfaceJDBC;
+import com.krafton.kts.backend.domain.test_rel_testcase.service.impl.jdbc.TestRelTestcaseInterfaceJDBC;
+import com.krafton.kts.backend.domain.test_rel_testcase.service.impl.mybatis.TestRelTestcaseInterfaceMybatis;
 import com.krafton.kts.backend.domain.testcase.service.TestcaseService;
 import com.krafton.kts.backend.domain.testcase.service.TestcaseServiceImpl;
 import com.krafton.kts.backend.domain.testcase.service.impl.*;
-import com.krafton.kts.backend.domain.testcase.service.impl.jdbc.TestcaseInterfaceJDBC;
 import com.krafton.kts.backend.domain.testcase.service.impl.mybatis.TestcaseInterfaceMybatis;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -41,8 +41,8 @@ public class SpringConstructionClass {
     }
     @Bean
     public TestInterface testInterface(){
-        //return new TestInterfaceJDBC(dataSource);         //JDBC 이용
-        return new TestInterfaceMybatis();                  //Mybatis 이용
+        //return new TestInterfaceJDBC(dataSource);             //JDBC 이용
+        return new TestInterfaceMybatis();                      //Mybatis 이용
     }
 
     //testcase
@@ -54,8 +54,8 @@ public class SpringConstructionClass {
     }
     @Bean
     public TestcaseInterface testcaseInterface(){
-        //return new TestcaseInterfaceJDBC(dataSource);     //JDBC 이용
-        return new TestcaseInterfaceMybatis();              //Mybatis 이용
+        //return new TestcaseInterfaceJDBC(dataSource);         //JDBC 이용
+        return new TestcaseInterfaceMybatis();                  //Mybatis 이용
     }
 
     //test_rel_testcase
@@ -67,7 +67,8 @@ public class SpringConstructionClass {
     }
     @Bean
     public TestRelTestcaseInterface testRelTestcaseInterface(){
-        return new TestRelTestcaseInterfaceJDBC(dataSource);
+        //return new TestRelTestcaseInterfaceJDBC(dataSource);  //JDBC 이용
+        return new TestRelTestcaseInterfaceMybatis();           //Mybatis 이용
     }
 
     //action & property
@@ -80,11 +81,11 @@ public class SpringConstructionClass {
     }
     @Bean
     public ActionInterface actionInterface(){
-        return new ActionInterfaceJDBC(dataSource);
+        return new ActionInterfaceJDBC(dataSource);             //JDBC 이용
     }
     @Bean
     public PropertyInterface propertyInterface(){
-        return new PropertyInterfaceJDBC(dataSource);
+        return new PropertyInterfaceJDBC(dataSource);           //JDBC 이용
     }
 
     //cross

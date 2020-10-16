@@ -1,19 +1,21 @@
 package com.krafton.kts.backend;
 
-import com.krafton.kts.backend.action.service.ActionService;
-import com.krafton.kts.backend.action.service.ActionServiceImpl;
-import com.krafton.kts.backend.action.service.interfaces.*;
-import com.krafton.kts.backend.test.service.TestServiceImpl;
-import com.krafton.kts.backend.test.service.TestService;
-import com.krafton.kts.backend.test.service.interfaces.TestInterface;
-import com.krafton.kts.backend.test.service.interfaces.TestInterfaceJDBC;
-import com.krafton.kts.backend.test_rel_testcase.service.TestRelTestcaseServiceImpl;
-import com.krafton.kts.backend.test_rel_testcase.service.TestRelTestcaseService;
-import com.krafton.kts.backend.test_rel_testcase.service.interfaces.TestRelTestcaseInterface;
-import com.krafton.kts.backend.test_rel_testcase.service.interfaces.TestRelTestcaseInterfaceJDBC;
-import com.krafton.kts.backend.testcase.service.TestcaseService;
-import com.krafton.kts.backend.testcase.service.TestcaseServiceImpl;
-import com.krafton.kts.backend.testcase.service.interfaces.*;
+import com.krafton.kts.backend.cross.service.SaveActionService;
+import com.krafton.kts.backend.cross.service.SaveActionServiceImpl;
+import com.krafton.kts.backend.domain.action.service.ActionService;
+import com.krafton.kts.backend.domain.action.service.ActionServiceImpl;
+import com.krafton.kts.backend.domain.action.service.interfaces.*;
+import com.krafton.kts.backend.domain.test.service.TestServiceImpl;
+import com.krafton.kts.backend.domain.test.service.TestService;
+import com.krafton.kts.backend.domain.test.service.interfaces.TestInterface;
+import com.krafton.kts.backend.domain.test.service.interfaces.TestInterfaceJDBC;
+import com.krafton.kts.backend.domain.test_rel_testcase.service.TestRelTestcaseServiceImpl;
+import com.krafton.kts.backend.domain.test_rel_testcase.service.TestRelTestcaseService;
+import com.krafton.kts.backend.domain.test_rel_testcase.service.interfaces.TestRelTestcaseInterface;
+import com.krafton.kts.backend.domain.test_rel_testcase.service.interfaces.TestRelTestcaseInterfaceJDBC;
+import com.krafton.kts.backend.domain.testcase.service.TestcaseService;
+import com.krafton.kts.backend.domain.testcase.service.TestcaseServiceImpl;
+import com.krafton.kts.backend.domain.testcase.service.interfaces.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -69,7 +71,6 @@ public class SpringConstructionClass {
     public ActionService actionService(){
         return new ActionServiceImpl(
                 actionInterface(),
-                testcaseInterface(),
                 propertyInterface()
         );
     }
@@ -80,5 +81,14 @@ public class SpringConstructionClass {
     @Bean
     public PropertyInterface propertyInterface(){
         return new PropertyInterfaceJDBC(dataSource);
+    }
+
+    //cross
+    @Bean
+    public SaveActionService saveActionService(){
+        return new SaveActionServiceImpl(
+                actionInterface(),
+                testcaseInterface()
+        );
     }
 }

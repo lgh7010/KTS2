@@ -3,7 +3,13 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.krafton.kts.backend.domain.test.service.impl.mybatis.TestInterfaceMybatisMapper">
-    <select id="findAllTest" resultType="hashmap">
+    <select id="findAllTest" resultType="com.krafton.kts.backend.domain.test.domain.db.KTS_TEST">
         SELECT * FROM KTS_TEST;
     </select>
+
+    <select id="findTest" resultType="com.krafton.kts.backend.domain.test.domain.db.KTS_TEST">
+        SELECT * FROM KTS_TEST WHERE testSeq = #{testSeq} AND DELETED = 'N'
+    </select>
+
+    
 </mapper>

@@ -1,7 +1,8 @@
-package com.krafton.kts.backend.testcase.service.internal;
+package com.krafton.kts.backend.testcase.service.interfaces;
 
 import com.krafton.kts.backend.common.JdbcCommon;
 import com.krafton.kts.backend.testcase.domain.command.RemoveTestcaseCommand;
+import com.krafton.kts.backend.testcase.domain.db.KTS_TESTCASE;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -12,9 +13,85 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class RemoveTestcaseServiceJDBC extends JdbcCommon implements RemoveTestcaseService {
-    public RemoveTestcaseServiceJDBC(DataSource dataSource) {
+public class TestcaseInterfaceJDBC extends JdbcCommon implements TestcaseInterface {
+    public TestcaseInterfaceJDBC(DataSource dataSource) {
         super(dataSource);
+    }
+
+    @Override
+    public void addTestcase(KTS_TESTCASE testcase) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement("INSERT INTO KTS_TESTCASE (testcaseGuid, name, description, deleted) VALUES (?, ?, ?, 'N') " +
+                    "ON DUPLICATE KEY UPDATE name = VALUES(name), description = VALUES(description)");
+            pstmt.setString(1, testcase.getTestcaseGuid());
+            pstmt.setString(2, testcase.getName());
+            pstmt.setString(3, testcase.getDescription());
+            pstmt.executeUpdate();
+        } catch (Exception e){
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt);
+        }
+    }
+
+    @Override
+    public List<KTS_TESTCASE> findAll() {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement("select * from KTS_TESTCASE where deleted = 'N'");
+            rs = pstmt.executeQuery();
+
+            List<KTS_TESTCASE> testcases = new ArrayList<>();
+            while(rs.next()){
+                KTS_TESTCASE test = new KTS_TESTCASE();
+                test.setTestcaseGuid(rs.getString("testcaseGuid"));
+                test.setName(rs.getString("name"));
+                test.setDescription(rs.getString("description"));
+                test.setDeleted(rs.getString("deleted"));
+
+                testcases.add(test);
+            }
+
+            return testcases;
+        } catch (Exception e){
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt, rs);
+        }
+    }
+
+    @Override
+    public KTS_TESTCASE findTestcase(String testcaseGuid) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement("SELECT * FROM KTS_TESTCASE WHERE testcaseGuid = ? AND deleted = 'N'");
+            pstmt.setString(1, testcaseGuid);
+            rs = pstmt.executeQuery();
+
+            rs.next();
+            KTS_TESTCASE tc = new KTS_TESTCASE();
+            tc.setTestcaseGuid(rs.getString("testcaseGuid"));
+            tc.setName(rs.getString("name"));
+            tc.setDescription(rs.getString("description"));
+            tc.setDeleted(rs.getString("deleted"));
+            return tc;
+        } catch (Exception e){
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt, rs);
+        }
     }
 
     @Override

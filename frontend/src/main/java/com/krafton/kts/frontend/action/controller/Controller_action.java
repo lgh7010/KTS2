@@ -18,7 +18,7 @@ import java.util.*;
 public class Controller_action {
 
     private final ActionService actionService;
-    private final TestcaseService service_testcase;
+    private final TestcaseService testcaseService;
 
     @GetMapping("/currentTestcaseActions")
     @ResponseBody
@@ -57,8 +57,7 @@ public class Controller_action {
         try {
 
             this.actionService.saveAction(command.getCurrentTestcaseActions(), command.getRemoveActionGuidList());
-            //this.service_action.saveActionList(command.getCurrentTestcaseActions(), command.getRemoveActionGuidList());
-            this.service_testcase.addTestcase(command.getTestcase());
+            this.testcaseService.addTestcase(command.getTestcase());
 
             return new Response();
         } catch(Exception e){

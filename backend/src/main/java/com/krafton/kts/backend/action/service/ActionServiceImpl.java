@@ -5,63 +5,51 @@ import com.krafton.kts.backend.action.domain.db.KTS_ACTION;
 import com.krafton.kts.backend.action.domain.db.KTS_ACTION_TEMPLATE;
 import com.krafton.kts.backend.action.domain.db.KTS_PROPERTY;
 import com.krafton.kts.backend.action.domain.db.KTS_PROPERTY_TEMPLATE;
-import com.krafton.kts.backend.action.service.internal.*;
+import com.krafton.kts.backend.action.service.interfaces.*;
 
 import java.util.List;
 import java.util.Map;
 
 public class ActionServiceImpl implements ActionService {
 
-    private FindActionService findActionService;
-    private FindPropertyService findPropertyService;
-    private GetPropertyTemplateService getPropertyTemplateService;
-    private GetActionTemplateService getActionTemplateService;
-    private SaveActionService saveActionService;
-    private SavePropertyService savePropertyService;
+    private ActionInterface actionInterface;
+    private PropertyInterface propertyInterface;
 
     public ActionServiceImpl(
-            FindActionService findActionService,
-            FindPropertyService findPropertyService,
-            GetPropertyTemplateService getPropertyTemplateService,
-            GetActionTemplateService getActionTemplateService,
-            SaveActionService saveActionService,
-            SavePropertyService savePropertyService
+            ActionInterface actionInterface,
+            PropertyInterface findPropertyService
     ){
-        this.findActionService = findActionService;
-        this.findPropertyService = findPropertyService;
-        this.getPropertyTemplateService = getPropertyTemplateService;
-        this.getActionTemplateService = getActionTemplateService;
-        this.saveActionService = saveActionService;
-        this.savePropertyService = savePropertyService;
+        this.actionInterface = actionInterface;
+        this.propertyInterface = findPropertyService;
     }
 
     @Override
     public List<KTS_ACTION> findAction(String testcaseGuid) {
-        return this.findActionService.findAction(testcaseGuid);
+        return this.actionInterface.findAction(testcaseGuid);
     }
 
     @Override
     public List<KTS_PROPERTY> findProperty(String actionGuid) {
-        return this.findPropertyService.findProperty(actionGuid);
+        return this.propertyInterface.findProperty(actionGuid);
     }
 
     @Override
     public List<KTS_PROPERTY_TEMPLATE> getPropertyTemplate(String actionId) {
-        return this.getPropertyTemplateService.getPropertyTemplate(actionId);
+        return this.propertyInterface.getPropertyTemplate(actionId);
     }
 
     @Override
     public Map<String, KTS_ACTION_TEMPLATE> getActionTemplate() {
-        return this.getActionTemplateService.getActionTemplate();
+        return this.actionInterface.getActionTemplate();
     }
 
     @Override
     public void saveAction(Map<String, KTS_ACTION> map, List<String> removeList) {
-        this.saveActionService.saveAction(map, removeList);
+        this.actionInterface.saveAction(map, removeList);
     }
 
     @Override
     public void saveProperties(SavePropertiesCommand command) {
-        this.savePropertyService.saveProperties(command);
+        this.propertyInterface.saveProperties(command);
     }
 }

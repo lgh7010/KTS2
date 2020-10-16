@@ -2,26 +2,23 @@ package com.krafton.kts.backend.test.service;
 
 import com.krafton.kts.backend.test.domain.command.RemoveTestCommand;
 import com.krafton.kts.backend.test.domain.db.KTS_TEST;
-import com.krafton.kts.backend.test.service.internal.FindTestService;
-import com.krafton.kts.backend.test.service.internal.RemoveTestService;
+import com.krafton.kts.backend.test.service.interfaces.TestInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
 public class TestServiceImpl implements TestService {
 
-    private RemoveTestService removeTestService;
-    private FindTestService findTestService;
+    private TestInterface testInterface;
 
     @Autowired
-    public TestServiceImpl(RemoveTestService removeTestService, FindTestService findTestService){
-        this.removeTestService = removeTestService;
-        this.findTestService = findTestService;
+    public TestServiceImpl(TestInterface findTestService){
+        this.testInterface = findTestService;
     }
 
     @Override
     public List<KTS_TEST> findAllTest() {
-        return this.findTestService.findAllTest();
+        return this.testInterface.findAllTest();
     }
 
     @Override
@@ -29,7 +26,7 @@ public class TestServiceImpl implements TestService {
         if(testSeq < 1){
             return null;
         }
-        return this.findTestService.findTest(testSeq);
+        return this.testInterface.findTest(testSeq);
     }
 
     @Override
@@ -37,6 +34,6 @@ public class TestServiceImpl implements TestService {
         if(command.getTestSeq() < 1){
             return;
         }
-        this.removeTestService.RemoveTest(command);
+        this.testInterface.RemoveTest(command);
     }
 }

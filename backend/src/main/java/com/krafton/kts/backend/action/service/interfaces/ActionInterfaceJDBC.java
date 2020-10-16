@@ -1,19 +1,81 @@
-package com.krafton.kts.backend.action.service.internal;
+package com.krafton.kts.backend.action.service.interfaces;
 
 import com.krafton.kts.backend.action.domain.db.KTS_ACTION;
+import com.krafton.kts.backend.action.domain.db.KTS_ACTION_TEMPLATE;
 import com.krafton.kts.backend.common.JdbcCommon;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
-public class SaveActionServiceJDBC extends JdbcCommon implements SaveActionService {
-    public SaveActionServiceJDBC(DataSource dataSource) {
+public class ActionInterfaceJDBC extends JdbcCommon implements ActionInterface {
+    public ActionInterfaceJDBC(DataSource dataSource) {
         super(dataSource);
+    }
+
+    @Override
+    public List<KTS_ACTION> findAction(String testcaseGuid) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement("select * from KTS_ACTION where testcaseGuid = ? AND deleted = 'N'");
+            pstmt.setString(1, testcaseGuid);
+            rs = pstmt.executeQuery();
+
+            List<KTS_ACTION> list = new ArrayList<>();
+            while(rs.next()){
+                KTS_ACTION action = new KTS_ACTION();
+                action.setActionGuid(rs.getString("actionGuid"));
+                action.setTestcaseGuid(rs.getString("testcaseGuid"));
+                action.setIsStart(rs.getString("isStart"));
+                action.setNextActionGuid(rs.getString("nextActionGuid"));
+                action.setActionId(rs.getString("actionId"));
+                action.setX(rs.getFloat("x"));
+                action.setY(rs.getFloat("y"));
+                action.setDescription(rs.getString("description"));
+                action.setDeleted(rs.getString("deleted"));
+                list.add(action);
+            }
+            return list;
+        } catch (Exception e){
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt, rs);
+        }
+    }
+
+    @Override
+    public Map<String, KTS_ACTION_TEMPLATE> getActionTemplate() {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+        ResultSet rs = null;
+
+        try {
+            conn = getConnection();
+            pstmt = conn.prepareStatement("SELECT * FROM KTS_ACTION_TEMPLATE");
+            rs = pstmt.executeQuery();
+
+            Map<String, KTS_ACTION_TEMPLATE> ret = new HashMap<>();
+            while(rs.next()){
+                KTS_ACTION_TEMPLATE tp = new KTS_ACTION_TEMPLATE();
+                tp.setActionId(rs.getString("actionId"));
+                tp.setType(rs.getString("type"));
+                tp.setTemplateDescription(rs.getString("templateDescription"));
+
+                ret.put(rs.getString("actionId"), tp);
+            }
+            return ret;
+        } catch (Exception e){
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt, rs);
+        }
     }
 
     @Override

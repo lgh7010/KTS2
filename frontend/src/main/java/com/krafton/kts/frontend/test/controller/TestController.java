@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-public class Controller_test {
+public class TestController {
 
     private final TestService testListService;
 

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
-public class Controller_test_rel_testcase {
+public class TestRelTestcaseController {
 
     private final TestRelTestcaseService service_test_rel_testcase;
 

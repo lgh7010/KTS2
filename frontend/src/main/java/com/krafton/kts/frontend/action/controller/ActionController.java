@@ -15,7 +15,7 @@ import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
-public class Controller_action {
+public class ActionController {
 
     private final ActionService actionService;
     private final TestcaseService testcaseService;

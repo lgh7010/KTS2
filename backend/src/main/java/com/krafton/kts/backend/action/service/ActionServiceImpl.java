@@ -8,6 +8,7 @@ import com.krafton.kts.backend.action.domain.db.KTS_PROPERTY;
 import com.krafton.kts.backend.action.domain.db.KTS_PROPERTY_TEMPLATE;
 import com.krafton.kts.backend.action.service.interfaces.*;
 import com.krafton.kts.backend.testcase.service.interfaces.TestcaseInterface;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Map;
@@ -49,6 +50,7 @@ public class ActionServiceImpl implements ActionService {
     }
 
     @Override
+    @Transactional
     public void saveAction(SaveCurrentTestcaseActionsCommand command) {
         this.actionInterface.saveAction(command.getCurrentTestcaseActions(), command.getRemoveActionGuidList());
         this.testcaseInterface.addTestcase(command.getTestcase());

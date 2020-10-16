@@ -15,8 +15,8 @@ public class TestInterfaceMybatis implements TestInterface {
     private TestInterfaceMybatisMapper testInterfaceMybatisMapper;
 
     @Override
-    public KTS_TEST findTest(int testSeq) {
-        return this.testInterfaceMybatisMapper.findTest(testSeq);
+    public KTS_TEST findTest(String testGuid) {
+        return this.testInterfaceMybatisMapper.findTest(testGuid);
     }
 
     @Override

@@ -8,13 +8,13 @@
     </select>
 
     <select id="findTest" resultType="com.krafton.kts.backend.domain.test.domain.db.KTS_TEST">
-        SELECT * FROM KTS_TEST WHERE testSeq = #{testSeq} AND DELETED = 'N';
+        SELECT * FROM KTS_TEST WHERE testGuid = #{testGuid} AND DELETED = 'N';
     </select>
 
     <update id="removeTest" parameterType="com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand">
-        UPDATE KTS_TEST SET deleted = 'Y' WHERE testSeq = #{testSeq};
+        UPDATE KTS_TEST SET deleted = 'Y' WHERE testGuid = #{testGuid};
 
-        UPDATE TEST_REL_TESTCASE SET deleted = 'Y' WHERE testSeq = #{testSeq};
+        UPDATE TEST_REL_TESTCASE SET deleted = 'Y' WHERE testGuid = #{testGuid};
     </update>
 
 </mapper>

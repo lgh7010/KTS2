@@ -4,5 +4,5 @@ import lombok.Data;
 
 @Data
 public class RemoveTestCommand {
-    private int testSeq;
+    private String testGuid;
 }

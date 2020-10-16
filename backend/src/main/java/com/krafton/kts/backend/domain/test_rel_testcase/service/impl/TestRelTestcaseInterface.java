@@ -6,6 +6,6 @@ import com.krafton.kts.backend.domain.test_rel_testcase.domain.db.TestRelTestcas
 import java.util.List;
 
 public interface TestRelTestcaseInterface {
-    List<TestRelTestcaseDerived> findTestRelTestcaseDerived(int testSeq);
+    List<TestRelTestcaseDerived> findTestRelTestcaseDerived(String testGuid);
     void saveTestRelTestcase(TestRelTestcaseSaveCommand command);
 }

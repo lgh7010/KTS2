@@ -24,9 +24,9 @@ public class TestController {
 
     @GetMapping("/findTest")
     @ResponseBody
-    public Response findTest(@RequestParam int testSeq){
+    public Response findTest(@RequestParam String testGuid){
         Response response = new Response();
-        response.putContext("test", this.testService.findTest(testSeq));
+        response.putContext("test", this.testService.findTest(testGuid));
         return response;
     }
 

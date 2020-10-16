@@ -101,13 +101,12 @@ export default {
       testRelTestcaseDerived: [],
       testcaseList: [],
       currentTest: null,
-      removeRelationSeqList: [],
     }
   },
   mounted: function() {
-    axios.get("/findTest", { params: {'testSeq': this.$route.params.testSeq}}).then(responseTest => {
+    axios.get("/findTest", { params: {'testGuid': this.$route.params.testGuid}}).then(responseTest => {
       this.currentTest = (responseTest.data.context != null && responseTest.data.context.test != null) ? responseTest.data.context.test : {
-        testSeq: 0,
+        testGuid: this.guid(),
         name: "",
         description: "",
       }
@@ -115,7 +114,7 @@ export default {
       document.getElementById("testDescription").value = this.currentTest.description
 
 
-      axios.get("/testRelTestcaseDerived", { params: {'testSeq': this.currentTest.testSeq}}).then(response => {
+      axios.get("/testRelTestcaseDerived", { params: {'testGuid': this.currentTest.testGuid}}).then(response => {
         this.testRelTestcaseDerived = response.data.context.list
       }).catch(error => {
         console.log(error)
@@ -125,6 +124,14 @@ export default {
     })
   },
   methods: {
+    guid(){
+      function _p8(s) {
+        var p = (Math.random().toString(16)+"000000000").substr(2,8);
+        return s ? "-" + p.substr(0,4) + "-" + p.substr(4,4) : p ;
+      }
+      return _p8() + _p8(true) + _p8(true) + _p8();
+    },
+
     onClickAdd: function(){
       axios.get('/testcaseList').then(response => {
         this.testcaseList = response.data.context.testcaseList
@@ -141,8 +148,8 @@ export default {
     },
     onClickTestcaseAddToTest: function(testcase){
       this.testRelTestcaseDerived.push({
-        relationSeq: 0,
-        testSeq : (this.currentTest != null) ? this.currentTest.testSeq : 0,
+        relationGuid: this.guid(),
+        testGuid : this.currentTest.testGuid,
         testcaseGuid : testcase.testcaseGuid,
         name : testcase.name,
         description : testcase.description,
@@ -151,10 +158,9 @@ export default {
     onClickSave: function(){
       axios.post("/testRelTestcaseSave", {
         "relationList": this.testRelTestcaseDerived,
-        "testSeq": (this.currentTest != null) ? this.currentTest.testSeq : 0,
+        "testGuid": this.currentTest.testGuid,
         "testName": document.getElementById("testName").value,
         "testDescription": document.getElementById("testDescription").value,
-        "removeRelationSeqList": this.removeRelationSeqList,
       }).then(response => {
         alert("저장 완료")
         console.log(response)
@@ -175,9 +181,7 @@ export default {
       this.testRelTestcaseDerived[listIndex] = this.testRelTestcaseDerived.splice(listIndex + 1, 1, this.testRelTestcaseDerived[listIndex])[0]
     },
     removeTestcase: function(listIndex){
-      this.removeRelationSeqList.push(this.testRelTestcaseDerived[listIndex].relationSeq)
       this.testRelTestcaseDerived.splice(listIndex, 1)
-      console.log(this.removeRelationSeqList)
     }
   }
 }

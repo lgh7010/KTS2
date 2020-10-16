@@ -1,6 +1,6 @@
 <template>
   <div>
-    <router-link :to="{name: 'TestEdit', params: {testSeq: 0}}"><button>추가</button></router-link>
+    <router-link :to="{name: 'TestEdit', params: {testGuid: 'DUMMY'}}"><button>추가</button></router-link>
 
     <div>
       <table>
@@ -18,8 +18,8 @@
           <td>{{test.name}}</td>
           <td>{{test.description}}</td>
           <td>
-            <router-link :to="{name: 'TestEdit', params: { testSeq: test.testSeq }}"><button>편집</button></router-link>
-            <button v-on:click="onClickRemove(test.testSeq)">삭제</button>
+            <router-link :to="{name: 'TestEdit', params: { testGuid: test.testGuid }}"><button>편집</button></router-link>
+            <button v-on:click="onClickRemove(test.testGuid)">삭제</button>
           </td>
         </tr>
         </tbody>
@@ -49,9 +49,9 @@ export default {
     })
   },
   methods: {
-    onClickRemove: function(testSeq){
+    onClickRemove: function(testGuid){
       axios.post("/removeTest", {
-        'testSeq': testSeq
+        'testGuid': testGuid
       }).then(response => {
         alert('삭제 완료')
         location.reload()

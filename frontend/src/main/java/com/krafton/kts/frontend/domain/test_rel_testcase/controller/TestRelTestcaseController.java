@@ -27,10 +27,10 @@ public class TestRelTestcaseController {
 
     @GetMapping("/testRelTestcaseDerived")
     @ResponseBody
-    public Response testRelTestcaseDerived(@RequestParam(value = "testSeq") int testSeq){
+    public Response testRelTestcaseDerived(@RequestParam(value = "testGuid") String testGuid){
         try {
             Response response = new Response();
-            response.putContext("list", this.service_test_rel_testcase.findTestRelTestcaseDerived(testSeq));
+            response.putContext("list", this.service_test_rel_testcase.findTestRelTestcaseDerived(testGuid));
             return response;
         } catch(Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());

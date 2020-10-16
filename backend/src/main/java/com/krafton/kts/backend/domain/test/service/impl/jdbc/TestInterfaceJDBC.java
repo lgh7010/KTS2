@@ -19,21 +19,21 @@ public class TestInterfaceJDBC extends JdbcCommon implements TestInterface {
     }
 
     @Override
-    public KTS_TEST findTest(int testSeq) {
+    public KTS_TEST findTest(String testGuid) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement("select * from KTS_TEST where testSeq = ? AND deleted = 'N'");
-            pstmt.setInt(1, testSeq);
+            pstmt = conn.prepareStatement("select * from KTS_TEST where testGuid = ? AND deleted = 'N'");
+            pstmt.setString(1, testGuid);
             rs = pstmt.executeQuery();
 
             rs.next();
 
             KTS_TEST test = new KTS_TEST();
-            test.setTestSeq(rs.getInt("testSeq"));
+            test.setTestGuid(rs.getString("testGuid"));
             test.setName(rs.getString("name"));
             test.setDescription(rs.getString("description"));
             test.setDeleted(rs.getString("deleted"));
@@ -60,7 +60,7 @@ public class TestInterfaceJDBC extends JdbcCommon implements TestInterface {
             List<KTS_TEST> tests = new ArrayList<>();
             while(rs.next()){
                 KTS_TEST test = new KTS_TEST();
-                test.setTestSeq(rs.getInt("testSeq"));
+                test.setTestGuid(rs.getString("testGuid"));
                 test.setName(rs.getString("name"));
                 test.setDescription(rs.getString("description"));
                 test.setDeleted(rs.getString("deleted"));
@@ -86,13 +86,13 @@ public class TestInterfaceJDBC extends JdbcCommon implements TestInterface {
             conn.setAutoCommit(false);//트랜잭션 처리
 
             //step 1. KTS_TEST 테이블에서 해당 테스트의 DELETED = Y로 변경
-            pstmt = conn.prepareStatement("update KTS_TEST set deleted = 'Y' where testSeq = ?");
-            pstmt.setInt(1, command.getTestSeq());
+            pstmt = conn.prepareStatement("update KTS_TEST set deleted = 'Y' where testGuid = ?");
+            pstmt.setString(1, command.getTestGuid());
             pstmt.executeUpdate();
 
             //step 2. TEST_REL_TESTCASE 테이블에서 해당하는 TEST_SEQ의 모든 관계내역의 DELETED = Y로 변경
-            pstmt = conn.prepareStatement("update TEST_REL_TESTCASE set deleted = 'Y' where testSeq = ?");
-            pstmt.setInt(1, command.getTestSeq());
+            pstmt = conn.prepareStatement("update TEST_REL_TESTCASE set deleted = 'Y' where testGuid = ?");
+            pstmt.setString(1, command.getTestGuid());
             pstmt.executeUpdate();
 
             conn.commit();

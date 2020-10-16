@@ -22,7 +22,7 @@ public class TestRelTestcaseServiceImpl implements TestRelTestcaseService {
     }
 
     @Override
-    public List<TestRelTestcaseDerived> findTestRelTestcaseDerived(int testSeq) {
-        return this.testRelTestcaseInterface.findTestRelTestcaseDerived(testSeq);
+    public List<TestRelTestcaseDerived> findTestRelTestcaseDerived(String testGuid) {
+        return this.testRelTestcaseInterface.findTestRelTestcaseDerived(testGuid);
     }
 }

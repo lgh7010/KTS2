@@ -22,18 +22,12 @@ public class TestServiceImpl implements TestService {
     }
 
     @Override
-    public KTS_TEST findTest(int testSeq) {
-        if(testSeq < 1){
-            return null;
-        }
-        return this.testInterface.findTest(testSeq);
+    public KTS_TEST findTest(String testGuid) {
+        return this.testInterface.findTest(testGuid);
     }
 
     @Override
     public void removeTest(RemoveTestCommand command) {
-        if(command.getTestSeq() < 1){
-            return;
-        }
         this.testInterface.removeTest(command);
     }
 }

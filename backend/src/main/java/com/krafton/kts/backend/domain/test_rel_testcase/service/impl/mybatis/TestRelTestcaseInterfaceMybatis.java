@@ -13,9 +13,9 @@ public class TestRelTestcaseInterfaceMybatis implements TestRelTestcaseInterface
     private TestRelTestcaseInterfaceMybatisMapper testRelTestcaseInterfaceMybatisMapper;
 
     @Override
-    public List<TestRelTestcaseDerived> findTestRelTestcaseDerived(int testSeq) {
-        System.out.println("findTestRelTestcaseDerived : " + testSeq);
-        return this.testRelTestcaseInterfaceMybatisMapper.findTestRelTestcaseDerived(testSeq);
+    public List<TestRelTestcaseDerived> findTestRelTestcaseDerived(String testGuid) {
+        System.out.println("findTestRelTestcaseDerived : " + testGuid);
+        return this.testRelTestcaseInterfaceMybatisMapper.findTestRelTestcaseDerived(testGuid);
     }
 
     @Override

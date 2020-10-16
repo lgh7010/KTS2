@@ -10,5 +10,5 @@ import java.util.List;
 public interface TestRelTestcaseService {
 
     void saveTestRelTestcase(TestRelTestcaseSaveCommand command);
-    List<TestRelTestcaseDerived> findTestRelTestcaseDerived(int testSeq);
+    List<TestRelTestcaseDerived> findTestRelTestcaseDerived(String testGuid);
 }

@@ -115,7 +115,7 @@ public class TestcaseInterfaceJDBC extends JdbcCommon implements TestcaseInterfa
                 "WHERE propertySeq IN (SELECT * FROM (" +
                 "   SELECT propertySeq FROM KTS_ACTION_PROPERTY WHERE actionGuid IN (" +
                 "       SELECT actionGuid FROM KTS_ACTION WHERE testcaseGuid = ? AND deleted = 'N' GROUP BY actionGuid" +
-                "    ) GROUP BY propertySeq\n" +
+                "    ) GROUP BY propertySeq" +
                 ") AS temp)");
             pstmt.setString(1, command.getTestcaseGuid());
             pstmt.executeUpdate();

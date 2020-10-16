@@ -110,25 +110,14 @@ public class TestcaseInterfaceJDBC extends JdbcCommon implements TestcaseInterfa
             pstmt.executeUpdate();
 
             //step 2. KTS_ACTION과 KTS_ACTION_PROPERTY를 조인하여, 현재 삭제해야 하는 TESTCASE_GUID에 해당하는 ACTION들에 포함된 PROPERTY들의 PROPERTY_SEQ 리스트 확보
-            pstmt = conn.prepareStatement("SELECT propertySeq FROM KTS_ACTION_PROPERTY WHERE actionGuid IN (" +
-                    "SELECT actionGuid FROM KTS_ACTION WHERE testcaseGuid = ? AND deleted = 'N' GROUP BY actionGuid)");
+            pstmt = conn.prepareStatement(
+            "UPDATE KTS_ACTION_PROPERTY SET deleted = 'Y' " +
+                "WHERE propertySeq IN (SELECT * FROM (" +
+                "   SELECT propertySeq FROM KTS_ACTION_PROPERTY WHERE actionGuid IN (" +
+                "       SELECT actionGuid FROM KTS_ACTION WHERE testcaseGuid = ? AND deleted = 'N' GROUP BY actionGuid" +
+                "    ) GROUP BY propertySeq\n" +
+                ") AS temp)");
             pstmt.setString(1, command.getTestcaseGuid());
-            ResultSet rs = pstmt.executeQuery();
-            List<Integer> propertySeqList = new ArrayList<>();
-            while(rs.next()){
-                propertySeqList.add(rs.getInt(1));
-            }
-            StringBuilder builder = new StringBuilder();
-            Iterator<Integer> iter = propertySeqList.iterator();
-            while(iter.hasNext()){
-                builder.append(iter.next());
-                if(iter.hasNext()){
-                    builder.append(",");
-                }
-            }
-
-            //step 3. KTS_ACTION_PROPERTY에서 위에서 구한 SEQ에 해당하는 PROPERTY들 삭제 처리
-            pstmt = conn.prepareStatement("UPDATE KTS_ACTION_PROPERTY SET deleted = 'Y' WHERE propertySeq IN (" + builder.toString() + ")");
             pstmt.executeUpdate();
 
             //step 4. KTS_ACTION에서 해당 TESTCASE_GUID를 가지는 로우 삭제 처리

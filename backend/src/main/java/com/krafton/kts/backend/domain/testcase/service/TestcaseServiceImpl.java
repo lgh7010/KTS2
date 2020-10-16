@@ -2,7 +2,7 @@ package com.krafton.kts.backend.domain.testcase.service;
 
 import com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand;
 import com.krafton.kts.backend.domain.testcase.domain.db.KTS_TESTCASE;
-import com.krafton.kts.backend.domain.testcase.service.interfaces.TestcaseInterface;
+import com.krafton.kts.backend.domain.testcase.service.impl.TestcaseInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

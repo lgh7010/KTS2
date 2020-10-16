@@ -1,4 +1,4 @@
-package com.krafton.kts.backend.domain.test_rel_testcase.service.interfaces;
+package com.krafton.kts.backend.domain.test_rel_testcase.service.impl;
 
 import com.krafton.kts.backend.common.JdbcCommon;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.TestRelTestcaseSaveCommand;

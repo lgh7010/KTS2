@@ -1,4 +1,4 @@
-package com.krafton.kts.backend.domain.testcase.service.interfaces;
+package com.krafton.kts.backend.domain.testcase.service.impl;
 
 import com.krafton.kts.backend.common.JdbcCommon;
 import com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand;

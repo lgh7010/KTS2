@@ -2,7 +2,7 @@ package com.krafton.kts.backend.domain.test.service;
 
 import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
 import com.krafton.kts.backend.domain.test.domain.db.KTS_TEST;
-import com.krafton.kts.backend.domain.test.service.interfaces.TestInterface;
+import com.krafton.kts.backend.domain.test.service.impl.TestInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -34,6 +34,6 @@ public class TestServiceImpl implements TestService {
         if(command.getTestSeq() < 1){
             return;
         }
-        this.testInterface.RemoveTest(command);
+        this.testInterface.removeTest(command);
     }
 }

@@ -1,8 +1,9 @@
-package com.krafton.kts.backend.domain.test.service.interfaces;
+package com.krafton.kts.backend.domain.test.service.impl.jdbc;
 
 import com.krafton.kts.backend.common.JdbcCommon;
 import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
 import com.krafton.kts.backend.domain.test.domain.db.KTS_TEST;
+import com.krafton.kts.backend.domain.test.service.impl.TestInterface;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -76,7 +77,7 @@ public class TestInterfaceJDBC extends JdbcCommon implements TestInterface {
     }
 
     @Override
-    public void RemoveTest(RemoveTestCommand command) {
+    public void removeTest(RemoveTestCommand command) {
         Connection conn = null;
         PreparedStatement pstmt = null;
 

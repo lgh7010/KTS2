@@ -1,8 +1,8 @@
 package com.krafton.kts.backend.cross.service;
 
 import com.krafton.kts.backend.domain.action.domain.command.SaveCurrentTestcaseActionsCommand;
-import com.krafton.kts.backend.domain.action.service.interfaces.ActionInterface;
-import com.krafton.kts.backend.domain.testcase.service.interfaces.TestcaseInterface;
+import com.krafton.kts.backend.domain.action.service.impl.ActionInterface;
+import com.krafton.kts.backend.domain.testcase.service.impl.TestcaseInterface;
 import org.springframework.transaction.annotation.Transactional;
 
 public class CrossDomainInterfaceImpl implements CrossDomainInterface {

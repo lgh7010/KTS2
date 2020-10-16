@@ -2,7 +2,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.krafton.kts.backend.domain.test.service.interfaces.TestInterfaceMybatis">
+<mapper namespace="com.krafton.kts.backend.domain.test.service.impl.mybatis.TestInterfaceMybatisMapper">
     <select id="findAllTest" resultType="hashmap">
         SELECT * FROM KTS_TEST;
     </select>

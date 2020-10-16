@@ -1,7 +1,6 @@
 package com.krafton.kts.frontend.domain.test.controller;
 
 import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
-import com.krafton.kts.backend.domain.test.service.interfaces.TestInterfaceMybatis;
 import com.krafton.kts.frontend.common.ErrorCode;
 import com.krafton.kts.frontend.common.Response;
 import com.krafton.kts.backend.domain.test.service.TestService;
@@ -14,12 +13,10 @@ import org.springframework.web.bind.annotation.*;
 public class TestController {
 
     private final TestService testService;
-    private final TestInterfaceMybatis testInterfaceMybatis;
 
     @GetMapping("/findAllTest")
     @ResponseBody
     public Response findAllTest(){
-        System.out.println(testInterfaceMybatis.findAllTest());
         Response response = new Response();
         response.putContext("list", this.testService.findAllTest());
         return response;

@@ -1,4 +1,4 @@
-package com.krafton.kts.backend.domain.action.service.interfaces;
+package com.krafton.kts.backend.domain.action.service.impl;
 
 import com.krafton.kts.backend.domain.action.domain.command.SavePropertiesCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_PROPERTY;

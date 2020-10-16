@@ -3,7 +3,9 @@ package com.krafton.kts.backend.domain.test.service.impl.mybatis;
 import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
 import com.krafton.kts.backend.domain.test.domain.db.KTS_TEST;
 import com.krafton.kts.backend.domain.test.service.impl.TestInterface;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -14,16 +16,20 @@ public class TestInterfaceMybatis implements TestInterface {
 
     @Override
     public KTS_TEST findTest(int testSeq) {
+        System.out.println("findTest : " + testSeq);
         return this.testInterfaceMybatisMapper.findTest(testSeq);
     }
 
     @Override
     public List<KTS_TEST> findAllTest() {
+        System.out.println("findAllTest");
         return this.testInterfaceMybatisMapper.findAllTest();
     }
 
     @Override
-    public void removeTest(RemoveTestCommand command) {
+    @Transactional
+    public void removeTest(@Param("removeTestCommand")RemoveTestCommand command) {
+        System.out.println(command);
         this.testInterfaceMybatisMapper.removeTest(command);
     }
 }

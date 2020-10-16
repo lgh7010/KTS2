@@ -1,11 +1,13 @@
 package com.krafton.kts.backend.action.service;
 
+import com.krafton.kts.backend.action.domain.command.SaveCurrentTestcaseActionsCommand;
 import com.krafton.kts.backend.action.domain.command.SavePropertiesCommand;
 import com.krafton.kts.backend.action.domain.db.KTS_ACTION;
 import com.krafton.kts.backend.action.domain.db.KTS_ACTION_TEMPLATE;
 import com.krafton.kts.backend.action.domain.db.KTS_PROPERTY;
 import com.krafton.kts.backend.action.domain.db.KTS_PROPERTY_TEMPLATE;
 import com.krafton.kts.backend.action.service.interfaces.*;
+import com.krafton.kts.backend.testcase.service.interfaces.TestcaseInterface;
 
 import java.util.List;
 import java.util.Map;
@@ -13,13 +15,16 @@ import java.util.Map;
 public class ActionServiceImpl implements ActionService {
 
     private ActionInterface actionInterface;
+    private TestcaseInterface testcaseInterface;
     private PropertyInterface propertyInterface;
 
     public ActionServiceImpl(
             ActionInterface actionInterface,
+            TestcaseInterface testcaseInterface,
             PropertyInterface findPropertyService
     ){
         this.actionInterface = actionInterface;
+        this.testcaseInterface = testcaseInterface;
         this.propertyInterface = findPropertyService;
     }
 
@@ -44,8 +49,9 @@ public class ActionServiceImpl implements ActionService {
     }
 
     @Override
-    public void saveAction(Map<String, KTS_ACTION> map, List<String> removeList) {
-        this.actionInterface.saveAction(map, removeList);
+    public void saveAction(SaveCurrentTestcaseActionsCommand command) {
+        this.actionInterface.saveAction(command.getCurrentTestcaseActions(), command.getRemoveActionGuidList());
+        this.testcaseInterface.addTestcase(command.getTestcase());
     }
 
     @Override

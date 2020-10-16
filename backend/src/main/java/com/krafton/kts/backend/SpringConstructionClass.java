@@ -69,6 +69,7 @@ public class SpringConstructionClass {
     public ActionService actionService(){
         return new ActionServiceImpl(
                 actionInterface(),
+                testcaseInterface(),
                 propertyInterface()
         );
     }

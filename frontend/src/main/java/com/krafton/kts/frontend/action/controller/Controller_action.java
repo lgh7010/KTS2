@@ -55,10 +55,7 @@ public class Controller_action {
     @ResponseBody
     public Response saveCurrentTestcaseActions(@RequestBody SaveCurrentTestcaseActionsCommand command){
         try {
-
-            this.actionService.saveAction(command.getCurrentTestcaseActions(), command.getRemoveActionGuidList());
-            this.testcaseService.addTestcase(command.getTestcase());
-
+            this.actionService.saveAction(command);
             return new Response();
         } catch(Exception e){
             return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());

@@ -16,20 +16,17 @@ public class TestInterfaceMybatis implements TestInterface {
 
     @Override
     public KTS_TEST findTest(int testSeq) {
-        System.out.println("findTest : " + testSeq);
         return this.testInterfaceMybatisMapper.findTest(testSeq);
     }
 
     @Override
     public List<KTS_TEST> findAllTest() {
-        System.out.println("findAllTest");
         return this.testInterfaceMybatisMapper.findAllTest();
     }
 
     @Override
     @Transactional
     public void removeTest(@Param("removeTestCommand")RemoveTestCommand command) {
-        System.out.println(command);
         this.testInterfaceMybatisMapper.removeTest(command);
     }
 }

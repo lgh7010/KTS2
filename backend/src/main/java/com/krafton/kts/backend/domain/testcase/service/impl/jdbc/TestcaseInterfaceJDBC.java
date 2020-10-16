@@ -1,8 +1,9 @@
-package com.krafton.kts.backend.domain.testcase.service.impl;
+package com.krafton.kts.backend.domain.testcase.service.impl.jdbc;
 
 import com.krafton.kts.backend.common.JdbcCommon;
 import com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand;
 import com.krafton.kts.backend.domain.testcase.domain.db.KTS_TESTCASE;
+import com.krafton.kts.backend.domain.testcase.service.impl.TestcaseInterface;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

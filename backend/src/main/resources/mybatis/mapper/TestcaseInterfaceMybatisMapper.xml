@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.krafton.kts.backend.domain.testcase.service.impl.mybatis.TestcaseInterfaceMybatisMapper">
+    <insert id="addTestcase" parameterType="com.krafton.kts.backend.domain.testcase.domain.db.KTS_TESTCASE">
+        INSERT INTO KTS_TESTCASE (testcaseGuid, name, description, deleted)
+        VALUES (#{testcaseGuid}, #{name}, #{description}, 'N')
+        ON DUPLICATE KEY UPDATE name = VALUES(name), description = VALUES(description);
+    </insert>
+
+    <select id="findAll" resultType="com.krafton.kts.backend.domain.testcase.domain.db.KTS_TESTCASE">
+        SELECT * FROM KTS_TESTCASE WHERE deleted = 'N';
+    </select>
+
+    <select id="findTestcase" resultType="com.krafton.kts.backend.domain.testcase.domain.db.KTS_TESTCASE">
+        SELECT * FROM KTS_TESTCASE WHERE testcaseGuid = #{testcaseGuid} AND deleted = 'N';
+    </select>
+
+    <update id="removeTestcase" parameterType="com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand">
+        UPDATE TEST_REL_TESTCASE SET deleted = 'Y' WHERE testcaseGuid = #{testcaseGuid};
+
+        UPDATE KTS_ACTION_PROPERTY SET deleted = 'Y'
+        WHERE propertySeq IN (SELECT * FROM (
+            SELECT propertySeq FROM KTS_ACTION_PROPERTY WHERE actionGuid IN (
+                SELECT actionGuid FROM KTS_ACTION WHERE testcaseGuid = #{testcaseGuid} AND deleted = 'N' GROUP BY actionGuid
+            ) GROUP BY propertySeq
+        ) AS temp);
+
+        UPDATE KTS_ACTION SET deleted = 'Y' WHERE testcaseGuid = #{testcaseGuid};
+
+        UPDATE KTS_TESTCASE SET deleted = 'Y' WHERE testcaseGuid = #{testcaseGuid};
+    </update>
+</mapper>

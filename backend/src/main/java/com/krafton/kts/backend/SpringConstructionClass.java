@@ -16,6 +16,8 @@ import com.krafton.kts.backend.domain.test_rel_testcase.service.impl.TestRelTest
 import com.krafton.kts.backend.domain.testcase.service.TestcaseService;
 import com.krafton.kts.backend.domain.testcase.service.TestcaseServiceImpl;
 import com.krafton.kts.backend.domain.testcase.service.impl.*;
+import com.krafton.kts.backend.domain.testcase.service.impl.jdbc.TestcaseInterfaceJDBC;
+import com.krafton.kts.backend.domain.testcase.service.impl.mybatis.TestcaseInterfaceMybatis;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -39,8 +41,8 @@ public class SpringConstructionClass {
     }
     @Bean
     public TestInterface testInterface(){
-        //return new TestInterfaceJDBC(dataSource); //JDBC 이용
-        return new TestInterfaceMybatis();          //Mybatis 이용
+        //return new TestInterfaceJDBC(dataSource);         //JDBC 이용
+        return new TestInterfaceMybatis();                  //Mybatis 이용
     }
 
     //testcase
@@ -52,7 +54,8 @@ public class SpringConstructionClass {
     }
     @Bean
     public TestcaseInterface testcaseInterface(){
-        return new TestcaseInterfaceJDBC(dataSource);
+        //return new TestcaseInterfaceJDBC(dataSource);     //JDBC 이용
+        return new TestcaseInterfaceMybatis();              //Mybatis 이용
     }
 
     //test_rel_testcase

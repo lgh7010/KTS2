@@ -13,6 +13,7 @@
 
     <update id="removeTest" parameterType="com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand">
         UPDATE KTS_TEST SET deleted = 'Y' WHERE testSeq = #{testSeq};
+
         UPDATE TEST_REL_TESTCASE SET deleted = 'Y' WHERE testSeq = #{testSeq};
     </update>
 

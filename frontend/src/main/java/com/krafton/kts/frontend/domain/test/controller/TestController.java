@@ -1,7 +1,7 @@
 package com.krafton.kts.frontend.domain.test.controller;
 
 import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
-import com.krafton.kts.backend.domain.test.service.MyBatisService;
+import com.krafton.kts.backend.domain.test.service.interfaces.TestInterfaceMybatis;
 import com.krafton.kts.frontend.common.ErrorCode;
 import com.krafton.kts.frontend.common.Response;
 import com.krafton.kts.backend.domain.test.service.TestService;
@@ -13,16 +13,15 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class TestController {
 
-    private final TestService testListService;
-    private final MyBatisService myBatisService;
+    private final TestService testService;
+    private final TestInterfaceMybatis testInterfaceMybatis;
 
     @GetMapping("/findAllTest")
     @ResponseBody
     public Response findAllTest(){
-        System.out.println(this.myBatisService.getTest());
-
+        System.out.println(testInterfaceMybatis.findAllTest());
         Response response = new Response();
-        response.putContext("list", this.testListService.findAllTest());
+        response.putContext("list", this.testService.findAllTest());
         return response;
     }
 
@@ -30,7 +29,7 @@ public class TestController {
     @ResponseBody
     public Response findTest(@RequestParam int testSeq){
         Response response = new Response();
-        response.putContext("test", this.testListService.findTest(testSeq));
+        response.putContext("test", this.testService.findTest(testSeq));
         return response;
     }
 
@@ -38,7 +37,7 @@ public class TestController {
     @ResponseBody
     public Response removeTest(@RequestBody RemoveTestCommand command){
         try {
-            this.testListService.removeTest(command);
+            this.testService.removeTest(command);
             return new Response();
         } catch(Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());

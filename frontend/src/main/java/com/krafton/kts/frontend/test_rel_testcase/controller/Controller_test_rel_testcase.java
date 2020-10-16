@@ -1,7 +1,7 @@
 package com.krafton.kts.frontend.test_rel_testcase.controller;
 
 import com.krafton.kts.backend.test_rel_testcase.domain.command.TestRelTestcaseSaveCommand;
-import com.krafton.kts.backend.test_rel_testcase.service.Service_test_rel_testcase;
+import com.krafton.kts.backend.test_rel_testcase.service.TestRelTestcaseService;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class Controller_test_rel_testcase {
 
-    private final Service_test_rel_testcase service_test_rel_testcase;
+    private final TestRelTestcaseService service_test_rel_testcase;
 
     @PostMapping("/testRelTestcaseSave")
     @ResponseBody

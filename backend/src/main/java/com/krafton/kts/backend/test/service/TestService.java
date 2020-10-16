@@ -7,7 +7,7 @@ import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
-public interface Service_test {
+public interface TestService {
     List<KTS_TEST> findAllTest();
     KTS_TEST findTest(int testSeq);
     void removeTest(RemoveTestCommand command);

@@ -1,27 +1,23 @@
 package com.krafton.kts.backend;
 
-import com.krafton.kts.backend.action.repository.RepoJdbc_action;
-import com.krafton.kts.backend.action.repository.Repo_action;
-import com.krafton.kts.backend.action.service.ServiceImpl_action;
-import com.krafton.kts.backend.action.service.Service_action;
-import com.krafton.kts.backend.action.repository.RepoJdbc_property;
-import com.krafton.kts.backend.action.repository.Repo_property;
-import com.krafton.kts.backend.action.service.ServiceImpl_property;
-import com.krafton.kts.backend.action.service.Service_property;
-import com.krafton.kts.backend.test.service.ServiceImpl_test;
-import com.krafton.kts.backend.test.service.Service_test;
+import com.krafton.kts.backend.action.service.ActionService;
+import com.krafton.kts.backend.action.service.ActionServiceImpl;
+import com.krafton.kts.backend.action.service.internal.*;
+import com.krafton.kts.backend.test.service.TestServiceImpl;
+import com.krafton.kts.backend.test.service.TestService;
 import com.krafton.kts.backend.test.service.internal.FindTestService;
 import com.krafton.kts.backend.test.service.internal.FindTestServiceJDBC;
 import com.krafton.kts.backend.test.service.internal.RemoveTestService;
 import com.krafton.kts.backend.test.service.internal.RemoveTestServiceJDBC;
-import com.krafton.kts.backend.test_rel_testcase.repository.RepoJdbc_test_rel_testcase;
-import com.krafton.kts.backend.test_rel_testcase.repository.Repo_test_rel_testcase;
-import com.krafton.kts.backend.test_rel_testcase.service.ServiceImpl_test_rel_testcase;
-import com.krafton.kts.backend.test_rel_testcase.service.Service_test_rel_testcase;
-import com.krafton.kts.backend.testcase.repository.RepoJdbc_testcase;
-import com.krafton.kts.backend.testcase.repository.Repo_testcase;
-import com.krafton.kts.backend.testcase.service.Service_testcase;
-import com.krafton.kts.backend.testcase.service.ServiceImpl_testcase;
+import com.krafton.kts.backend.test_rel_testcase.service.TestRelTestcaseServiceImpl;
+import com.krafton.kts.backend.test_rel_testcase.service.TestRelTestcaseService;
+import com.krafton.kts.backend.test_rel_testcase.service.internal.FindTestRelTestcaseService;
+import com.krafton.kts.backend.test_rel_testcase.service.internal.FindTestRelTestcaseServiceJDBC;
+import com.krafton.kts.backend.test_rel_testcase.service.internal.SaveTestRelTestcaseService;
+import com.krafton.kts.backend.test_rel_testcase.service.internal.SaveTestRelTestcaseServiceJDBC;
+import com.krafton.kts.backend.testcase.service.TestcaseService;
+import com.krafton.kts.backend.testcase.service.TestcaseServiceImpl;
+import com.krafton.kts.backend.testcase.service.internal.*;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -38,6 +34,13 @@ public class SpringConstructionClass {
 
     //test
     @Bean
+    public TestService service_test(){
+        return new TestServiceImpl(
+                removeTest(),
+                findTestService()
+        );
+    }
+    @Bean
     public RemoveTestService removeTest(){
         return new RemoveTestServiceJDBC(dataSource);
     }
@@ -45,48 +48,80 @@ public class SpringConstructionClass {
     public FindTestService findTestService(){
         return new FindTestServiceJDBC(dataSource);
     }
-    @Bean
-    public Service_test service_test(){
-        return new ServiceImpl_test(removeTest(), findTestService());
-    }
 
     //testcase
     @Bean
-    public Repo_testcase repo_testcase(){
-        return new RepoJdbc_testcase(dataSource);
+    public TestcaseService service_testcase(){
+        return new TestcaseServiceImpl(
+                addTestcaseService(),
+                findTestcaseService(),
+                removeTestcaseService()
+        );
     }
     @Bean
-    public Service_testcase service_testcase(){
-        return new ServiceImpl_testcase(repo_testcase());
+    public AddTestcaseService addTestcaseService(){
+        return new AddTestcaseServiceJDBC(dataSource);
+    }
+    @Bean
+    public FindTestcaseService findTestcaseService(){
+        return new FindTestcaseServiceJDBC(dataSource);
+    }
+    @Bean
+    public RemoveTestcaseService removeTestcaseService(){
+        return new RemoveTestcaseServiceJDBC(dataSource);
     }
 
     //test_rel_testcase
     @Bean
-    public Repo_test_rel_testcase repo_test_rel_testcase(){
-        return new RepoJdbc_test_rel_testcase(dataSource);
+    public TestRelTestcaseService service_test_rel_testcase(){
+        return new TestRelTestcaseServiceImpl(
+                saveTestRelTestcaseService(),
+                findTestRelTestcaseService()
+        );
     }
     @Bean
-    public Service_test_rel_testcase service_test_rel_testcase(){
-        return new ServiceImpl_test_rel_testcase(repo_test_rel_testcase());
-    }
-
-    //action
-    @Bean
-    public Repo_action repo_action(){
-        return new RepoJdbc_action(dataSource);
+    public SaveTestRelTestcaseService saveTestRelTestcaseService(){
+        return new SaveTestRelTestcaseServiceJDBC(dataSource);
     }
     @Bean
-    public Service_action service_action(){
-        return new ServiceImpl_action(repo_action());
+    public FindTestRelTestcaseService findTestRelTestcaseService(){
+        return new FindTestRelTestcaseServiceJDBC(dataSource);
     }
 
-    //property
+    //action & property
     @Bean
-    public Repo_property repo_property(){
-        return new RepoJdbc_property(dataSource);
+    public ActionService actionService(){
+        return new ActionServiceImpl(
+                findActionService(),
+                findPropertyService(),
+                getPropertyTemplateService(),
+                getActionTemplateService(),
+                saveActionService(),
+                savePropertyService()
+        );
     }
     @Bean
-    public Service_property service_property(){
-        return new ServiceImpl_property(repo_property());
+    public FindActionService findActionService(){
+        return new FindActionServiceJDBC(dataSource);
+    }
+    @Bean
+    public FindPropertyService findPropertyService(){
+        return new FindPropertyServiceJDBC(dataSource);
+    }
+    @Bean
+    public GetActionTemplateService getActionTemplateService(){
+        return new GetActionTemplateServiceJDBC(dataSource);
+    }
+    @Bean
+    public GetPropertyTemplateService getPropertyTemplateService(){
+        return new GetPropertyTemplateServiceJDBC(dataSource);
+    }
+    @Bean
+    public SaveActionService saveActionService(){
+        return new SaveActionServiceJDBC(dataSource);
+    }
+    @Bean
+    public SavePropertyService savePropertyService(){
+        return new SavePropertyServiceJDBC(dataSource);
     }
 }

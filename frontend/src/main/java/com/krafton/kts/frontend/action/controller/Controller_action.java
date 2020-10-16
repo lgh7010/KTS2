@@ -1,9 +1,10 @@
 package com.krafton.kts.frontend.action.controller;
 
+import com.krafton.kts.backend.action.domain.command.SavePropertiesCommand;
 import com.krafton.kts.backend.action.domain.db.KTS_ACTION;
 import com.krafton.kts.backend.action.domain.command.SaveCurrentTestcaseActionsCommand;
-import com.krafton.kts.backend.action.service.Service_action;
-import com.krafton.kts.backend.testcase.service.Service_testcase;
+import com.krafton.kts.backend.action.service.ActionService;
+import com.krafton.kts.backend.testcase.service.TestcaseService;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;
 import lombok.RequiredArgsConstructor;
@@ -16,14 +17,14 @@ import java.util.*;
 @RequiredArgsConstructor
 public class Controller_action {
 
-    private final Service_action service_action;
-    private final Service_testcase service_testcase;
+    private final ActionService actionService;
+    private final TestcaseService service_testcase;
 
     @GetMapping("/currentTestcaseActions")
     @ResponseBody
     public Response currentTestcaseActions(@RequestParam(value = "testcaseGuid") String testcaseGuid){
         try {
-            List<KTS_ACTION> list = this.service_action.findActionsByTESTCASE_GUID(testcaseGuid);
+            List<KTS_ACTION> list = this.actionService.findAction(testcaseGuid);
             Map<String, KTS_ACTION> ret = new HashMap<>();
             for (Iterator<KTS_ACTION> iter = list.iterator(); iter.hasNext();){
                 KTS_ACTION tc = iter.next();
@@ -43,7 +44,7 @@ public class Controller_action {
     public Response actionTemplates(){
         try {
             Response response = new Response();
-            response.putContext("actionTemplates", this.service_action.findAllTemplate());
+            response.putContext("actionTemplates", this.actionService.getActionTemplate());
             return response;
         } catch(Exception e){
             return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
@@ -55,9 +56,49 @@ public class Controller_action {
     public Response saveCurrentTestcaseActions(@RequestBody SaveCurrentTestcaseActionsCommand command){
         try {
 
-            this.service_action.saveActionList(command.getCurrentTestcaseActions(), command.getRemoveActionGuidList());
+            this.actionService.saveAction(command.getCurrentTestcaseActions(), command.getRemoveActionGuidList());
+            //this.service_action.saveActionList(command.getCurrentTestcaseActions(), command.getRemoveActionGuidList());
             this.service_testcase.addTestcase(command.getTestcase());
 
+            return new Response();
+        } catch(Exception e){
+            return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
+        }
+    }
+
+
+
+
+
+    @GetMapping("/propertiesTemplate")
+    @ResponseBody
+    public Response propertiesTemplate(@RequestParam(value = "actionId") String actionId){
+        try {
+            Response response = new Response();
+            response.putContext("list", this.actionService.getPropertyTemplate(actionId));
+            return response;
+        } catch(Exception e) {
+            return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
+        }
+    }
+
+    @GetMapping("/properties")
+    @ResponseBody
+    public Response properties(@RequestParam(value = "actionGuid") String actionGuid){
+        try {
+            Response response = new Response();
+            response.putContext("list", this.actionService.findProperty(actionGuid));
+            return response;
+        } catch(Exception e) {
+            return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());
+        }
+    }
+
+    @PostMapping("/saveProperties")
+    @ResponseBody
+    public Response saveProperties(@RequestBody SavePropertiesCommand command){
+        try {
+            this.actionService.saveProperties(command);
             return new Response();
         } catch(Exception e){
             return new Response(ERROR_CODE.ERR_COMMON, e.getMessage());

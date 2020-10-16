@@ -1,7 +1,7 @@
 package com.krafton.kts.frontend.testcase.controller;
 
 import com.krafton.kts.backend.testcase.domain.command.RemoveTestcaseCommand;
-import com.krafton.kts.backend.testcase.service.Service_testcase;
+import com.krafton.kts.backend.testcase.service.TestcaseService;
 import com.krafton.kts.frontend.common.ERROR_CODE;
 import com.krafton.kts.frontend.common.Response;
 import lombok.RequiredArgsConstructor;
@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequiredArgsConstructor
 public class Controller_testcase {
 
-    private final Service_testcase service_testcase;
+    private final TestcaseService service_testcase;
 
     @GetMapping("/testcaseList")
     @ResponseBody

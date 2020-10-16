@@ -8,13 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
 
-public class ServiceImpl_test implements Service_test {
+public class TestServiceImpl implements TestService {
 
     private RemoveTestService removeTestService;
     private FindTestService findTestService;
 
     @Autowired
-    public ServiceImpl_test(RemoveTestService removeTestService, FindTestService findTestService){
+    public TestServiceImpl(RemoveTestService removeTestService, FindTestService findTestService){
         this.removeTestService = removeTestService;
         this.findTestService = findTestService;
     }

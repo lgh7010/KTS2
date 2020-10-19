@@ -10,7 +10,7 @@
         opacity: 0.5;
         z-index:10;"/>
 
-    <div id="addTestcaseToTestLayer"
+    <div class="container" id="addTestcaseToTestLayer"
          style="display: none;
         width: 500px;
         height: 500px;
@@ -22,7 +22,7 @@
         background-color: white;
         z-index:11;">
       <button v-on:click="onClickCloseTestcaseToTestLayer">닫기</button>
-      <table>
+      <table class="table table-hover">
         <thead>
         <tr>
           <th>테스트케이스 이름</th>
@@ -34,14 +34,14 @@
         <tr v-for="testcase in this.testcaseList">
           <td>{{testcase.name}}</td>
           <td>{{testcase.description}}</td>
-          <td><button v-on:click="onClickTestcaseAddToTest(testcase)">추가</button></td>
+          <td><button class="btn btn-primary" v-on:click="onClickTestcaseAddToTest(testcase)">추가</button></td>
         </tr>
         </tbody>
       </table>
     </div>
 
-    <div>
-      <table>
+    <div class="container">
+      <table class="table table-hover">
         <thead>
         <tr>
           <th>테스트 이름</th>
@@ -56,7 +56,7 @@
         </tbody>
       </table>
 
-      <table>
+      <table class="table table-hover">
         <thead>
         <tr>
           <th>순서</th>
@@ -71,10 +71,10 @@
           <td>{{rel.name}}</td>
           <td>{{rel.description}}</td>
           <td>
-            <button v-on:click="moveUp(index)">위로</button>
-            <button v-on:click="moveDown(index)">아래로</button>
-            <router-link :to="{name: 'TestcaseEdit', params: {testcaseGuid: rel.testcaseGuid}}"><button>편집</button></router-link>
-            <button v-on:click="removeTestcase(index)">제거</button>
+            <button class="btn btn-secondary" v-on:click="moveUp(index)">위로</button>
+            <button class="btn btn-secondary" v-on:click="moveDown(index)">아래로</button>
+            <router-link :to="{name: 'TestcaseEdit', params: {testcaseGuid: rel.testcaseGuid}}"><button class="btn btn-info">편집</button></router-link>
+            <button class="btn btn-danger" v-on:click="removeTestcase(index)">제거</button>
           </td>
         </tr>
         </tbody>
@@ -83,9 +83,9 @@
 
     <hr>
 
-    <button v-on:click="onClickAdd">추가</button>
-    <button v-on:click="onClickSave">저장</button>
-    <router-link :to="{name: 'TestList'}"><button>닫기</button></router-link>
+    <button class="btn btn-primary" v-on:click="onClickAdd">추가</button>
+    <button class="btn btn-success" v-on:click="onClickSave">저장</button>
+    <router-link :to="{name: 'TestList'}"><button class="btn btn-secondary">닫기</button></router-link>
   </div>
 </template>
 

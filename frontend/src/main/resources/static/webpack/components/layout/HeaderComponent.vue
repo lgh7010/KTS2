@@ -1,19 +1,24 @@
 <template>
-  <div>
-    <button v-on:click="onClickHome()">홈으로</button>
-    <router-link :to="{name: 'TestList'}"><button>테스트 목록</button></router-link>
-    <router-link :to="{name: 'TestcaseList'}"><button>테스트케이스 목록</button></router-link>
+  <div class="navbar-nav bg-gradient-primary sidebar-dark accordion">
+    <table>
+      <thead>
+        <th>
+          <router-link :to="{name: 'Home'}" class="nav-item"><a class="nav-link"><span>홈으로</span></a></router-link>
+        </th>
+        <th>
+          <router-link :to="{name: 'TestList'}" class="nav-item"><a class="nav-link"><span>테스트</span></a></router-link>
+        </th>
+        <th>
+          <router-link :to="{name: 'TestcaseList'}" class="nav-item"><a class="nav-link"><span>테스트케이스</span></a></router-link>
+        </th>
+      </thead>
+    </table>
   </div>
 </template>
 
 <script>
 export default {
-  name: "HeaderComponent",
-  methods: {
-    onClickHome: function(){
-      this.$router.push('/')
-    }
-  }
+  name: "HeaderComponent"
 }
 </script>
 

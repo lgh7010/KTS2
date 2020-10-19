@@ -1,30 +1,41 @@
 <template>
   <div>
-    <router-link :to="{name: 'TestEdit', params: {testGuid: 'DUMMY'}}"><button>추가</button></router-link>
+    <table>
 
-    <div>
-      <table>
-        <thead>
-        <tr>
-          <th>순서</th>
-          <th>테스트 이름</th>
-          <th>설명</th>
-          <th>상호작용</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="(test, index) in this.testList">
-          <td>{{index + 1}}</td>
-          <td>{{test.name}}</td>
-          <td>{{test.description}}</td>
-          <td>
-            <router-link :to="{name: 'TestEdit', params: { testGuid: test.testGuid }}"><button>편집</button></router-link>
-            <button v-on:click="onClickRemove(test.testGuid)">삭제</button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+      <th>
+        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion">
+          <router-link :to="{name: 'TestEdit', params: {testGuid: 'DUMMY'}}"><button class="btn btn-primary">추가</button></router-link>
+        </ul>
+      </th>
+
+      <th>
+        <div class="d-flex flex-column">
+          <div class="container-fluid">
+            <table class="table table-hover">
+              <thead>
+              <tr>
+                <th>순서</th>
+                <th>테스트 이름</th>
+                <th>설명</th>
+                <th>상호작용</th>
+              </tr>
+              </thead>
+              <tbody>
+              <tr v-for="(test, index) in this.testList">
+                <td>{{index + 1}}</td>
+                <td>{{test.name}}</td>
+                <td>{{test.description}}</td>
+                <td>
+                  <router-link :to="{name: 'TestEdit', params: { testGuid: test.testGuid }}"><button class="btn btn-info">편집</button></router-link>
+                  <button class="btn btn-danger" v-on:click="onClickRemove(test.testGuid)">삭제</button>
+                </td>
+              </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </th>
+    </table>
 
   </div>
 </template>

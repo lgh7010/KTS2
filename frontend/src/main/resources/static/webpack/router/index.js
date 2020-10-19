@@ -11,6 +11,10 @@ Vue.use(Router)
 const router = new Router({
     routes: [
         {
+            path: '/',
+            name: 'Home',
+        },
+        {
             path: '/test/list',
             name: 'TestList',
             component: TestListComponent

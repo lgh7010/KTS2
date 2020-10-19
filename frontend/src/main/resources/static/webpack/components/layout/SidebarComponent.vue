@@ -1,7 +1,5 @@
 <template>
-  <div>
-    이건 사이드바
-  </div>
+
 </template>
 
 <script>

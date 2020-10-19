@@ -28,12 +28,12 @@
             {{actionTemplate.actionId}}
           </option>
         </select>
-        <button v-on:click="onClickActionSave">저장</button>
-        <button v-on:click="actionClose">닫기</button>
+        <button class="btn btn-success" v-on:click="onClickActionSave">저장</button>
+        <button class="btn btn-secondary" v-on:click="actionClose">닫기</button>
       </div>
 
       <div>
-        <table>
+        <table class="table">
           <thead>
             <tr>
               <th>속성</th>
@@ -54,9 +54,9 @@
     <div id="flowchart">
       <td><input id="testcaseName" type="text"></td>
       <td><input id="testcaseDescription" type="text"></td>
-      <button v-on:click="onClickTestcaseSave()">저장</button>
-      <button v-on:click="onClickAdd()">추가</button>
-      <button v-on:click="goBack()">닫기</button>
+      <button class="btn btn-success" v-on:click="onClickTestcaseSave()">저장</button>
+      <button class="btn btn-primary" v-on:click="onClickAdd()">추가</button>
+      <button class="btn btn-secondary" v-on:click="goBack()">닫기</button>
 
       <div v-for="action in this.currentTestcaseActions"
            v-bind:id="action.actionGuid" v-bind:actionGuid="action.actionGuid" v-bind:nextActionGuid="action.nextActionGuid"
@@ -64,8 +64,8 @@
         height:100px;
         background-color:gray;
         position: absolute;">
-        <button v-on:click="actionOpen(action)">편집</button>
-        <button v-on:click="onClickRemove(action)">삭제</button>
+        <button class="btn btn-info" v-on:click="actionOpen(action)">편집</button>
+        <button class="btn btn-danger" v-on:click="onClickRemove(action)">삭제</button>
         <hr>
         {{action.description}}
       </div>

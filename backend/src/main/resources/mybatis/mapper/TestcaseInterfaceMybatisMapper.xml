@@ -2,7 +2,7 @@
 
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
-<mapper namespace="com.krafton.kts.backend.domain.testcase.service.impl.mybatis.TestcaseInterfaceMybatisMapper">
+<mapper namespace="com.krafton.kts.backend.domain.testcase.interfaces.mybatis.TestcaseInterfaceMybatisMapper">
     <insert id="addTestcase" parameterType="com.krafton.kts.backend.domain.testcase.domain.db.KTS_TESTCASE">
         INSERT INTO KTS_TESTCASE (testcaseGuid, name, description, deleted)
         VALUES (#{testcaseGuid}, #{name}, #{description}, 'N')

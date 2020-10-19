@@ -20,11 +20,11 @@
         </foreach>;
     </update>
 
-    <update id="removeTestRelTestcase" parameterType="com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestcaseGuidCommand">
+    <update id="removeTestRelTestcaseByTestcaseGuid" parameterType="com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestcaseGuidCommand">
         UPDATE TEST_REL_TESTCASE SET deleted = 'Y' WHERE testcaseGuid = #{testcaseGuid};
     </update>
 
-    <update id="removeTestRelTestcase" parameterType="com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestGuidCommand">
+    <update id="removeTestRelTestcaseByTestGuid" parameterType="com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestGuidCommand">
         UPDATE TEST_REL_TESTCASE SET deleted = 'Y' WHERE testGuid = #{testGuid};
     </update>
 </mapper>

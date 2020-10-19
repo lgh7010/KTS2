@@ -52,7 +52,7 @@ public class MySystemServiceImpl implements MySystemService {
     public void removeTestcase(RemoveTestcaseCommand command) {
         this.testcaseInterface.removeTestcase(command);
         this.actionInterface.removeAction(new RemoveActionCommand(command.getTestcaseGuid()));
-        this.testRelTestcaseInterface.removeTestRelTestcase(new RemoveTestRelTestcaseByTestcaseGuidCommand(command.getTestcaseGuid()));
+        this.testRelTestcaseInterface.removeTestRelTestcaseByTestcaseGuid(new RemoveTestRelTestcaseByTestcaseGuidCommand(command.getTestcaseGuid()));
         this.propertyInterface.removeProperties(new RemovePropertiesCommand(command.getTestcaseGuid()));
     }
 
@@ -60,13 +60,15 @@ public class MySystemServiceImpl implements MySystemService {
     @Transactional
     public void removeTest(RemoveTestCommand command) {
         this.testInterface.removeTest(command);
-        this.testRelTestcaseInterface.removeTestRelTestcase(new RemoveTestRelTestcaseByTestGuidCommand(command.getTestGuid()));
+        this.testRelTestcaseInterface.removeTestRelTestcaseByTestGuid(new RemoveTestRelTestcaseByTestGuidCommand(command.getTestGuid()));
     }
 
     @Override
     @Transactional
     public void saveTestRelTestcase(SaveTestRelTestcaseCommand command) {
-        this.testRelTestcaseInterface.saveTestRelTestcase(command);
+        if(command.getRelationList().stream().count() > 0){
+            this.testRelTestcaseInterface.saveTestRelTestcase(command);
+        }
         this.testInterface.addTest(new AddTestCommand(command.getTestGuid(), command.getTestName(), command.getTestDescription()));
     }
 

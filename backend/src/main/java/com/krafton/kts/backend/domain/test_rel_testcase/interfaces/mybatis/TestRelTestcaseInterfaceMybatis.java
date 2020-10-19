@@ -5,7 +5,6 @@ import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTes
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.db.TestRelTestcaseDerived;
 import com.krafton.kts.backend.domain.test_rel_testcase.interfaces.TestRelTestcaseInterface;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
@@ -28,12 +27,12 @@ public class TestRelTestcaseInterfaceMybatis implements TestRelTestcaseInterface
     }
 
     @Override
-    public void removeTestRelTestcase(RemoveTestRelTestcaseByTestcaseGuidCommand command) {
-        this.testRelTestcaseInterfaceMybatisMapper.removeTestRelTestcase(command);
+    public void removeTestRelTestcaseByTestcaseGuid(RemoveTestRelTestcaseByTestcaseGuidCommand command) {
+        this.testRelTestcaseInterfaceMybatisMapper.removeTestRelTestcaseByTestcaseGuid(command);
     }
 
     @Override
-    public void removeTestRelTestcase(RemoveTestRelTestcaseByTestGuidCommand command) {
-        this.testRelTestcaseInterfaceMybatisMapper.removeTestRelTestcase(command);
+    public void removeTestRelTestcaseByTestGuid(RemoveTestRelTestcaseByTestGuidCommand command) {
+        this.testRelTestcaseInterfaceMybatisMapper.removeTestRelTestcaseByTestGuid(command);
     }
 }

@@ -11,6 +11,6 @@ import java.util.List;
 public interface TestRelTestcaseInterface {
     List<TestRelTestcaseDerived> findTestRelTestcaseDerived(String testGuid);
     void saveTestRelTestcase(SaveTestRelTestcaseCommand command);
-    void removeTestRelTestcase(RemoveTestRelTestcaseByTestcaseGuidCommand command);
-    void removeTestRelTestcase(RemoveTestRelTestcaseByTestGuidCommand command);
+    void removeTestRelTestcaseByTestcaseGuid(RemoveTestRelTestcaseByTestcaseGuidCommand command);
+    void removeTestRelTestcaseByTestGuid(RemoveTestRelTestcaseByTestGuidCommand command);
 }

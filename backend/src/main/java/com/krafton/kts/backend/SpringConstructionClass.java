@@ -1,14 +1,19 @@
 package com.krafton.kts.backend;
 
 import com.krafton.kts.backend.domain.action.interfaces.ActionInterface;
+import com.krafton.kts.backend.domain.action.interfaces.jdbc.ActionInterfaceJDBC;
 import com.krafton.kts.backend.domain.action.interfaces.mybatis.ActionInterfaceMybatis;
 import com.krafton.kts.backend.domain.property.interfaces.PropertyInterface;
+import com.krafton.kts.backend.domain.property.interfaces.jdbc.PropertyInterfaceJDBC;
 import com.krafton.kts.backend.domain.property.interfaces.mybatis.PropertyInterfaceMybatis;
 import com.krafton.kts.backend.domain.test.interfaces.TestInterface;
 import com.krafton.kts.backend.domain.test.interfaces.mybatis.TestInterfaceMybatis;
+import com.krafton.kts.backend.domain.test.interfaces.jdbc.TestInterfaceJDBC;
 import com.krafton.kts.backend.domain.test_rel_testcase.interfaces.TestRelTestcaseInterface;
+import com.krafton.kts.backend.domain.test_rel_testcase.interfaces.jdbc.TestRelTestcaseInterfaceJDBC;
 import com.krafton.kts.backend.domain.test_rel_testcase.interfaces.mybatis.TestRelTestcaseInterfaceMybatis;
 import com.krafton.kts.backend.domain.testcase.interfaces.TestcaseInterface;
+import com.krafton.kts.backend.domain.testcase.interfaces.jdbc.TestcaseInterfaceJDBC;
 import com.krafton.kts.backend.domain.testcase.interfaces.mybatis.TestcaseInterfaceMybatis;
 import com.krafton.kts.backend.service.MySystemService;
 import com.krafton.kts.backend.service.MySystemServiceImpl;

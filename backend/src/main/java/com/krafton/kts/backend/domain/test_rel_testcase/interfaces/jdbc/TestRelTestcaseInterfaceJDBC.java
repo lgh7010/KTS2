@@ -125,12 +125,12 @@ public class TestRelTestcaseInterfaceJDBC extends JdbcCommon implements TestRelT
     }
 
     @Override
-    public void removeTestRelTestcase(RemoveTestRelTestcaseByTestcaseGuidCommand command) {
+    public void removeTestRelTestcaseByTestcaseGuid(RemoveTestRelTestcaseByTestcaseGuidCommand command) {
 
     }
 
     @Override
-    public void removeTestRelTestcase(RemoveTestRelTestcaseByTestGuidCommand command) {
+    public void removeTestRelTestcaseByTestGuid(RemoveTestRelTestcaseByTestGuidCommand command) {
 
     }
 }

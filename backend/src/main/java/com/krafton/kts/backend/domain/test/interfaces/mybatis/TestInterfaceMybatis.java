@@ -34,6 +34,6 @@ public class TestInterfaceMybatis implements TestInterface {
 
     @Override
     public void addTest(AddTestCommand command) {
-        this.addTest(command);
+        this.testInterfaceMybatisMapper.addTest(command);
     }
 }

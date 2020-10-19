@@ -1,5 +1,6 @@
 package com.krafton.kts.backend.domain.test.service.impl.mybatis;
 
+import com.krafton.kts.backend.domain.test.domain.command.AddTestCommand;
 import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
 import com.krafton.kts.backend.domain.test.domain.db.KTS_TEST;
 import com.krafton.kts.backend.domain.test.service.impl.TestInterface;
@@ -28,5 +29,10 @@ public class TestInterfaceMybatis implements TestInterface {
     @Transactional
     public void removeTest(@Param("removeTestCommand")RemoveTestCommand command) {
         this.testInterfaceMybatisMapper.removeTest(command);
+    }
+
+    @Override
+    public void addTest(AddTestCommand command) {
+        this.addTest(command);
     }
 }

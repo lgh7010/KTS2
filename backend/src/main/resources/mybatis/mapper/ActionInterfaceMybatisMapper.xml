@@ -29,4 +29,8 @@
     <update id="updateActionId" parameterType="com.krafton.kts.backend.domain.action.domain.command.UpdateActionIdCommand">
         UPDATE KTS_ACTION SET actionId = #{actionId} WHERE actionGuid = #{actionGuid};
     </update>
+
+    <update id="removeAction" parameterType="com.krafton.kts.backend.domain.action.domain.command.RemoveActionCommand">
+        UPDATE KTS_ACTION SET deleted = 'Y' WHERE testcaseGuid = #{testcaseGuid};
+    </update>
 </mapper>

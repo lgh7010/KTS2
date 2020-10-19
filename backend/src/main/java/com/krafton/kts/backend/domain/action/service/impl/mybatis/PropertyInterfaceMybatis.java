@@ -1,5 +1,6 @@
 package com.krafton.kts.backend.domain.action.service.impl.mybatis;
 
+import com.krafton.kts.backend.domain.action.domain.command.RemovePropertiesCommand;
 import com.krafton.kts.backend.domain.action.domain.command.SavePropertiesCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_PROPERTY;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_PROPERTY_TEMPLATE;
@@ -26,5 +27,10 @@ public class PropertyInterfaceMybatis implements PropertyInterface {
     @Override
     public void saveProperties(SavePropertiesCommand command) {
         this.propertyInterfaceMybatisMapper.saveProperties(command);
+    }
+
+    @Override
+    public void removeProperties(RemovePropertiesCommand command) {
+        this.propertyInterfaceMybatisMapper.removeProperties(command);
     }
 }

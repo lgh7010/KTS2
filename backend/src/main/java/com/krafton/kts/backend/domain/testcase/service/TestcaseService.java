@@ -10,7 +10,5 @@ import java.util.List;
 public interface TestcaseService {
 
     List<KTS_TESTCASE> findAll();
-    void removeTestcase(RemoveTestcaseCommand command);
     KTS_TESTCASE findTestcase(String testcaseGuid);
-    void addTestcase(KTS_TESTCASE testcase);
 }

@@ -1,6 +1,7 @@
 package com.krafton.kts.backend.domain.test.service.impl.jdbc;
 
 import com.krafton.kts.backend.common.JdbcCommon;
+import com.krafton.kts.backend.domain.test.domain.command.AddTestCommand;
 import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
 import com.krafton.kts.backend.domain.test.domain.db.KTS_TEST;
 import com.krafton.kts.backend.domain.test.service.impl.TestInterface;
@@ -106,5 +107,10 @@ public class TestInterfaceJDBC extends JdbcCommon implements TestInterface {
         } finally {
             close(conn, pstmt);
         }
+    }
+
+    @Override
+    public void addTest(AddTestCommand command) {
+
     }
 }

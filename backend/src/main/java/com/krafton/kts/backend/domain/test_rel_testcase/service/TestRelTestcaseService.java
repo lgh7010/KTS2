@@ -1,7 +1,7 @@
 package com.krafton.kts.backend.domain.test_rel_testcase.service;
 
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.db.TestRelTestcaseDerived;
-import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.TestRelTestcaseSaveCommand;
+import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -9,6 +9,5 @@ import java.util.List;
 @Service
 public interface TestRelTestcaseService {
 
-    void saveTestRelTestcase(TestRelTestcaseSaveCommand command);
     List<TestRelTestcaseDerived> findTestRelTestcaseDerived(String testGuid);
 }

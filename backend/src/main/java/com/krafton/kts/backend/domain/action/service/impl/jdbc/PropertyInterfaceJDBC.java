@@ -1,5 +1,6 @@
 package com.krafton.kts.backend.domain.action.service.impl.jdbc;
 
+import com.krafton.kts.backend.domain.action.domain.command.RemovePropertiesCommand;
 import com.krafton.kts.backend.domain.action.domain.command.SavePropertiesCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_PROPERTY;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_PROPERTY_TEMPLATE;
@@ -119,5 +120,10 @@ public class PropertyInterfaceJDBC extends JdbcCommon implements PropertyInterfa
         } finally {
             close(conn, pstmt);
         }
+    }
+
+    @Override
+    public void removeProperties(RemovePropertiesCommand command) {
+
     }
 }

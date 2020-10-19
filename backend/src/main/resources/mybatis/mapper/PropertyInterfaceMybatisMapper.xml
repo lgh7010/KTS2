@@ -22,4 +22,11 @@
             ON DUPLICATE KEY UPDATE actionGuid = VALUES(actionGuid), propertyName = VALUES(propertyName), propertyValue = VALUES(propertyValue);
         </if>
     </update>
+
+    <delete id="removeProperties" parameterType="com.krafton.kts.backend.domain.action.domain.command.RemovePropertiesCommand">
+        DELETE FROM KTS_ACTION_PROPERTY
+        WHERE actionGuid IN (
+            SELECT actionGuid FROM KTS_ACTION WHERE testcaseGuid = #{testcaseGuid} AND deleted = 'N' GROUP BY actionGuid
+        );
+    </delete>
 </mapper>

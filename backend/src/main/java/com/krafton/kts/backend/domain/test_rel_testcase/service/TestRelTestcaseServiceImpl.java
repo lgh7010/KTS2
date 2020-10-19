@@ -1,7 +1,7 @@
 package com.krafton.kts.backend.domain.test_rel_testcase.service;
 
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.db.TestRelTestcaseDerived;
-import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.TestRelTestcaseSaveCommand;
+import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.service.impl.TestRelTestcaseInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,11 +14,6 @@ public class TestRelTestcaseServiceImpl implements TestRelTestcaseService {
     @Autowired
     public TestRelTestcaseServiceImpl(TestRelTestcaseInterface findTestRelTestcaseService){
         this.testRelTestcaseInterface = findTestRelTestcaseService;
-    }
-
-    @Override
-    public void saveTestRelTestcase(TestRelTestcaseSaveCommand command) {
-        this.testRelTestcaseInterface.saveTestRelTestcase(command);
     }
 
     @Override

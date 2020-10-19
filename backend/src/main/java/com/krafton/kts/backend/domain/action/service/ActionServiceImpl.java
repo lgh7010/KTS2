@@ -1,5 +1,7 @@
 package com.krafton.kts.backend.domain.action.service;
 
+import com.krafton.kts.backend.domain.action.domain.command.RemoveActionCommand;
+import com.krafton.kts.backend.domain.action.domain.command.RemovePropertiesCommand;
 import com.krafton.kts.backend.domain.action.domain.command.SavePropertiesCommand;
 import com.krafton.kts.backend.domain.action.domain.command.UpdateActionIdCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;

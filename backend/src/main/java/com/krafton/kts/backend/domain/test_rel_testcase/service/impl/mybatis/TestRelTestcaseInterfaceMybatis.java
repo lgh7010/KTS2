@@ -1,6 +1,8 @@
 package com.krafton.kts.backend.domain.test_rel_testcase.service.impl.mybatis;
 
-import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.TestRelTestcaseSaveCommand;
+import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestGuidCommand;
+import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestcaseGuidCommand;
+import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.db.TestRelTestcaseDerived;
 import com.krafton.kts.backend.domain.test_rel_testcase.service.impl.TestRelTestcaseInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,8 +21,18 @@ public class TestRelTestcaseInterfaceMybatis implements TestRelTestcaseInterface
     }
 
     @Override
-    public void saveTestRelTestcase(TestRelTestcaseSaveCommand command) {
+    public void saveTestRelTestcase(SaveTestRelTestcaseCommand command) {
         System.out.println(command);
         this.testRelTestcaseInterfaceMybatisMapper.saveTestRelTestcase(command);
+    }
+
+    @Override
+    public void removeTestRelTestcase(RemoveTestRelTestcaseByTestcaseGuidCommand command) {
+        this.testRelTestcaseInterfaceMybatisMapper.removeTestRelTestcase(command);
+    }
+
+    @Override
+    public void removeTestRelTestcase(RemoveTestRelTestcaseByTestGuidCommand command) {
+        this.testRelTestcaseInterfaceMybatisMapper.removeTestRelTestcase(command);
     }
 }

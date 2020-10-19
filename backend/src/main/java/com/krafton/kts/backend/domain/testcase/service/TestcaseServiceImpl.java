@@ -23,19 +23,8 @@ public class TestcaseServiceImpl implements TestcaseService {
     }
 
     @Override
-    @Transactional
-    public void removeTestcase(RemoveTestcaseCommand command) {
-        this.testcaseInterface.removeTestcase(command);
-    }
-
-    @Override
     public KTS_TESTCASE findTestcase(String testcaseGuid) {
         return this.testcaseInterface.findTestcase(testcaseGuid);
-    }
-
-    @Override
-    public void addTestcase(KTS_TESTCASE testcase) {
-        this.testcaseInterface.addTestcase(testcase);
     }
 
 }

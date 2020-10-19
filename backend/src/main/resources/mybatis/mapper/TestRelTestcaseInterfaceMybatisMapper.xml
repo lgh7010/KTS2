@@ -11,15 +11,20 @@
         ORDER BY listIndex;
     </select>
 
-    <update id="saveTestRelTestcase" parameterType="com.krafton.kts.backend.domain.test_rel_testcase.domain.command.TestRelTestcaseSaveCommand">
-        INSERT INTO KTS_TEST (testGuid, name, description) VALUES (#{testGuid}, #{testName}, #{testDescription})
-        ON DUPLICATE KEY UPDATE name = VALUES(name), description = VALUES(description);
-
+    <update id="saveTestRelTestcase" parameterType="com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand">
         UPDATE TEST_REL_TESTCASE SET DELETED = 'Y' WHERE testGuid = #{testGuid};
 
         INSERT INTO TEST_REL_TESTCASE (relationGuid, testGuid, listIndex, testcaseGuid) VALUES
         <foreach item="item" index="index" collection="relationList" separator=",">
             (#{item.relationGuid}, #{item.testGuid}, #{index}, #{item.testcaseGuid})
         </foreach>;
+    </update>
+
+    <update id="removeTestRelTestcase" parameterType="com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestcaseGuidCommand">
+        UPDATE TEST_REL_TESTCASE SET deleted = 'Y' WHERE testcaseGuid = #{testcaseGuid};
+    </update>
+
+    <update id="removeTestRelTestcase" parameterType="com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestGuidCommand">
+        UPDATE TEST_REL_TESTCASE SET deleted = 'Y' WHERE testGuid = #{testGuid};
     </update>
 </mapper>

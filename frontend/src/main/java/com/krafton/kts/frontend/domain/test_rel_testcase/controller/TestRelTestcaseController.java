@@ -1,6 +1,5 @@
 package com.krafton.kts.frontend.domain.test_rel_testcase.controller;
 
-import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.TestRelTestcaseSaveCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.service.TestRelTestcaseService;
 import com.krafton.kts.frontend.common.ErrorCode;
 import com.krafton.kts.frontend.common.Response;
@@ -13,17 +12,6 @@ import org.springframework.web.bind.annotation.*;
 public class TestRelTestcaseController {
 
     private final TestRelTestcaseService service_test_rel_testcase;
-
-    @PostMapping("/testRelTestcaseSave")
-    @ResponseBody
-    public Response testRelTestcaseSave(@RequestBody TestRelTestcaseSaveCommand command){
-        try {
-            this.service_test_rel_testcase.saveTestRelTestcase(command);
-            return new Response();
-        } catch(Exception e){
-            return new Response(ErrorCode.ERR_COMMON, e.getMessage());
-        }
-    }
 
     @GetMapping("/testRelTestcaseDerived")
     @ResponseBody

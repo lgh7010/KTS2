@@ -13,8 +13,11 @@
 
     <update id="removeTest" parameterType="com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand">
         UPDATE KTS_TEST SET deleted = 'Y' WHERE testGuid = #{testGuid};
-
-        UPDATE TEST_REL_TESTCASE SET deleted = 'Y' WHERE testGuid = #{testGuid};
     </update>
+
+    <insert id="addTest" parameterType="com.krafton.kts.backend.domain.test.domain.command.AddTestCommand">
+        INSERT INTO KTS_TEST (testGuid, name, description) VALUES (#{testGuid}, #{testName}, #{testDescription})
+        ON DUPLICATE KEY UPDATE name = VALUES(name), description = VALUES(description);
+    </insert>
 
 </mapper>

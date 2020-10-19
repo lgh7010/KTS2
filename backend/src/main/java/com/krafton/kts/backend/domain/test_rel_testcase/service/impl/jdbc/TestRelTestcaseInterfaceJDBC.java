@@ -1,15 +1,15 @@
 package com.krafton.kts.backend.domain.test_rel_testcase.service.impl.jdbc;
 
 import com.krafton.kts.backend.common.JdbcCommon;
-import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.TestRelTestcaseSaveCommand;
-import com.krafton.kts.backend.domain.test_rel_testcase.domain.db.TEST_REL_TESTCASE;
+import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestGuidCommand;
+import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestcaseGuidCommand;
+import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.db.TestRelTestcaseDerived;
 import com.krafton.kts.backend.domain.test_rel_testcase.service.impl.TestRelTestcaseInterface;
 
 import javax.sql.DataSource;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class TestRelTestcaseInterfaceJDBC extends JdbcCommon implements TestRelTestcaseInterface {
@@ -50,7 +50,7 @@ public class TestRelTestcaseInterfaceJDBC extends JdbcCommon implements TestRelT
     }
 
     @Override
-    public void saveTestRelTestcase(TestRelTestcaseSaveCommand command) {
+    public void saveTestRelTestcase(SaveTestRelTestcaseCommand command) {
 //        Connection conn = null;
 //        PreparedStatement pstmt = null;
 //
@@ -122,5 +122,15 @@ public class TestRelTestcaseInterfaceJDBC extends JdbcCommon implements TestRelT
 //        } finally {
 //            close(conn, pstmt);
 ////        }
+    }
+
+    @Override
+    public void removeTestRelTestcase(RemoveTestRelTestcaseByTestcaseGuidCommand command) {
+
+    }
+
+    @Override
+    public void removeTestRelTestcase(RemoveTestRelTestcaseByTestGuidCommand command) {
+
     }
 }

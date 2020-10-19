@@ -25,9 +25,4 @@ public class TestServiceImpl implements TestService {
     public KTS_TEST findTest(String testGuid) {
         return this.testInterface.findTest(testGuid);
     }
-
-    @Override
-    public void removeTest(RemoveTestCommand command) {
-        this.testInterface.removeTest(command);
-    }
 }

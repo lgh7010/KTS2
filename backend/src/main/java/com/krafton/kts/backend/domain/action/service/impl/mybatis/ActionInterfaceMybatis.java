@@ -1,5 +1,6 @@
 package com.krafton.kts.backend.domain.action.service.impl.mybatis;
 
+import com.krafton.kts.backend.domain.action.domain.command.RemoveActionCommand;
 import com.krafton.kts.backend.domain.action.domain.command.SaveActionCommand;
 import com.krafton.kts.backend.domain.action.domain.command.UpdateActionIdCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
@@ -32,5 +33,10 @@ public class ActionInterfaceMybatis implements ActionInterface {
     @Override
     public void updateActionId(UpdateActionIdCommand command) {
         this.actionInterfaceMybatisMapper.updateActionId(command);
+    }
+
+    @Override
+    public void removeAction(RemoveActionCommand command) {
+        this.actionInterfaceMybatisMapper.removeAction(command);
     }
 }

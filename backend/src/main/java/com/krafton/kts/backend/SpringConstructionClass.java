@@ -1,12 +1,10 @@
 package com.krafton.kts.backend;
 
-import com.krafton.kts.backend.cross.service.CrossDomainInterface;
-import com.krafton.kts.backend.cross.service.CrossDomainInterfaceImpl;
+import com.krafton.kts.backend.cross.CrossService;
+import com.krafton.kts.backend.cross.CrossServiceImpl;
 import com.krafton.kts.backend.domain.action.service.ActionService;
 import com.krafton.kts.backend.domain.action.service.ActionServiceImpl;
 import com.krafton.kts.backend.domain.action.service.impl.*;
-import com.krafton.kts.backend.domain.action.service.impl.jdbc.ActionInterfaceJDBC;
-import com.krafton.kts.backend.domain.action.service.impl.jdbc.PropertyInterfaceJDBC;
 import com.krafton.kts.backend.domain.action.service.impl.mybatis.ActionInterfaceMybatis;
 import com.krafton.kts.backend.domain.action.service.impl.mybatis.PropertyInterfaceMybatis;
 import com.krafton.kts.backend.domain.test.service.TestServiceImpl;
@@ -95,10 +93,13 @@ public class SpringConstructionClass {
 
     //cross
     @Bean
-    public CrossDomainInterface saveActionService(){
-        return new CrossDomainInterfaceImpl(
+    public CrossService crossService(){
+        return new CrossServiceImpl(
                 actionInterface(),
-                testcaseInterface()
+                propertyInterface(),
+                testcaseInterface(),
+                testRelTestcaseInterface(),
+                testInterface()
         );
     }
 }

@@ -1,5 +1,6 @@
 package com.krafton.kts.backend.domain.action.service.impl.jdbc;
 
+import com.krafton.kts.backend.domain.action.domain.command.RemoveActionCommand;
 import com.krafton.kts.backend.domain.action.domain.command.SaveActionCommand;
 import com.krafton.kts.backend.domain.action.domain.command.UpdateActionIdCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
@@ -149,5 +150,10 @@ public class ActionInterfaceJDBC extends JdbcCommon implements ActionInterface {
         } finally {
             close(conn, pstmt);
         }
+    }
+
+    @Override
+    public void removeAction(RemoveActionCommand command) {
+
     }
 }

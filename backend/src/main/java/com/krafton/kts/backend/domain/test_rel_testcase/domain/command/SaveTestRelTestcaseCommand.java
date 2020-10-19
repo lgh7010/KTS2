@@ -6,7 +6,7 @@ import lombok.Data;
 import java.util.List;
 
 @Data
-public class TestRelTestcaseSaveCommand {
+public class SaveTestRelTestcaseCommand {
     private List<TEST_REL_TESTCASE> relationList;
     private String testGuid;
     private String testName;

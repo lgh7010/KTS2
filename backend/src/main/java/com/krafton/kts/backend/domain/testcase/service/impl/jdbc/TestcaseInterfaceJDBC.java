@@ -111,12 +111,10 @@ public class TestcaseInterfaceJDBC extends JdbcCommon implements TestcaseInterfa
 
             //step 2. KTS_ACTION과 KTS_ACTION_PROPERTY를 조인하여, 현재 삭제해야 하는 TESTCASE_GUID에 해당하는 ACTION들에 포함된 PROPERTY들의 PROPERTY_SEQ 리스트 확보
             pstmt = conn.prepareStatement(
-            "UPDATE KTS_ACTION_PROPERTY SET deleted = 'Y' " +
-                "WHERE propertySeq IN (SELECT * FROM (" +
-                "   SELECT propertySeq FROM KTS_ACTION_PROPERTY WHERE actionGuid IN (" +
-                "       SELECT actionGuid FROM KTS_ACTION WHERE testcaseGuid = ? AND deleted = 'N' GROUP BY actionGuid" +
-                "    ) GROUP BY propertySeq" +
-                ") AS temp)");
+            "DELETE FROM KTS_ACTION_PROPERTY" +
+                    "WHERE actionGuid IN (" +
+                    "SELECT actionGuid FROM KTS_ACTION WHERE testcaseGuid = ? AND deleted = 'N' GROUP BY actionGuid" +
+                    ");");
             pstmt.setString(1, command.getTestcaseGuid());
             pstmt.executeUpdate();
 

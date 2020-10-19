@@ -15,7 +15,8 @@
         INSERT INTO KTS_ACTION (actionGuid, testcaseGuid, isStart, nextActionGuid, actionId, x, y, description) VALUES
         <foreach item="item" index="index" collection="actionMap" separator=",">
             (#{item.actionGuid}, #{item.testcaseGuid}, #{item.isStart}, #{item.nextActionGuid}, #{item.actionId}, #{item.x}, #{item.y}, #{item.description})
-        </foreach>;
+        </foreach>
+        ON DUPLICATE KEY UPDATE testcaseGuid = VALUES(testcaseGuid), isStart = VALUES(isStart), nextActionGuid = VALUES(nextActionGuid), actionId = VALUES(actionId), x = VALUES(x), y = VALUES(y), description = VALUES(description);
 
         <if test="removeList != null and removeList.size() > 0">
             UPDATE KTS_ACTION SET deleted = 'Y' WHERE actionGuid IN

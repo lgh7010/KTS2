@@ -4,7 +4,7 @@
 
 <mapper namespace="com.krafton.kts.backend.domain.action.service.impl.mybatis.PropertyInterfaceMybatisMapper">
     <select id="findProperty" resultType="com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_PROPERTY">
-        SELECT * FROM KTS_ACTION_PROPERTY WHERE actionGuid = #{actionGuid} AND deleted = 'N'
+        SELECT * FROM KTS_ACTION_PROPERTY WHERE actionGuid = #{actionGuid};
     </select>
 
     <select id="getPropertyTemplate" resultType="com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_PROPERTY_TEMPLATE">
@@ -12,14 +12,14 @@
     </select>
 
     <update id="saveProperties" parameterType="com.krafton.kts.backend.domain.action.domain.command.SavePropertiesCommand">
-        UPDATE KTS_ACTION_PROPERTY SET deleted = 'Y' WHERE actionGuid = #{actionGuid};
+        DELETE FROM KTS_ACTION_PROPERTY WHERE actionGuid = #{actionGuid};
 
         <if test="properties != null and properties.size() > 0">
-            INSERT INTO KTS_ACTION_PROPERTY (propertySeq, propertyName, propertyValue, actionGuid) VALUES
+            INSERT INTO KTS_ACTION_PROPERTY (actionGuid, propertyName, propertyValue) VALUES
             <foreach item="item" index="index" collection="properties" separator=",">
-                (#{item.propertySeq}, #{item.propertyName}, #{item.propertyValue}, #{item.actionGuid})
+                (#{item.actionGuid}, #{item.propertyName}, #{item.propertyValue})
             </foreach>
-            ON DUPLICATE KEY UPDATE propertyName = VALUES(propertyName), propertyValue = VALUES(propertyValue), actionGuid = VALUES(actionGuid);
+            ON DUPLICATE KEY UPDATE actionGuid = VALUES(actionGuid), propertyName = VALUES(propertyName), propertyValue = VALUES(propertyValue);
         </if>
 
         UPDATE KTS_ACTION SET actionId = #{actionId} WHERE actionGuid = #{actionGuid};

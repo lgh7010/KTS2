@@ -27,18 +27,16 @@ public class PropertyInterfaceJDBC extends JdbcCommon implements PropertyInterfa
 
         try {
             conn = getConnection();
-            pstmt = conn.prepareStatement("select * from KTS_ACTION_PROPERTY where actionGuid = ? AND deleted = 'N'");
+            pstmt = conn.prepareStatement("select * from KTS_ACTION_PROPERTY where actionGuid = ?");
             pstmt.setString(1, actionGuid);
             rs = pstmt.executeQuery();
 
             List<KTS_ACTION_PROPERTY> list = new ArrayList<>();
             while(rs.next()){
                 KTS_ACTION_PROPERTY prop = new KTS_ACTION_PROPERTY();
-                prop.setPropertySeq(rs.getInt("propertySeq"));
+                prop.setActionGuid(rs.getString("actionGuid"));
                 prop.setPropertyName(rs.getString("propertyName"));
                 prop.setPropertyValue(rs.getString("propertyValue"));
-                prop.setActionGuid(rs.getString("actionGuid"));
-                prop.setDeleted(rs.getString("deleted"));
                 list.add(prop);
             }
             return list;
@@ -86,8 +84,8 @@ public class PropertyInterfaceJDBC extends JdbcCommon implements PropertyInterfa
             conn = getConnection();
             conn.setAutoCommit(false);//트랜잭션 처리
 
-            //step 1. 기존 프로퍼티 정보 삭제(DELETED = Y로 변경)
-            pstmt = conn.prepareStatement("UPDATE KTS_ACTION_PROPERTY SET deleted = 'Y' WHERE actionGuid = ?");
+            //step 1. 기존 프로퍼티 정보 삭제
+            pstmt = conn.prepareStatement("DELETE FROM KTS_ACTION_PROPERTY WHERE actionGuid = ?");
             pstmt.setString(1, command.getActionGuid());
             pstmt.executeUpdate();
 
@@ -95,13 +93,13 @@ public class PropertyInterfaceJDBC extends JdbcCommon implements PropertyInterfa
             String values = "";
             for(int i = 0; i < command.getProperties().stream().count(); i++){
                 KTS_ACTION_PROPERTY prop = command.getProperties().get(i);
-                values += "(" + prop.getPropertySeq() + ", '" + prop.getPropertyName() + "', '" + prop.getPropertyValue() + "', '" + prop.getActionGuid() + "')";
+                values += "('" + prop.getActionGuid() + "', '" + prop.getPropertyName() + "', '" + prop.getPropertyValue() + "')";
                 if(i < command.getProperties().stream().count()-1){
                     values += ",";
                 }
             }
-            pstmt = conn.prepareStatement("INSERT INTO KTS_ACTION_PROPERTY (propertySeq, propertyName, propertyValue, actionGuid) VALUES " + values
-                    + " ON DUPLICATE KEY UPDATE propertyName = VALUES(propertyName), propertyValue = VALUES(propertyValue), actionGuid = VALUES(actionGuid)");
+            pstmt = conn.prepareStatement("INSERT INTO KTS_ACTION_PROPERTY (actionGuid, propertyName, propertyValue) VALUES " + values
+                    + " ON DUPLICATE KEY UPDATE actionGuid = VALUES(actionGuid), propertyName = VALUES(propertyName), propertyValue = VALUES(propertyValue)");
             pstmt.executeUpdate();
 
             //step 3. 액션의 액션ID 변경

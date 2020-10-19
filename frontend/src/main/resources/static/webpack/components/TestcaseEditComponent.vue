@@ -43,7 +43,7 @@
           <tbody>
             <tr v-for="prop in this.actionProperties">
               <td>{{prop.propertyName}}</td>
-              <td><input type="text" v-bind:id="prop.propertySeq" v-bind:value="prop.propertyValue" v-on:input="onPropertyChange(prop)"></td>
+              <td><input type="text" v-bind:id="prop.actionGuid+'_'+prop.propertyName" v-bind:value="prop.propertyValue" v-on:input="onPropertyChange(prop)"></td>
             </tr>
           </tbody>
         </table>
@@ -168,6 +168,9 @@ export default {
         return s ? "-" + p.substr(0,4) + "-" + p.substr(4,4) : p ;
       }
       return _p8() + _p8(true) + _p8(true) + _p8();
+    },
+    makePropertyId(actionGuid, propertyName){
+      return actionGuid + "_" + propertyName
     },
 
     //제어 관련
@@ -307,6 +310,7 @@ export default {
       //현재 해당 노드에 포함된 속성정보를 불러온다.
       this.currentActionGuid = action.actionGuid
       axios.get("/properties", { params: {'actionGuid': this.currentActionGuid}}).then(response => {
+        console.log(response)
         this.actionProperties = response.data.context.list
         console.log(action);
         $("#actionIdSelection").val(action.actionId)
@@ -327,12 +331,8 @@ export default {
       var actionId = $("#actionIdSelection").val()
       this.currentTestcaseActions[this.currentActionGuid].actionId = actionId
       axios.get("/propertiesTemplate", { params: {'actionId': actionId}}).then(response => {
-        console.log(response)
         this.actionProperties = response.data.context.list
-        //템플릿이라서 현재 property_SEQ값이 없다. actionProperties에 템플릿 리스트나 그냥 프로퍼티 리스트 둘 다 들어갈 수 있는데서 비롯된 문제.
-        //그냥 여기서 넣어준다. 0으로 넣어주면 된다.
         for(var i = 0; i < this.actionProperties.length; i++){
-          this.actionProperties[i].propertySeq = 0
           this.actionProperties[i].actionGuid = this.currentActionGuid
         }
       }).catch(error => {
@@ -352,7 +352,7 @@ export default {
       })
     },
     onPropertyChange(prop){
-      prop.propertyValue = document.getElementById(prop.propertySeq).value
+      prop.propertyValue = document.getElementById(this.makePropertyId(prop.actionGuid, prop.propertyName)).value
     }
   }
 }

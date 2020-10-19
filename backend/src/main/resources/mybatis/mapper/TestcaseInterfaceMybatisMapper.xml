@@ -20,12 +20,10 @@
     <update id="removeTestcase" parameterType="com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand">
         UPDATE TEST_REL_TESTCASE SET deleted = 'Y' WHERE testcaseGuid = #{testcaseGuid};
 
-        UPDATE KTS_ACTION_PROPERTY SET deleted = 'Y'
-        WHERE propertySeq IN (SELECT * FROM (
-            SELECT propertySeq FROM KTS_ACTION_PROPERTY WHERE actionGuid IN (
-                SELECT actionGuid FROM KTS_ACTION WHERE testcaseGuid = #{testcaseGuid} AND deleted = 'N' GROUP BY actionGuid
-            ) GROUP BY propertySeq
-        ) AS temp);
+        DELETE FROM KTS_ACTION_PROPERTY
+        WHERE actionGuid IN (
+            SELECT actionGuid FROM KTS_ACTION WHERE testcaseGuid = #{testcaseGuid} AND deleted = 'N' GROUP BY actionGuid
+        );
 
         UPDATE KTS_ACTION SET deleted = 'Y' WHERE testcaseGuid = #{testcaseGuid};
 

@@ -1,9 +1,10 @@
-package com.krafton.kts.backend.domain.action.service.impl;
+package com.krafton.kts.backend.domain.action.service.impl.jdbc;
 
 import com.krafton.kts.backend.domain.action.domain.command.SavePropertiesCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_PROPERTY;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_PROPERTY_TEMPLATE;
 import com.krafton.kts.backend.common.JdbcCommon;
+import com.krafton.kts.backend.domain.action.service.impl.PropertyInterface;
 
 import javax.sql.DataSource;
 import java.sql.Connection;

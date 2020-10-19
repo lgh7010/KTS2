@@ -7,6 +7,7 @@ import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_PROPERTY;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_PROPERTY_TEMPLATE;
 import com.krafton.kts.backend.domain.action.service.impl.*;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -40,7 +41,12 @@ public class ActionServiceImpl implements ActionService {
 
     @Override
     public Map<String, KTS_ACTION_TEMPLATE> getActionTemplate() {
-        return this.actionInterface.getActionTemplate();
+        List<KTS_ACTION_TEMPLATE> list = this.actionInterface.getActionTemplate();
+        Map<String, KTS_ACTION_TEMPLATE> ret = new HashMap<>();
+        for (KTS_ACTION_TEMPLATE ktsActionTemplate : list) {
+            ret.put(ktsActionTemplate.getActionId(), ktsActionTemplate);
+        }
+        return ret;
     }
 
     @Override

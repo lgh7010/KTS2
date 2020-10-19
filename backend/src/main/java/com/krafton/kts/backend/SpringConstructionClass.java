@@ -5,6 +5,10 @@ import com.krafton.kts.backend.cross.service.CrossDomainInterfaceImpl;
 import com.krafton.kts.backend.domain.action.service.ActionService;
 import com.krafton.kts.backend.domain.action.service.ActionServiceImpl;
 import com.krafton.kts.backend.domain.action.service.impl.*;
+import com.krafton.kts.backend.domain.action.service.impl.jdbc.ActionInterfaceJDBC;
+import com.krafton.kts.backend.domain.action.service.impl.jdbc.PropertyInterfaceJDBC;
+import com.krafton.kts.backend.domain.action.service.impl.mybatis.ActionInterfaceMybatis;
+import com.krafton.kts.backend.domain.action.service.impl.mybatis.PropertyInterfaceMybatis;
 import com.krafton.kts.backend.domain.test.service.TestServiceImpl;
 import com.krafton.kts.backend.domain.test.service.TestService;
 import com.krafton.kts.backend.domain.test.service.impl.TestInterface;
@@ -12,7 +16,6 @@ import com.krafton.kts.backend.domain.test.service.impl.mybatis.TestInterfaceMyb
 import com.krafton.kts.backend.domain.test_rel_testcase.service.TestRelTestcaseServiceImpl;
 import com.krafton.kts.backend.domain.test_rel_testcase.service.TestRelTestcaseService;
 import com.krafton.kts.backend.domain.test_rel_testcase.service.impl.TestRelTestcaseInterface;
-import com.krafton.kts.backend.domain.test_rel_testcase.service.impl.jdbc.TestRelTestcaseInterfaceJDBC;
 import com.krafton.kts.backend.domain.test_rel_testcase.service.impl.mybatis.TestRelTestcaseInterfaceMybatis;
 import com.krafton.kts.backend.domain.testcase.service.TestcaseService;
 import com.krafton.kts.backend.domain.testcase.service.TestcaseServiceImpl;
@@ -81,11 +84,13 @@ public class SpringConstructionClass {
     }
     @Bean
     public ActionInterface actionInterface(){
-        return new ActionInterfaceJDBC(dataSource);             //JDBC 이용
+        //return new ActionInterfaceJDBC(dataSource);           //JDBC 이용
+        return new ActionInterfaceMybatis();                    //Mybatis 이용
     }
     @Bean
     public PropertyInterface propertyInterface(){
-        return new PropertyInterfaceJDBC(dataSource);           //JDBC 이용
+        //return new PropertyInterfaceJDBC(dataSource);         //JDBC 이용
+        return new PropertyInterfaceMybatis();                  //Mybatis 이용
     }
 
     //cross

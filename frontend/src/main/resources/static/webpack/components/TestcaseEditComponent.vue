@@ -118,6 +118,7 @@ export default {
   },
   created(){
     axios.get("/actionTemplates").then(response => {
+      console.log(response)
       this.actionTemplates = response.data.context.actionTemplates
     }).catch(error => {
       console.log(error)
@@ -307,6 +308,7 @@ export default {
       this.currentActionGuid = action.actionGuid
       axios.get("/properties", { params: {'actionGuid': this.currentActionGuid}}).then(response => {
         this.actionProperties = response.data.context.list
+        console.log(action);
         $("#actionIdSelection").val(action.actionId)
 
         $("#actionEditorBackground").show()
@@ -325,6 +327,7 @@ export default {
       var actionId = $("#actionIdSelection").val()
       this.currentTestcaseActions[this.currentActionGuid].actionId = actionId
       axios.get("/propertiesTemplate", { params: {'actionId': actionId}}).then(response => {
+        console.log(response)
         this.actionProperties = response.data.context.list
         //템플릿이라서 현재 property_SEQ값이 없다. actionProperties에 템플릿 리스트나 그냥 프로퍼티 리스트 둘 다 들어갈 수 있는데서 비롯된 문제.
         //그냥 여기서 넣어준다. 0으로 넣어주면 된다.

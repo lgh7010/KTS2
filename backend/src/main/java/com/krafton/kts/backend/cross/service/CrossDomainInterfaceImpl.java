@@ -1,5 +1,6 @@
 package com.krafton.kts.backend.cross.service;
 
+import com.krafton.kts.backend.domain.action.domain.command.SaveActionCommand;
 import com.krafton.kts.backend.domain.action.domain.command.SaveCurrentTestcaseActionsCommand;
 import com.krafton.kts.backend.domain.action.service.impl.ActionInterface;
 import com.krafton.kts.backend.domain.testcase.service.impl.TestcaseInterface;
@@ -18,7 +19,9 @@ public class CrossDomainInterfaceImpl implements CrossDomainInterface {
     @Override
     @Transactional
     public void saveAction(SaveCurrentTestcaseActionsCommand command) {
-        this.actionInterface.saveAction(command.getCurrentTestcaseActions(), command.getRemoveActionGuidList());
+        if(command.getCurrentTestcaseActions().size() > 0){
+            this.actionInterface.saveAction(new SaveActionCommand(command.getCurrentTestcaseActions(), command.getRemoveActionGuidList()));
+        }
         this.testcaseInterface.addTestcase(command.getTestcase());
     }
 }

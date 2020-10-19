@@ -1,8 +1,10 @@
-package com.krafton.kts.backend.domain.action.service.impl;
+package com.krafton.kts.backend.domain.action.service.impl.jdbc;
 
+import com.krafton.kts.backend.domain.action.domain.command.SaveActionCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_TEMPLATE;
 import com.krafton.kts.backend.common.JdbcCommon;
+import com.krafton.kts.backend.domain.action.service.impl.ActionInterface;
 
 import javax.sql.DataSource;
 import java.sql.Connection;
@@ -51,7 +53,7 @@ public class ActionInterfaceJDBC extends JdbcCommon implements ActionInterface {
     }
 
     @Override
-    public Map<String, KTS_ACTION_TEMPLATE> getActionTemplate() {
+    public List<KTS_ACTION_TEMPLATE> getActionTemplate() {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -61,14 +63,14 @@ public class ActionInterfaceJDBC extends JdbcCommon implements ActionInterface {
             pstmt = conn.prepareStatement("SELECT * FROM KTS_ACTION_TEMPLATE");
             rs = pstmt.executeQuery();
 
-            Map<String, KTS_ACTION_TEMPLATE> ret = new HashMap<>();
+            List<KTS_ACTION_TEMPLATE> ret = new ArrayList<>();
             while(rs.next()){
                 KTS_ACTION_TEMPLATE tp = new KTS_ACTION_TEMPLATE();
                 tp.setActionId(rs.getString("actionId"));
                 tp.setType(rs.getString("type"));
                 tp.setTemplateDescription(rs.getString("templateDescription"));
 
-                ret.put(rs.getString("actionId"), tp);
+                ret.add(tp);
             }
             return ret;
         } catch (Exception e){
@@ -79,7 +81,7 @@ public class ActionInterfaceJDBC extends JdbcCommon implements ActionInterface {
     }
 
     @Override
-    public void saveAction(Map<String, KTS_ACTION> map, List<String> removeList) {
+    public void saveAction(SaveActionCommand command) {
         Connection conn = null;
         PreparedStatement pstmt = null;
 
@@ -89,7 +91,7 @@ public class ActionInterfaceJDBC extends JdbcCommon implements ActionInterface {
 
             //step 1. list의 내용 저장
             String values = "";
-            Iterator<Map.Entry<String, KTS_ACTION>> mapIterator = map.entrySet().iterator();
+            Iterator<Map.Entry<String, KTS_ACTION>> mapIterator = command.getActionMap().entrySet().iterator();
             while(mapIterator.hasNext()){
                 KTS_ACTION action = mapIterator.next().getValue();
                 values += "('" + action.getActionGuid() + "', '" + action.getTestcaseGuid() + "', '" + action.getIsStart() + "', '" + action.getNextActionGuid() + "', '" + action.getActionId() + "', " + action.getX() + ", " + action.getY() + ", '" + action.getDescription() + "')";
@@ -102,9 +104,9 @@ public class ActionInterfaceJDBC extends JdbcCommon implements ActionInterface {
             pstmt.executeUpdate();
 
             //step 2. removeList에 SEQ가 존재하는 ACTION들의 DELETED를 Y로 변경
-            if(removeList != null && removeList.stream().count() > 0){
+            if(command.getRemoveList() != null && command.getRemoveList().stream().count() > 0){
                 StringBuilder builder = new StringBuilder();
-                Iterator<String> iter = removeList.iterator();
+                Iterator<String> iter = command.getRemoveList().iterator();
                 while(iter.hasNext()){
                     builder.append("'" + iter.next() + "'");
                     if(iter.hasNext()){

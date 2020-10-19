@@ -8,7 +8,7 @@
         FROM TEST_REL_TESTCASE a
             LEFT JOIN KTS_TESTCASE b ON a.testcaseGuid = b.testcaseGuid
         WHERE a.testGuid = #{testGuid} AND a.deleted = 'N'
-        ORDER BY listIndex
+        ORDER BY listIndex;
     </select>
 
     <update id="saveTestRelTestcase" parameterType="com.krafton.kts.backend.domain.test_rel_testcase.domain.command.TestRelTestcaseSaveCommand">
@@ -20,6 +20,6 @@
         INSERT INTO TEST_REL_TESTCASE (relationGuid, testGuid, listIndex, testcaseGuid) VALUES
         <foreach item="item" index="index" collection="relationList" separator=",">
             (#{item.relationGuid}, #{item.testGuid}, #{index}, #{item.testcaseGuid})
-        </foreach>
+        </foreach>;
     </update>
 </mapper>

@@ -21,7 +21,5 @@
             </foreach>
             ON DUPLICATE KEY UPDATE actionGuid = VALUES(actionGuid), propertyName = VALUES(propertyName), propertyValue = VALUES(propertyValue);
         </if>
-
-        UPDATE KTS_ACTION SET actionId = #{actionId} WHERE actionGuid = #{actionGuid};
     </update>
 </mapper>

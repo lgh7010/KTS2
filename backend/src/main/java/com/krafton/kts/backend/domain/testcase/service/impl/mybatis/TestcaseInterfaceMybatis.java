@@ -29,7 +29,6 @@ public class TestcaseInterfaceMybatis implements TestcaseInterface {
     }
 
     @Override
-    @Transactional
     public void removeTestcase(RemoveTestcaseCommand command) {
         this.testcaseInterfaceMybatisMapper.removeTestcase(command);
     }

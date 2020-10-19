@@ -1,11 +1,13 @@
 package com.krafton.kts.backend.domain.action.service;
 
 import com.krafton.kts.backend.domain.action.domain.command.SavePropertiesCommand;
+import com.krafton.kts.backend.domain.action.domain.command.UpdateActionIdCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_TEMPLATE;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_PROPERTY;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_PROPERTY_TEMPLATE;
 import com.krafton.kts.backend.domain.action.service.impl.*;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -50,7 +52,9 @@ public class ActionServiceImpl implements ActionService {
     }
 
     @Override
+    @Transactional
     public void saveProperties(SavePropertiesCommand command) {
         this.propertyInterface.saveProperties(command);
+        this.actionInterface.updateActionId(new UpdateActionIdCommand(command.getActionGuid(), command.getActionId()));
     }
 }

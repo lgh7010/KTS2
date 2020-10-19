@@ -1,7 +1,7 @@
 package com.krafton.kts.frontend.cross.controller;
 
 import com.krafton.kts.backend.cross.service.CrossDomainInterface;
-import com.krafton.kts.backend.domain.action.domain.command.SaveCurrentTestcaseActionsCommand;
+import com.krafton.kts.backend.domain.action.domain.command.SaveTestcaseCommand;
 import com.krafton.kts.frontend.common.ErrorCode;
 import com.krafton.kts.frontend.common.Response;
 import lombok.RequiredArgsConstructor;
@@ -18,9 +18,9 @@ public class CrossDomainController {
 
     @PostMapping("/saveCurrentTestcaseActions")
     @ResponseBody
-    public Response saveCurrentTestcaseActions(@RequestBody SaveCurrentTestcaseActionsCommand command){
+    public Response saveCurrentTestcaseActions(@RequestBody SaveTestcaseCommand command){
         try {
-            this.crossDomainInterface.saveAction(command);
+            this.crossDomainInterface.saveTestcase(command);
             return new Response();
         } catch(Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());

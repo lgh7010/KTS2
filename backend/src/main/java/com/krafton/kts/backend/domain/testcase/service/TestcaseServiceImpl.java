@@ -4,6 +4,7 @@ import com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseComm
 import com.krafton.kts.backend.domain.testcase.domain.db.KTS_TESTCASE;
 import com.krafton.kts.backend.domain.testcase.service.impl.TestcaseInterface;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class TestcaseServiceImpl implements TestcaseService {
     }
 
     @Override
+    @Transactional
     public void removeTestcase(RemoveTestcaseCommand command) {
         this.testcaseInterface.removeTestcase(command);
     }

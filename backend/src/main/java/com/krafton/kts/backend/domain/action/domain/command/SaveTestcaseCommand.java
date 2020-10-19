@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 @Data
-public class SaveCurrentTestcaseActionsCommand {
+public class SaveTestcaseCommand {
     private Map<String, KTS_ACTION> currentTestcaseActions;
     private List<String> removeActionGuidList;
     private KTS_TESTCASE testcase;

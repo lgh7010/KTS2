@@ -1,7 +1,9 @@
 package com.krafton.kts.backend.domain.action.service.impl.jdbc;
 
 import com.krafton.kts.backend.domain.action.domain.command.SaveActionCommand;
+import com.krafton.kts.backend.domain.action.domain.command.UpdateActionIdCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
+import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_PROPERTY;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_TEMPLATE;
 import com.krafton.kts.backend.common.JdbcCommon;
 import com.krafton.kts.backend.domain.action.service.impl.ActionInterface;
@@ -124,6 +126,25 @@ public class ActionInterfaceJDBC extends JdbcCommon implements ActionInterface {
             } catch(SQLException ee){
                 System.out.println(ee);
             }
+            throw new IllegalStateException(e);
+        } finally {
+            close(conn, pstmt);
+        }
+    }
+
+    @Override
+    public void updateActionId(UpdateActionIdCommand command) {
+        Connection conn = null;
+        PreparedStatement pstmt = null;
+
+        try {
+            conn = getConnection();
+
+            pstmt = conn.prepareStatement("UPDATE KTS_ACTION SET actionId = ? WHERE actionGuid = ?");
+            pstmt.setString(1, command.getActionId());
+            pstmt.setString(2, command.getActionGuid());
+            pstmt.executeUpdate();
+        } catch (Exception e){
             throw new IllegalStateException(e);
         } finally {
             close(conn, pstmt);

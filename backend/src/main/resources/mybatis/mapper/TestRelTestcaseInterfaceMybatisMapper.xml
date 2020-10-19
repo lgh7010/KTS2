@@ -3,7 +3,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.krafton.kts.backend.domain.test_rel_testcase.service.impl.mybatis.TestRelTestcaseInterfaceMybatisMapper">
-    <select id="findTestRelTestcaseDerived" resultType="com.krafton.kts.backend.domain.test_rel_testcase.domain.db.TEST_REL_TESTCASE">
+    <select id="findTestRelTestcaseDerived" resultType="com.krafton.kts.backend.domain.test_rel_testcase.domain.db.TestRelTestcaseDerived">
         SELECT a.*, b.name, b.description
         FROM TEST_REL_TESTCASE a
             LEFT JOIN KTS_TESTCASE b ON a.testcaseGuid = b.testcaseGuid

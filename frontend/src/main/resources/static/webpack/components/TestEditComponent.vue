@@ -40,52 +40,52 @@
       </table>
     </div>
 
-    <div class="container">
-      <table class="table table-hover">
-        <thead>
-        <tr>
-          <th>테스트 이름</th>
-          <th>테스트 설명</th>
-        </tr>
-        </thead>
-        <tbody>
+    <table>
+
+      <th>
+        <ul class="navbar-nav bg-gray-600 sidebar sidebar-dark accordion">
+          <table class="table table-hover">
+            <tr>테스트 이름</tr>
+            <tr><input id="testName" type="text"></tr>
+            <tr>테스트 설명</tr>
+            <tr><input id="testDescription" type="text"></tr>
+            <tr>
+              <button class="btn btn-primary" v-on:click="onClickAdd">추가</button>
+              <button class="btn btn-success" v-on:click="onClickSave">저장</button>
+              <router-link :to="{name: 'TestList'}"><button class="btn btn-secondary">닫기</button></router-link>
+            </tr>
+          </table>
+        </ul>
+      </th>
+
+      <th>
+        <table class="table table-hover">
+          <thead>
           <tr>
-            <td><input id="testName" type="text"></td>
-            <td><input id="testDescription" type="text"></td>
+            <th>순서</th>
+            <th>테스트케이스 이름</th>
+            <th>설명</th>
+            <th>상호작용</th>
           </tr>
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+          <tr v-for="(rel, index) in this.testRelTestcaseDerived">
+            <td>{{index}}</td>
+            <td>{{rel.name}}</td>
+            <td>{{rel.description}}</td>
+            <td>
+              <button class="btn btn-secondary" v-on:click="moveUp(index)">위로</button>
+              <button class="btn btn-secondary" v-on:click="moveDown(index)">아래로</button>
+              <router-link :to="{name: 'TestcaseEdit', params: {testcaseGuid: rel.testcaseGuid}}"><button class="btn btn-info">편집</button></router-link>
+              <button class="btn btn-danger" v-on:click="removeTestcase(index)">제거</button>
+            </td>
+          </tr>
+          </tbody>
+        </table>
+      </th>
 
-      <table class="table table-hover">
-        <thead>
-        <tr>
-          <th>순서</th>
-          <th>테스트케이스 이름</th>
-          <th>설명</th>
-          <th>상호작용</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr v-for="(rel, index) in this.testRelTestcaseDerived">
-          <td>{{index}}</td>
-          <td>{{rel.name}}</td>
-          <td>{{rel.description}}</td>
-          <td>
-            <button class="btn btn-secondary" v-on:click="moveUp(index)">위로</button>
-            <button class="btn btn-secondary" v-on:click="moveDown(index)">아래로</button>
-            <router-link :to="{name: 'TestcaseEdit', params: {testcaseGuid: rel.testcaseGuid}}"><button class="btn btn-info">편집</button></router-link>
-            <button class="btn btn-danger" v-on:click="removeTestcase(index)">제거</button>
-          </td>
-        </tr>
-        </tbody>
-      </table>
-    </div>
+    </table>
 
-    <hr>
-
-    <button class="btn btn-primary" v-on:click="onClickAdd">추가</button>
-    <button class="btn btn-success" v-on:click="onClickSave">저장</button>
-    <router-link :to="{name: 'TestList'}"><button class="btn btn-secondary">닫기</button></router-link>
   </div>
 </template>
 
@@ -116,6 +116,7 @@ export default {
 
       axios.get("/testRelTestcaseDerived", { params: {'testGuid': this.currentTest.testGuid}}).then(response => {
         this.testRelTestcaseDerived = response.data.context.list
+        console.log(this.testRelTestcaseDerived)
       }).catch(error => {
         console.log(error)
       })

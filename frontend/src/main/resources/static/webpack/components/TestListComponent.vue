@@ -3,7 +3,7 @@
     <table>
 
       <th>
-        <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion">
+        <ul class="navbar-nav bg-gray-600 sidebar sidebar-dark accordion">
           <router-link :to="{name: 'TestEdit', params: {testGuid: 'DUMMY'}}"><button class="btn btn-primary">추가</button></router-link>
         </ul>
       </th>

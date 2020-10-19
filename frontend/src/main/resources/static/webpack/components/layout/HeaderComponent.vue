@@ -1,5 +1,5 @@
 <template>
-  <div class="navbar-nav bg-gradient-primary sidebar-dark accordion">
+  <div class="navbar-nav bg-gray-600 sidebar-dark accordion">
     <table>
       <thead>
         <th>

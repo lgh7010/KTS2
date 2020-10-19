@@ -1,9 +1,14 @@
 <template>
   <div id="app2">
     <header-component/>
-    <sidebar-component/>
-
-    <router-view/>
+    <table>
+      <th>
+        <sidebar-component/>
+      </th>
+      <th>
+        <router-view/>
+      </th>
+    </table>
   </div>
 </template>
 

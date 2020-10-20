@@ -124,7 +124,6 @@ public class KTSServiceImpl implements KTSService {
             RUNNING_TEST runningTest = new RUNNING_TEST();
             runningTest.setTestGuid(test.getTestGuid());
             runningTest.setRunningTestGuid(runningTestGuid);
-            this.runningTestInterface.addRunningTest(runningTest);
 
             //step 2. 해당 테스트에 포함된 테스트케이스 정보를 확보하고, 이를 RunningTestcase에 추가한다.
             List<TEST_REL_TESTCASE_JOIN_TESTCASE> testcaseJoinTestcaseList = this.testRelTestcaseInterface.findTestRelTestcaseJoinTestcase(test.getTestGuid());
@@ -201,6 +200,7 @@ public class KTSServiceImpl implements KTSService {
             //running에 넣은 값에서 '첫번째'액션의 정보를 클라이언트에 응답한다.
             NextTestInstructionResponse response = new NextTestInstructionResponse();
             RUNNING_ACTION runningAction = this.findRunningAction(new FindRunningActionCommand(runningTestGuid, 0, 0));
+            response.setRunningTest(runningTest);
             response.setRunningAction(runningAction);
             response.setRunningProperties(this.runningPropertyInterface.findRunningProperty(runningAction.getRunningActionGuid()));
             return response;

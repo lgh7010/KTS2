@@ -28,10 +28,8 @@ public interface MySystemService {
     Map<String, KTS_ACTION_TEMPLATE> getActionTemplate();
 
     //property
-//    List<KTS_ACTION_PROPERTY> findProperty(String actionGuid);
     List<KTS_ACTION_PROPERTY_TEMPLATE> getPropertyTemplate(String actionId);
     Map<String, List<KTS_ACTION_PROPERTY>> findProperties(String testcaseGuid);
-//    void saveProperties(SavePropertiesCommand command);
 
     //test
     List<KTS_TEST> findAllTest();

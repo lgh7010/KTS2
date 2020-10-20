@@ -44,48 +44,61 @@ public class MySystemServiceImpl implements MySystemService {
     @Override
     @Transactional
     public void saveTestcase(SaveTestcaseCommand command) {
-        if(command.getCurrentTestcaseActions().size() > 0){
-            this.actionInterface.saveAction(new SaveActionCommand(command.getCurrentTestcaseActions(), command.getRemoveActionGuidList()));
+        try {
+            if(command.getCurrentTestcaseActions().size() > 0){
+                this.actionInterface.saveAction(new SaveActionCommand(command.getCurrentTestcaseActions(), command.getRemoveActionGuidList()));
 
-            Map<String, List<KTS_ACTION_PROPERTY>> currentTestcaseActionPropertyMap = command.getCurrentTestcaseActionPropertyMap();
-            List<KTS_ACTION_PROPERTY> finalProperties = new ArrayList<>();
-            List<String> actionGuids = new ArrayList<>();
-            currentTestcaseActionPropertyMap.forEach((actionGuid, properties) -> {
-                actionGuids.add(actionGuid);
-                for (KTS_ACTION_PROPERTY property : properties) {
-                    finalProperties.add(property);
+                Map<String, List<KTS_ACTION_PROPERTY>> currentTestcaseActionPropertyMap = command.getCurrentTestcaseActionPropertyMap();
+                List<KTS_ACTION_PROPERTY> finalProperties = new ArrayList<>();
+                List<String> actionGuids = new ArrayList<>();
+                currentTestcaseActionPropertyMap.forEach((actionGuid, properties) -> {
+                    actionGuids.add(actionGuid);
+                    for (KTS_ACTION_PROPERTY property : properties) {
+                        finalProperties.add(property);
+                    }
+                });
+                if(actionGuids.stream().count() > 0){
+                    this.propertyInterface.saveProperties(new SavePropertiesCommand(finalProperties, actionGuids));
                 }
-            });
-            if(actionGuids.stream().count() > 0){
-                this.propertyInterface.saveProperties(new SavePropertiesCommand(finalProperties, actionGuids));
             }
+            this.testcaseInterface.addTestcase(command.getTestcase());
+        } catch(Exception e){
+            throw e;
         }
-        this.testcaseInterface.addTestcase(command.getTestcase());
     }
-
     @Override
     @Transactional
     public void removeTestcase(RemoveTestcaseCommand command) {
-        this.testcaseInterface.removeTestcase(command);
-        this.actionInterface.removeAction(new RemoveActionCommand(command.getTestcaseGuid()));
-        this.testRelTestcaseInterface.removeTestRelTestcaseByTestcaseGuid(new RemoveTestRelTestcaseByTestcaseGuidCommand(command.getTestcaseGuid()));
-        this.propertyInterface.removeProperties(new RemovePropertiesCommand(command.getTestcaseGuid()));
+        try {
+            this.testcaseInterface.removeTestcase(command);
+            this.actionInterface.removeAction(new RemoveActionCommand(command.getTestcaseGuid()));
+            this.testRelTestcaseInterface.removeTestRelTestcaseByTestcaseGuid(new RemoveTestRelTestcaseByTestcaseGuidCommand(command.getTestcaseGuid()));
+            this.propertyInterface.removeProperties(new RemovePropertiesCommand(command.getTestcaseGuid()));
+        } catch(Exception e){
+            throw e;
+        }
     }
-
     @Override
     @Transactional
     public void removeTest(RemoveTestCommand command) {
-        this.testInterface.removeTest(command);
-        this.testRelTestcaseInterface.removeTestRelTestcaseByTestGuid(new RemoveTestRelTestcaseByTestGuidCommand(command.getTestGuid()));
+        try {
+            this.testInterface.removeTest(command);
+            this.testRelTestcaseInterface.removeTestRelTestcaseByTestGuid(new RemoveTestRelTestcaseByTestGuidCommand(command.getTestGuid()));
+        } catch (Exception e){
+            throw e;
+        }
     }
-
     @Override
     @Transactional
     public void saveTestRelTestcase(SaveTestRelTestcaseCommand command) {
-        if(command.getRelationList().stream().count() > 0){
-            this.testRelTestcaseInterface.saveTestRelTestcase(command);
+        try {
+            if(command.getRelationList().stream().count() > 0){
+                this.testRelTestcaseInterface.saveTestRelTestcase(command);
+            }
+            this.testInterface.addTest(new AddTestCommand(command.getTestGuid(), command.getTestName(), command.getTestDescription()));
+        } catch(Exception e){
+            throw e;
         }
-        this.testInterface.addTest(new AddTestCommand(command.getTestGuid(), command.getTestName(), command.getTestDescription()));
     }
 
     //action
@@ -104,10 +117,6 @@ public class MySystemServiceImpl implements MySystemService {
     }
 
     //property
-//    @Override
-//    public List<KTS_ACTION_PROPERTY> findProperty(String actionGuid) {
-//        return this.propertyInterface.findProperty(actionGuid);
-//    }
     @Override
     public List<KTS_ACTION_PROPERTY_TEMPLATE> getPropertyTemplate(String actionId) {
         return this.propertyInterface.getPropertyTemplate(actionId);
@@ -132,11 +141,6 @@ public class MySystemServiceImpl implements MySystemService {
         }
         return ret;
     }
-//    @Override
-//    public void saveProperties(SavePropertiesCommand command) {
-//        this.propertyInterface.saveProperties(command);
-//        this.actionInterface.updateActionId(new UpdateActionIdCommand(command.getActionGuid(), command.getActionId()));
-//    }
 
     //test
     @Override

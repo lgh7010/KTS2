@@ -17,11 +17,6 @@ public class PropertyInterfaceMybatis implements PropertyInterface {
     @Autowired
     private PropertyInterfaceMybatisMapper propertyInterfaceMybatisMapper;
 
-//    @Override
-//    public List<KTS_ACTION_PROPERTY> findProperty(String actionGuid) {
-//        return this.propertyInterfaceMybatisMapper.findProperty(actionGuid);
-//    }
-
     @Override
     public List<KTS_ACTION_PROPERTY> findProperties(FindPropertiesCommand command) {
         return this.propertyInterfaceMybatisMapper.findProperties(command);

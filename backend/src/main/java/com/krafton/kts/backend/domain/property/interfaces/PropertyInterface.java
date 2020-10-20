@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 public interface PropertyInterface {
-//    List<KTS_ACTION_PROPERTY> findProperty(String actionGuid);
     List<KTS_ACTION_PROPERTY> findProperties(FindPropertiesCommand command);
     List<KTS_ACTION_PROPERTY_TEMPLATE> getPropertyTemplate(String actionId);
     void saveProperties(SavePropertiesCommand command);

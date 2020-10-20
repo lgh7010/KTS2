@@ -109,28 +109,6 @@ public class MySystemController {
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());
         }
     }
-//    @GetMapping("/properties")
-//    @ResponseBody
-//    public Response properties(@RequestParam(value = "actionGuid") String actionGuid){
-//        try {
-//            Response response = new Response();
-//            response.putContext("list", this.systemService.findProperty(actionGuid));
-//            return response;
-//        } catch(Exception e) {
-//            return new Response(ErrorCode.ERR_COMMON, e.getMessage());
-//        }
-//    }
-//    @PostMapping("/saveProperties")
-//    @ResponseBody
-//    public Response saveProperties(@RequestBody SavePropertiesCommand command){
-//        try {
-//            this.systemService.saveProperties(command);
-//            return new Response();
-//        } catch(Exception e){
-//            return new Response(ErrorCode.ERR_COMMON, e.getMessage());
-//        }
-//    }
-
     @GetMapping("/findProperties")
     @ResponseBody
     public Response findProperties(@RequestParam(value = "testcaseGuid") String testcaseGuid){

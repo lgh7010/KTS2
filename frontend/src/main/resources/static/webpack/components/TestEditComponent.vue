@@ -69,7 +69,7 @@
           </tr>
           </thead>
           <tbody>
-          <tr v-for="(rel, index) in this.testRelTestcaseDerived">
+          <tr v-for="(rel, index) in this.testRelTestcaseJoinTestcase">
             <td>{{index}}</td>
             <td>{{rel.name}}</td>
             <td>{{rel.description}}</td>
@@ -98,7 +98,7 @@ export default {
   name: "testEditComponent",
   data: function(){
     return {
-      testRelTestcaseDerived: [],
+      testRelTestcaseJoinTestcase: [],
       testcaseList: [],
       currentTest: null,
     }
@@ -114,9 +114,9 @@ export default {
       document.getElementById("testDescription").value = this.currentTest.description
 
 
-      axios.get("/testRelTestcaseDerived", { params: {'testGuid': this.currentTest.testGuid}}).then(response => {
-        this.testRelTestcaseDerived = response.data.context.list
-        console.log(this.testRelTestcaseDerived)
+      axios.get("/testRelTestcaseJoinTestcase", { params: {'testGuid': this.currentTest.testGuid}}).then(response => {
+        this.testRelTestcaseJoinTestcase = response.data.context.list
+        console.log(this.testRelTestcaseJoinTestcase)
       }).catch(error => {
         console.log(error)
       })
@@ -148,7 +148,7 @@ export default {
       $("#addTestcaseToTestLayer").hide()
     },
     onClickTestcaseAddToTest: function(testcase){
-      this.testRelTestcaseDerived.push({
+      this.testRelTestcaseJoinTestcase.push({
         relationGuid: this.guid(),
         testGuid : this.currentTest.testGuid,
         testcaseGuid : testcase.testcaseGuid,
@@ -158,7 +158,7 @@ export default {
     },
     onClickSave: function(){
       axios.post("/testRelTestcaseSave", {
-        "relationList": this.testRelTestcaseDerived,
+        "relationList": this.testRelTestcaseJoinTestcase,
         "testGuid": this.currentTest.testGuid,
         "testName": document.getElementById("testName").value,
         "testDescription": document.getElementById("testDescription").value,
@@ -173,16 +173,16 @@ export default {
       if(listIndex < 1){
         return
       }
-      this.testRelTestcaseDerived[listIndex] = this.testRelTestcaseDerived.splice(listIndex - 1, 1, this.testRelTestcaseDerived[listIndex])[0]
+      this.testRelTestcaseJoinTestcase[listIndex] = this.testRelTestcaseJoinTestcase.splice(listIndex - 1, 1, this.testRelTestcaseJoinTestcase[listIndex])[0]
     },
     moveDown: function(listIndex){
-      if(listIndex > this.testRelTestcaseDerived.length - 2){
+      if(listIndex > this.testRelTestcaseJoinTestcase.length - 2){
         return
       }
-      this.testRelTestcaseDerived[listIndex] = this.testRelTestcaseDerived.splice(listIndex + 1, 1, this.testRelTestcaseDerived[listIndex])[0]
+      this.testRelTestcaseJoinTestcase[listIndex] = this.testRelTestcaseJoinTestcase.splice(listIndex + 1, 1, this.testRelTestcaseJoinTestcase[listIndex])[0]
     },
     removeTestcase: function(listIndex){
-      this.testRelTestcaseDerived.splice(listIndex, 1)
+      this.testRelTestcaseJoinTestcase.splice(listIndex, 1)
     }
   }
 }

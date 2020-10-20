@@ -17,12 +17,12 @@ import com.krafton.kts.backend.domain.test.interfaces.TestInterface;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestGuidCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestcaseGuidCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
-import com.krafton.kts.backend.domain.test_rel_testcase.domain.db.TestRelTestcaseDerived;
+import com.krafton.kts.backend.service.crossdomain.db.TEST_REL_TESTCASE_JOIN_TESTCASE;
 import com.krafton.kts.backend.domain.test_rel_testcase.interfaces.TestRelTestcaseInterface;
 import com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand;
 import com.krafton.kts.backend.domain.testcase.domain.db.KTS_TESTCASE;
 import com.krafton.kts.backend.domain.testcase.interfaces.TestcaseInterface;
-import com.krafton.kts.backend.service.command.SaveTestcaseCommand;
+import com.krafton.kts.backend.service.crossdomain.command.SaveTestcaseCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -154,8 +154,8 @@ public class MySystemServiceImpl implements MySystemService {
 
     //test_rel_testcase
     @Override
-    public List<TestRelTestcaseDerived> findTestRelTestcaseDerived(String testGuid) {
-        return this.testRelTestcaseInterface.findTestRelTestcaseDerived(testGuid);
+    public List<TEST_REL_TESTCASE_JOIN_TESTCASE> findTestRelTestcaseJoinTestcase(String testGuid) {
+        return this.testRelTestcaseInterface.findTestRelTestcaseJoinTestcase(testGuid);
     }
 
     //testcase

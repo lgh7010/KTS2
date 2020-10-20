@@ -1,7 +1,6 @@
 package com.krafton.kts.backend.service;
 
-import com.krafton.kts.backend.domain.property.domain.command.SavePropertiesCommand;
-import com.krafton.kts.backend.service.command.SaveTestcaseCommand;
+import com.krafton.kts.backend.service.crossdomain.command.SaveTestcaseCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
 import com.krafton.kts.backend.domain.property.domain.db.KTS_ACTION_PROPERTY;
 import com.krafton.kts.backend.domain.property.domain.db.KTS_ACTION_PROPERTY_TEMPLATE;
@@ -9,7 +8,7 @@ import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_TEMPLATE;
 import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
 import com.krafton.kts.backend.domain.test.domain.db.KTS_TEST;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
-import com.krafton.kts.backend.domain.test_rel_testcase.domain.db.TestRelTestcaseDerived;
+import com.krafton.kts.backend.service.crossdomain.db.TEST_REL_TESTCASE_JOIN_TESTCASE;
 import com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand;
 import com.krafton.kts.backend.domain.testcase.domain.db.KTS_TESTCASE;
 
@@ -36,7 +35,7 @@ public interface MySystemService {
     KTS_TEST findTest(String testGuid);
 
     //test_rel_testcase
-    List<TestRelTestcaseDerived> findTestRelTestcaseDerived(String testGuid);
+    List<TEST_REL_TESTCASE_JOIN_TESTCASE> findTestRelTestcaseJoinTestcase(String testGuid);
 
     //testcase
     List<KTS_TESTCASE> findAll();

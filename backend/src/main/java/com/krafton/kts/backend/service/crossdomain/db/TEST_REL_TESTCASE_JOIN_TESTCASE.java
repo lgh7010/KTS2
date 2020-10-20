@@ -1,9 +1,9 @@
-package com.krafton.kts.backend.domain.test_rel_testcase.domain.db;
+package com.krafton.kts.backend.service.crossdomain.db;
 
 import lombok.Data;
 
 @Data
-public class TestRelTestcaseDerived {
+public class TEST_REL_TESTCASE_JOIN_TESTCASE {
     private String relationGuid;
     private String testGuid;
     private int listIndex;

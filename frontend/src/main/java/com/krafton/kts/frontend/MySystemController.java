@@ -1,7 +1,6 @@
 package com.krafton.kts.frontend;
 
-import com.krafton.kts.backend.domain.property.domain.command.SavePropertiesCommand;
-import com.krafton.kts.backend.service.command.SaveTestcaseCommand;
+import com.krafton.kts.backend.service.crossdomain.command.SaveTestcaseCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
 import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
@@ -139,12 +138,12 @@ public class MySystemController {
     }
 
     //test_rel_testcase
-    @GetMapping("/testRelTestcaseDerived")
+    @GetMapping("/testRelTestcaseJoinTestcase")
     @ResponseBody
-    public Response testRelTestcaseDerived(@RequestParam(value = "testGuid") String testGuid){
+    public Response testRelTestcaseJoinTestcase(@RequestParam(value = "testGuid") String testGuid){
         try {
             Response response = new Response();
-            response.putContext("list", this.systemService.findTestRelTestcaseDerived(testGuid));
+            response.putContext("list", this.systemService.findTestRelTestcaseJoinTestcase(testGuid));
             return response;
         } catch(Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());

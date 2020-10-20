@@ -4,7 +4,7 @@ import com.krafton.kts.backend.common.JdbcCommon;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestGuidCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestcaseGuidCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
-import com.krafton.kts.backend.domain.test_rel_testcase.domain.db.TestRelTestcaseDerived;
+import com.krafton.kts.backend.service.crossdomain.db.TEST_REL_TESTCASE_JOIN_TESTCASE;
 import com.krafton.kts.backend.domain.test_rel_testcase.interfaces.TestRelTestcaseInterface;
 
 import javax.sql.DataSource;
@@ -18,7 +18,7 @@ public class TestRelTestcaseInterfaceJDBC extends JdbcCommon implements TestRelT
     }
 
     @Override
-    public List<TestRelTestcaseDerived> findTestRelTestcaseDerived(String testGuid) {
+    public List<TEST_REL_TESTCASE_JOIN_TESTCASE> findTestRelTestcaseJoinTestcase(String testGuid) {
         Connection conn = null;
         PreparedStatement pstmt = null;
         ResultSet rs = null;
@@ -30,9 +30,9 @@ public class TestRelTestcaseInterfaceJDBC extends JdbcCommon implements TestRelT
                     "WHERE a.testGuid = ? AND a.deleted = 'N' ORDER BY listIndex");
             pstmt.setString(1, testGuid);
             rs = pstmt.executeQuery();
-            List<TestRelTestcaseDerived> rels = new ArrayList<>();
+            List<TEST_REL_TESTCASE_JOIN_TESTCASE> rels = new ArrayList<>();
             while(rs.next()){
-                TestRelTestcaseDerived rel = new TestRelTestcaseDerived();
+                TEST_REL_TESTCASE_JOIN_TESTCASE rel = new TEST_REL_TESTCASE_JOIN_TESTCASE();
                 rel.setRelationGuid(rs.getString("relationGuid"));
                 rel.setTestGuid(rs.getString("testGuid"));
                 rel.setTestcaseGuid(rs.getString("testcaseGuid"));

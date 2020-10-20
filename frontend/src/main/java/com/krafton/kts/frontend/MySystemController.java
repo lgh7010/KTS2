@@ -5,7 +5,7 @@ import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
 import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
 import com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand;
-import com.krafton.kts.backend.service.MySystemService;
+import com.krafton.kts.backend.service.KTSService;
 import com.krafton.kts.frontend.common.ErrorCode;
 import com.krafton.kts.frontend.common.Response;
 import lombok.RequiredArgsConstructor;
@@ -21,48 +21,57 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MySystemController {
 
-    private final MySystemService systemService;
+    private final KTSService ktsService;
 
+    //transactional
     @PostMapping("/saveCurrentTestcaseActions")
     @ResponseBody
     public Response saveCurrentTestcaseActions(@RequestBody SaveTestcaseCommand command){
         try {
-            this.systemService.saveTestcase(command);
+            this.ktsService.saveTestcase(command);
             return new Response();
         } catch(Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());
         }
     }
-
     @PostMapping("/removeTestcase")
     @ResponseBody
     public Response removeTestcase(@RequestBody RemoveTestcaseCommand command){
         try {
-            this.systemService.removeTestcase(command);
+            this.ktsService.removeTestcase(command);
             return new Response();
         } catch(Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());
         }
     }
-
     @PostMapping("/testRelTestcaseSave")
     @ResponseBody
     public Response testRelTestcaseSave(@RequestBody SaveTestRelTestcaseCommand command){
         try {
-            this.systemService.saveTestRelTestcase(command);
+            this.ktsService.saveTestRelTestcase(command);
             return new Response();
         } catch(Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());
         }
     }
-
     @PostMapping("/removeTest")
     @ResponseBody
     public Response removeTest(@RequestBody RemoveTestCommand command){
         try {
-            this.systemService.removeTest(command);
+            this.ktsService.removeTest(command);
             return new Response();
         } catch(Exception e){
+            return new Response(ErrorCode.ERR_COMMON, e.getMessage());
+        }
+    }
+    @PostMapping("/runTest")
+    @ResponseBody
+    public Response runTest(@RequestBody RunTestCommand command){
+        try {
+            Response response = new Response();
+            response.putContext("instruction", this.ktsService.runTest(command));
+            return response;
+        } catch (Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());
         }
     }
@@ -72,7 +81,7 @@ public class MySystemController {
     @ResponseBody
     public Response currentTestcaseActions(@RequestParam(value = "testcaseGuid") String testcaseGuid){
         try {
-            List<KTS_ACTION> list = this.systemService.findAction(testcaseGuid);
+            List<KTS_ACTION> list = this.ktsService.findAction(testcaseGuid);
             Map<String, KTS_ACTION> ret = new HashMap<>();
             for (Iterator<KTS_ACTION> iter = list.iterator(); iter.hasNext();){
                 KTS_ACTION tc = iter.next();
@@ -91,7 +100,7 @@ public class MySystemController {
     public Response actionTemplates(){
         try {
             Response response = new Response();
-            response.putContext("actionTemplates", this.systemService.getActionTemplate());
+            response.putContext("actionTemplates", this.ktsService.getActionTemplate());
             return response;
         } catch(Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());
@@ -102,7 +111,7 @@ public class MySystemController {
     public Response propertiesTemplate(@RequestParam(value = "actionId") String actionId){
         try {
             Response response = new Response();
-            response.putContext("list", this.systemService.getPropertyTemplate(actionId));
+            response.putContext("list", this.ktsService.getPropertyTemplate(actionId));
             return response;
         } catch(Exception e) {
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());
@@ -113,7 +122,7 @@ public class MySystemController {
     public Response findProperties(@RequestParam(value = "testcaseGuid") String testcaseGuid){
         try {
             Response response = new Response();
-            response.putContext("map", this.systemService.findProperties(testcaseGuid));
+            response.putContext("map", this.ktsService.findProperties(testcaseGuid));
             return response;
         } catch(Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());
@@ -125,7 +134,7 @@ public class MySystemController {
     @ResponseBody
     public Response findAllTest(){
         Response response = new Response();
-        response.putContext("list", this.systemService.findAllTest());
+        response.putContext("list", this.ktsService.findAllTest());
         return response;
     }
 
@@ -133,7 +142,7 @@ public class MySystemController {
     @ResponseBody
     public Response findTest(@RequestParam String testGuid){
         Response response = new Response();
-        response.putContext("test", this.systemService.findTest(testGuid));
+        response.putContext("test", this.ktsService.findTest(testGuid));
         return response;
     }
 
@@ -143,7 +152,7 @@ public class MySystemController {
     public Response testRelTestcaseJoinTestcase(@RequestParam(value = "testGuid") String testGuid){
         try {
             Response response = new Response();
-            response.putContext("list", this.systemService.findTestRelTestcaseJoinTestcase(testGuid));
+            response.putContext("list", this.ktsService.findTestRelTestcaseJoinTestcase(testGuid));
             return response;
         } catch(Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());
@@ -156,7 +165,7 @@ public class MySystemController {
     public Response testcaseList(){
         try {
             Response response = new Response();
-            response.putContext("testcaseList", this.systemService.findAll());
+            response.putContext("testcaseList", this.ktsService.findAll());
             return response;
         } catch(Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());
@@ -168,7 +177,7 @@ public class MySystemController {
     public Response testcase(@RequestParam(value = "testcaseGuid") String testcaseGuid){
         try {
             Response response = new Response();
-            response.putContext("testcase", this.systemService.findTestcase(testcaseGuid));
+            response.putContext("testcase", this.ktsService.findTestcase(testcaseGuid));
             return response;
         } catch (Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());

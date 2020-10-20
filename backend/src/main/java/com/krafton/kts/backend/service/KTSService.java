@@ -1,5 +1,8 @@
 package com.krafton.kts.backend.service;
 
+import com.krafton.kts.backend.domain.running_action.domain.db.RUNNING_ACTION;
+import com.krafton.kts.backend.service.crossdomain.command.FindRunningActionCommand;
+import com.krafton.kts.backend.service.crossdomain.command.RunTestCommnad;
 import com.krafton.kts.backend.service.crossdomain.command.SaveTestcaseCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
 import com.krafton.kts.backend.domain.property.domain.db.KTS_ACTION_PROPERTY;
@@ -11,16 +14,19 @@ import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestR
 import com.krafton.kts.backend.service.crossdomain.db.TEST_REL_TESTCASE_JOIN_TESTCASE;
 import com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand;
 import com.krafton.kts.backend.domain.testcase.domain.db.KTS_TESTCASE;
+import com.krafton.kts.backend.service.crossdomain.response.NextTestInstructionResponse;
 
 import java.util.List;
 import java.util.Map;
 
-public interface MySystemService {
+public interface KTSService {
     //transactional
     void saveTestcase(SaveTestcaseCommand command);
     void removeTestcase(RemoveTestcaseCommand command);
     void removeTest(RemoveTestCommand command);
     void saveTestRelTestcase(SaveTestRelTestcaseCommand command);
+    NextTestInstructionResponse runTest(RunTestCommnad command);
+    RUNNING_ACTION findRunningAction(FindRunningActionCommand command);
 
     //action
     List<KTS_ACTION> findAction(String testcaseGuid);

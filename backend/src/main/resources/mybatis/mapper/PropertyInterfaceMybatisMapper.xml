@@ -12,7 +12,11 @@
     </select>
 
     <update id="saveProperties" parameterType="com.krafton.kts.backend.domain.property.domain.command.SavePropertiesCommand">
-        DELETE FROM KTS_ACTION_PROPERTY WHERE actionGuid = #{actionGuid};
+        DELETE FROM KTS_ACTION_PROPERTY WHERE actionGuid IN (
+        <foreach collection="actionGuids" item="item" separator=",">
+            #{item}
+        </foreach>
+        );
 
         <if test="properties != null and properties.size() > 0">
             INSERT INTO KTS_ACTION_PROPERTY (actionGuid, propertyName, propertyValue) VALUES
@@ -29,4 +33,12 @@
             SELECT actionGuid FROM KTS_ACTION WHERE testcaseGuid = #{testcaseGuid} AND deleted = 'N' GROUP BY actionGuid
         );
     </delete>
+
+    <select id="findProperties" parameterType="com.krafton.kts.backend.domain.property.domain.command.FindPropertiesCommand" resultType="com.krafton.kts.backend.domain.property.domain.db.KTS_ACTION_PROPERTY">
+        SELECT * FROM KTS_ACTION_PROPERTY WHERE actionGuid IN (
+        <foreach collection="actionGuids" item="item" separator=",">
+            #{item}
+        </foreach>
+        );
+    </select>
 </mapper>

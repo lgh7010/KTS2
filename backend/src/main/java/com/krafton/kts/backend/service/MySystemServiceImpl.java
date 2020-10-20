@@ -2,6 +2,7 @@ package com.krafton.kts.backend.service;
 
 import com.krafton.kts.backend.domain.action.domain.command.*;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
+import com.krafton.kts.backend.domain.property.domain.command.FindPropertiesCommand;
 import com.krafton.kts.backend.domain.property.domain.command.RemovePropertiesCommand;
 import com.krafton.kts.backend.domain.property.domain.command.SavePropertiesCommand;
 import com.krafton.kts.backend.domain.property.domain.db.KTS_ACTION_PROPERTY;
@@ -21,9 +22,11 @@ import com.krafton.kts.backend.domain.test_rel_testcase.interfaces.TestRelTestca
 import com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand;
 import com.krafton.kts.backend.domain.testcase.domain.db.KTS_TESTCASE;
 import com.krafton.kts.backend.domain.testcase.interfaces.TestcaseInterface;
+import com.krafton.kts.backend.service.command.SaveTestcaseCommand;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,6 +46,17 @@ public class MySystemServiceImpl implements MySystemService {
     public void saveTestcase(SaveTestcaseCommand command) {
         if(command.getCurrentTestcaseActions().size() > 0){
             this.actionInterface.saveAction(new SaveActionCommand(command.getCurrentTestcaseActions(), command.getRemoveActionGuidList()));
+
+            Map<String, List<KTS_ACTION_PROPERTY>> currentTestcaseActionPropertyMap = command.getCurrentTestcaseActionPropertyMap();
+            List<KTS_ACTION_PROPERTY> finalProperties = new ArrayList<>();
+            List<String> actionGuids = new ArrayList<>();
+            currentTestcaseActionPropertyMap.forEach((actionGuid, properties) -> {
+                actionGuids.add(actionGuid);
+                for (KTS_ACTION_PROPERTY property : properties) {
+                    finalProperties.add(property);
+                }
+            });
+            this.propertyInterface.saveProperties(new SavePropertiesCommand(finalProperties, actionGuids));
         }
         this.testcaseInterface.addTestcase(command.getTestcase());
     }
@@ -88,19 +102,36 @@ public class MySystemServiceImpl implements MySystemService {
     }
 
     //property
-    @Override
-    public List<KTS_ACTION_PROPERTY> findProperty(String actionGuid) {
-        return this.propertyInterface.findProperty(actionGuid);
-    }
+//    @Override
+//    public List<KTS_ACTION_PROPERTY> findProperty(String actionGuid) {
+//        return this.propertyInterface.findProperty(actionGuid);
+//    }
     @Override
     public List<KTS_ACTION_PROPERTY_TEMPLATE> getPropertyTemplate(String actionId) {
         return this.propertyInterface.getPropertyTemplate(actionId);
     }
     @Override
-    public void saveProperties(SavePropertiesCommand command) {
-        this.propertyInterface.saveProperties(command);
-        this.actionInterface.updateActionId(new UpdateActionIdCommand(command.getActionGuid(), command.getActionId()));
+    public Map<String, List<KTS_ACTION_PROPERTY>> findProperties(String testcaseGuid) {
+        List<KTS_ACTION> actions = this.actionInterface.findAction(testcaseGuid);
+        List<String> actionGuids = new ArrayList<>();
+        for (KTS_ACTION action : actions) {
+            actionGuids.add(action.getActionGuid());
+        }
+        List<KTS_ACTION_PROPERTY> list = this.propertyInterface.findProperties(new FindPropertiesCommand(actionGuids));
+        Map<String, List<KTS_ACTION_PROPERTY>> ret = new HashMap<>();
+        for (KTS_ACTION_PROPERTY property : list) {
+            if(ret.containsKey(property.getActionGuid()) == false){
+                ret.put(property.getActionGuid(), new ArrayList<>());
+            }
+            ret.get(property.getActionGuid()).add(property);
+        }
+        return ret;
     }
+//    @Override
+//    public void saveProperties(SavePropertiesCommand command) {
+//        this.propertyInterface.saveProperties(command);
+//        this.actionInterface.updateActionId(new UpdateActionIdCommand(command.getActionGuid(), command.getActionId()));
+//    }
 
     //test
     @Override

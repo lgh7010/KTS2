@@ -28,8 +28,8 @@
             {{actionTemplate.actionId}}
           </option>
         </select>
-        <button class="btn btn-success" v-on:click="onClickActionSave">저장</button>
-        <button class="btn btn-secondary" v-on:click="actionClose">닫기</button>
+        <button class="btn btn-success" v-on:click="onClickActionSave">완료</button>
+        <button class="btn btn-secondary" v-on:click="actionClose">취소</button>
       </div>
 
       <div>
@@ -43,7 +43,7 @@
           <tbody>
             <tr v-for="prop in this.actionProperties">
               <td>{{prop.propertyName}}</td>
-              <td><input type="text" v-bind:id="prop.actionGuid+'_'+prop.propertyName" v-bind:value="prop.propertyValue" v-on:input="onPropertyChange(prop)"></td>
+              <td><input type="text" v-bind:id="prop.actionGuid+'_'+prop.propertyName" v-bind:value="prop.propertyValue"></td>
             </tr>
           </tbody>
         </table>
@@ -105,6 +105,7 @@ export default {
   data(){
     return {
       currentTestcaseActions: {},//현재 페이지에서 관리중인 액션노드의 딕셔너리. 키값은 ACTION_GUID
+      currentTestcaseActionPropertyMap: {},//현재 페이지에서 관리중인 액션노드에 속한 모든 프로퍼티의 딕셔너리. 키값은 ACTION_GUID이며, 원소는 프로퍼티의 리스트임.
       actionTemplates: {},//액션 템플릿의 딕셔너리. 최초 페이지 생성시 불러온다.
       currentTestcase: null,//현재 에디터에서 편집중인 테스트케이스
 
@@ -137,6 +138,14 @@ export default {
         $("#testcaseName").val(this.currentTestcase.name)
         $("#testcaseDescription").val(this.currentTestcase.description)
         this.currentTestcaseActions = responseCurrentTestcaseActions.data.context.currentTestcaseActions
+
+        axios.get("/findProperties", { params: {'testcaseGuid': this.$route.params.testcaseGuid}}).then(responseProperties => {
+          console.log(responseProperties)
+          this.currentTestcaseActionPropertyMap = responseProperties.data.context.map
+          console.log(this.currentTestcaseActionPropertyMap)
+        }).catch(error => {
+          console.log(error)
+        })
       }).catch(error => {
         console.log(error)
       })
@@ -218,6 +227,7 @@ export default {
       console.log(this.currentTestcase)
       axios.post("/saveCurrentTestcaseActions", {
         "currentTestcaseActions": this.currentTestcaseActions,
+        "currentTestcaseActionPropertyMap": this.currentTestcaseActionPropertyMap,
         "removeActionGuidList": this.removeActionGuidList,
         "testcase": this.currentTestcase,
       }).then(response => {
@@ -309,20 +319,27 @@ export default {
     actionOpen(action){
       //현재 해당 노드에 포함된 속성정보를 불러온다.
       this.currentActionGuid = action.actionGuid
-      axios.get("/properties", { params: {'actionGuid': this.currentActionGuid}}).then(response => {
-        console.log(response)
-        this.actionProperties = response.data.context.list
-        console.log(action);
-        $("#actionIdSelection").val(action.actionId)
+      this.actionProperties = this.currentTestcaseActionPropertyMap[this.currentActionGuid]
 
-        $("#actionEditorBackground").show()
-        $("#actionEditor").show()
-      }).catch(error => {
-        console.log(error)
-      })
+      $("#actionIdSelection").val(action.actionId)
+      $("#actionEditorBackground").show()
+      $("#actionEditor").show()
+
+      // axios.get("/properties", { params: {'actionGuid': this.currentActionGuid}}).then(response => {
+      //   console.log(response)
+      //   this.actionProperties = response.data.context.list
+      //   console.log(action);
+      //   $("#actionIdSelection").val(action.actionId)
+      //
+      //   $("#actionEditorBackground").show()
+      //   $("#actionEditor").show()
+      // }).catch(error => {
+      //   console.log(error)
+      // })
     },
     actionClose(){
       this.currentActionGuid = ""
+      this.actionProperties = null
       $("#actionEditorBackground").hide()
       $("#actionEditor").hide()
     },
@@ -340,19 +357,22 @@ export default {
       })
     },
     onClickActionSave(){
-      axios.post("/saveProperties", {
-        "actionGuid": this.currentActionGuid,
-        "actionId": this.currentTestcaseActions[this.currentActionGuid].actionId,
-        "properties": this.actionProperties
-      }).then(response => {
-        alert('저장 완료')
-        console.log(response)
-      }).catch(error => {
-        console.log(error)
-      })
-    },
-    onPropertyChange(prop){
-      prop.propertyValue = document.getElementById(this.makePropertyId(prop.actionGuid, prop.propertyName)).value
+      for(var i = 0; i < this.actionProperties.length; i++){
+        this.actionProperties[i].propertyValue = document.getElementById(this.makePropertyId(this.actionProperties[i].actionGuid, this.actionProperties[i].propertyName)).value
+      }
+      this.currentTestcaseActionPropertyMap[this.currentActionGuid] = this.actionProperties
+      this.actionClose()
+
+      // axios.post("/saveProperties", {
+      //   "actionGuid": this.currentActionGuid,
+      //   "actionId": this.currentTestcaseActions[this.currentActionGuid].actionId,
+      //   "properties": this.actionProperties
+      // }).then(response => {
+      //   alert('저장 완료')
+      //   console.log(response)
+      // }).catch(error => {
+      //   console.log(error)
+      // })
     }
   }
 }

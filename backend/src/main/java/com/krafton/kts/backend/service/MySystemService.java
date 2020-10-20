@@ -1,7 +1,7 @@
 package com.krafton.kts.backend.service;
 
 import com.krafton.kts.backend.domain.property.domain.command.SavePropertiesCommand;
-import com.krafton.kts.backend.domain.action.domain.command.SaveTestcaseCommand;
+import com.krafton.kts.backend.service.command.SaveTestcaseCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
 import com.krafton.kts.backend.domain.property.domain.db.KTS_ACTION_PROPERTY;
 import com.krafton.kts.backend.domain.property.domain.db.KTS_ACTION_PROPERTY_TEMPLATE;
@@ -12,7 +12,6 @@ import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestR
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.db.TestRelTestcaseDerived;
 import com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand;
 import com.krafton.kts.backend.domain.testcase.domain.db.KTS_TESTCASE;
-import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Map;
@@ -29,9 +28,10 @@ public interface MySystemService {
     Map<String, KTS_ACTION_TEMPLATE> getActionTemplate();
 
     //property
-    List<KTS_ACTION_PROPERTY> findProperty(String actionGuid);
+//    List<KTS_ACTION_PROPERTY> findProperty(String actionGuid);
     List<KTS_ACTION_PROPERTY_TEMPLATE> getPropertyTemplate(String actionId);
-    void saveProperties(SavePropertiesCommand command);
+    Map<String, List<KTS_ACTION_PROPERTY>> findProperties(String testcaseGuid);
+//    void saveProperties(SavePropertiesCommand command);
 
     //test
     List<KTS_TEST> findAllTest();

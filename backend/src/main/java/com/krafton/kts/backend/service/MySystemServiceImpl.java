@@ -56,7 +56,9 @@ public class MySystemServiceImpl implements MySystemService {
                     finalProperties.add(property);
                 }
             });
-            this.propertyInterface.saveProperties(new SavePropertiesCommand(finalProperties, actionGuids));
+            if(actionGuids.stream().count() > 0){
+                this.propertyInterface.saveProperties(new SavePropertiesCommand(finalProperties, actionGuids));
+            }
         }
         this.testcaseInterface.addTestcase(command.getTestcase());
     }
@@ -117,13 +119,16 @@ public class MySystemServiceImpl implements MySystemService {
         for (KTS_ACTION action : actions) {
             actionGuids.add(action.getActionGuid());
         }
-        List<KTS_ACTION_PROPERTY> list = this.propertyInterface.findProperties(new FindPropertiesCommand(actionGuids));
+
         Map<String, List<KTS_ACTION_PROPERTY>> ret = new HashMap<>();
-        for (KTS_ACTION_PROPERTY property : list) {
-            if(ret.containsKey(property.getActionGuid()) == false){
-                ret.put(property.getActionGuid(), new ArrayList<>());
+        if(actions.stream().count() > 0){
+            List<KTS_ACTION_PROPERTY> list = this.propertyInterface.findProperties(new FindPropertiesCommand(actionGuids));
+            for (KTS_ACTION_PROPERTY property : list) {
+                if(ret.containsKey(property.getActionGuid()) == false){
+                    ret.put(property.getActionGuid(), new ArrayList<>());
+                }
+                ret.get(property.getActionGuid()).add(property);
             }
-            ret.get(property.getActionGuid()).add(property);
         }
         return ret;
     }

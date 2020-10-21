@@ -1,5 +1,6 @@
 package com.krafton.kts.backend.domain.running_property.interfaces.mybatis;
 
+import com.krafton.kts.backend.domain.running_property.domain.command.AddRunningPropertyCommand;
 import com.krafton.kts.backend.domain.running_property.domain.db.RUNNING_PROPERTY;
 import com.krafton.kts.backend.domain.running_property.interfaces.RunningPropertyInterface;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,8 +13,10 @@ public class RunningPropertyInterfaceMybatis implements RunningPropertyInterface
     private RunningPropertyInterfaceMybatisMapper runningPropertyInterfaceMybatisMapper;
 
     @Override
-    public void addRunningProperty(List<RUNNING_PROPERTY> properties) {
-        this.runningPropertyInterfaceMybatisMapper.addRunningProperty(properties);
+    public void addRunningProperty(AddRunningPropertyCommand command) {
+        if(command.getRunningProperties().stream().count() > 0){
+            this.runningPropertyInterfaceMybatisMapper.addRunningProperty(command);
+        }
     }
 
     @Override

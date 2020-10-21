@@ -6,8 +6,12 @@ import com.krafton.kts.backend.domain.property.interfaces.PropertyInterface;
 import com.krafton.kts.backend.domain.property.interfaces.mybatis.PropertyInterfaceMybatis;
 import com.krafton.kts.backend.domain.running_action.interfaces.RunningActionInterface;
 import com.krafton.kts.backend.domain.running_action.interfaces.mybatis.RunningActionInterfaceMybatis;
+import com.krafton.kts.backend.domain.running_property.interfaces.RunningPropertyInterface;
+import com.krafton.kts.backend.domain.running_property.interfaces.mybatis.RunningPropertyInterfaceMybatis;
 import com.krafton.kts.backend.domain.running_test.interfaces.RunningTestInterface;
 import com.krafton.kts.backend.domain.running_test.interfaces.mybatis.RunningTestInterfaceMybatis;
+import com.krafton.kts.backend.domain.running_testcase.interfaces.RunningTestcaseInterface;
+import com.krafton.kts.backend.domain.running_testcase.interfaces.mybatis.RunningTestcaseInterfaceMybatis;
 import com.krafton.kts.backend.domain.test.interfaces.TestInterface;
 import com.krafton.kts.backend.domain.test.interfaces.mybatis.TestInterfaceMybatis;
 import com.krafton.kts.backend.domain.test_rel_testcase.interfaces.TestRelTestcaseInterface;
@@ -37,7 +41,11 @@ public class SpringConstructionClass {
                 propertyInterface(),
                 testcaseInterface(),
                 testRelTestcaseInterface(),
-                testInterface()
+                testInterface(),
+                runningTestInterface(),
+                runningTestcaseInterface(),
+                runningActionInterface(),
+                runningPropertyInterface()
         );
     }
 
@@ -73,11 +81,21 @@ public class SpringConstructionClass {
 
     @Bean
     public RunningTestInterface runningTestInterface(){
-        return new RunningTestInterfaceMybatis();
+        return new RunningTestInterfaceMybatis();               //Mybatis 이용
+    }
+
+    @Bean
+    public RunningTestcaseInterface runningTestcaseInterface(){
+        return new RunningTestcaseInterfaceMybatis();           //Mybatis 이용
     }
 
     @Bean
     public RunningActionInterface runningActionInterface(){
-        return new RunningActionInterfaceMybatis();
+        return new RunningActionInterfaceMybatis();             //Mybatis 이용
+    }
+
+    @Bean
+    public RunningPropertyInterface runningPropertyInterface(){
+        return new RunningPropertyInterfaceMybatis();           //Mybatis 이용
     }
 }

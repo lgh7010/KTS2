@@ -13,4 +13,5 @@ public class NextTestInstructionResponse {
     private RUNNING_TEST runningTest;
     private RUNNING_ACTION runningAction;
     private List<RUNNING_PROPERTY> runningProperties;
+    private String isFinished = "N";
 }

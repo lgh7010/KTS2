@@ -10,12 +10,15 @@ import com.krafton.kts.backend.domain.property.domain.db.KTS_ACTION_PROPERTY_TEM
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_TEMPLATE;
 import com.krafton.kts.backend.domain.action.interfaces.ActionInterface;
 import com.krafton.kts.backend.domain.property.interfaces.PropertyInterface;
+import com.krafton.kts.backend.domain.running_action.domain.command.AddRunningActionCommand;
 import com.krafton.kts.backend.domain.running_action.domain.db.RUNNING_ACTION;
 import com.krafton.kts.backend.domain.running_action.interfaces.RunningActionInterface;
+import com.krafton.kts.backend.domain.running_property.domain.command.AddRunningPropertyCommand;
 import com.krafton.kts.backend.domain.running_property.domain.db.RUNNING_PROPERTY;
 import com.krafton.kts.backend.domain.running_property.interfaces.RunningPropertyInterface;
 import com.krafton.kts.backend.domain.running_test.domain.db.RUNNING_TEST;
 import com.krafton.kts.backend.domain.running_test.interfaces.RunningTestInterface;
+import com.krafton.kts.backend.domain.running_testcase.domain.command.AddRunningTestcaseCommand;
 import com.krafton.kts.backend.domain.running_testcase.domain.db.RUNNING_TESTCASE;
 import com.krafton.kts.backend.domain.running_testcase.interfaces.RunningTestcaseInterface;
 import com.krafton.kts.backend.domain.test.domain.command.AddTestCommand;
@@ -26,6 +29,7 @@ import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTes
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestcaseGuidCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
 import com.krafton.kts.backend.service.crossdomain.command.FindRunningActionCommand;
+import com.krafton.kts.backend.service.crossdomain.command.OnFinishActionCommand;
 import com.krafton.kts.backend.service.crossdomain.command.RunTestCommnad;
 import com.krafton.kts.backend.service.crossdomain.db.TEST_REL_TESTCASE_JOIN_TESTCASE;
 import com.krafton.kts.backend.domain.test_rel_testcase.interfaces.TestRelTestcaseInterface;
@@ -37,6 +41,8 @@ import com.krafton.kts.backend.service.crossdomain.response.NextTestInstructionR
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.*;
 
 @RequiredArgsConstructor
@@ -156,11 +162,13 @@ public class KTSServiceImpl implements KTSService {
                 //첫번째 액션을 찾는다.
                 KTS_ACTION currentAction = null;
                 for(KTS_ACTION action : actionList){
-                    if(action.getIsStart() == "Y"){
+                    System.out.println(action);
+                    if(action.getIsStart().equals("Y")){
                         currentAction = action;
                         break;
                     }
                 }
+                System.out.println(currentAction);
                 int actionOrder = 0;
                 while(currentAction != null){
                     //현재 액션을 RUNNING액션에 추가
@@ -188,14 +196,16 @@ public class KTSServiceImpl implements KTSService {
                     runningProperties.add(runningProperty);
                 }
 
-                runningTestcases.add(runningTestcase);
-
-                this.runningActionInterface.addRunningAction(runningActions);
-                this.runningPropertyInterface.addRunningProperty(runningProperties);
+                System.out.println("add runningActions : " + runningActions);
+                System.out.println("add runningProperties : " + runningProperties);
+                this.runningActionInterface.addRunningAction(new AddRunningActionCommand(runningActions));
+                this.runningPropertyInterface.addRunningProperty(new AddRunningPropertyCommand(runningProperties));
             }
 
-            this.runningTestcaseInterface.addRunningTestcase(runningTestcases);
-            this.runningTestInterface.addRunningTest(runningTest);
+            System.out.println("add runningTestcase : " + runningTestcases);
+            System.out.println("addUpdate runningTest : " + runningTest);
+            this.runningTestcaseInterface.addRunningTestcase(new AddRunningTestcaseCommand(runningTestcases));
+            this.runningTestInterface.addOrUpdateRunningTest(runningTest);
 
             //running에 넣은 값에서 '첫번째'액션의 정보를 클라이언트에 응답한다.
             NextTestInstructionResponse response = new NextTestInstructionResponse();
@@ -208,25 +218,60 @@ public class KTSServiceImpl implements KTSService {
             throw e;
         }
     }
-
     @Override
     @Transactional
-    public RUNNING_ACTION findRunningAction(FindRunningActionCommand command) {
+    public NextTestInstructionResponse onFinishAction(OnFinishActionCommand command) {
+        NextTestInstructionResponse nextTestInstructionResponse = new NextTestInstructionResponse();
+
+        //step 1. RUNNING_TEST DB의 currentRunningTestcaseOrder, currentRunningActionOrder 정보를 업데이트한다.
+        RUNNING_TEST runningTest = this.runningTestInterface.findRunningTest(command.getRunningTestGuid());
+        List<RUNNING_TESTCASE> runningTestcases = this.runningTestcaseInterface.findRunningTestcase(runningTest.getRunningTestGuid());
+        RUNNING_TESTCASE runningTestcase = runningTestcases.get(command.getCurrentRunningTestcaseOrder());
+        List<RUNNING_ACTION> runningActions = this.runningActionInterface.findRunningAction(runningTestcase.getRunningTestcaseGuid());
+        if(command.getCurrentRunningActionOrder() >= runningActions.stream().count() - 1){
+            //액션리스트가 끝났으면, 테스트케이스 오더를 1 올린다.
+            if(runningTest.getCurrentRunningTestcaseOrder() >= runningTestcases.stream().count() - 1){
+                //테스트케이스 리스트도 끝났으면 테스트 완료 처리
+                nextTestInstructionResponse.setRunningTest(runningTest);
+                nextTestInstructionResponse.setIsFinished("Y");
+                runningTest.setEndAt(Timestamp.valueOf(LocalDateTime.now()));
+                runningTest.setStatus(command.getStatus());
+                this.runningTestInterface.addOrUpdateRunningTest(runningTest);
+                return nextTestInstructionResponse;
+            }
+            runningTest.setCurrentRunningTestcaseOrder(runningTest.getCurrentRunningTestcaseOrder() + 1);
+            runningTest.setCurrentRunningActionOrder(0);
+        } else {
+            //액션리스트가 아직 안 끝났으면, 액션 오더를 1 올린다.
+            runningTest.setCurrentRunningActionOrder(runningTest.getCurrentRunningActionOrder() + 1);
+        }
+        this.runningTestInterface.addOrUpdateRunningTest(runningTest);
+
+        //step 2. 해당 액션 정보를 가져와서, 필요한 정보를 넣어 반환한다.
+        RUNNING_ACTION nextAction = this.findRunningAction(new FindRunningActionCommand(runningTest.getRunningTestGuid(), runningTest.getCurrentRunningTestcaseOrder(), runningTest.getCurrentRunningActionOrder()));
+        nextTestInstructionResponse.setRunningTest(runningTest);
+        nextTestInstructionResponse.setRunningAction(nextAction);
+        nextTestInstructionResponse.setRunningProperties(this.runningPropertyInterface.findRunningProperty(nextAction.getRunningActionGuid()));
+        return nextTestInstructionResponse;
+    }
+    private RUNNING_ACTION findRunningAction(FindRunningActionCommand command) {
         try {
             //step 1. 현재 runningTest의 currentRunningTestcaseOrder, currentRunningActionOrder 확보
             RUNNING_TEST runningTest = this.runningTestInterface.findRunningTest(command.getRunningTestGuid());
 
             //step 2. 해당 runningTest에 속하는 runningTestcase들을 runningTestcaseOrder로 정렬해서 가져온다음, currentRunningTestcaseOrder에 해당하는 runningTestcase 확보
             List<RUNNING_TESTCASE> runningTestcases = this.runningTestcaseInterface.findRunningTestcase(runningTest.getRunningTestGuid());
-            RUNNING_TESTCASE runningTestcase = runningTestcases.get(command.getCurrentTestcaseIndex());
+            RUNNING_TESTCASE runningTestcase = runningTestcases.get(command.getCurrentRunningTestcaseOrder());
 
             //step 3. 해당 runningTestcase에 속하는 runningAction들을 runningActionOrder로 정렬해서 가져온다음, currentRunningActionOrder에 해당하는 runningAction 확보 및 반환
             List<RUNNING_ACTION> runningActions = this.runningActionInterface.findRunningAction(runningTestcase.getRunningTestcaseGuid());
-            return runningActions.get(command.getCurrentActionIndex());
+            return runningActions.get(command.getCurrentRunningActionOrder());
         } catch(Exception e){
             throw e;
         }
     }
+
+
 
     //action
     @Override

@@ -1,5 +1,6 @@
 package com.krafton.kts.frontend;
 
+import com.krafton.kts.backend.service.crossdomain.command.RunTestCommnad;
 import com.krafton.kts.backend.service.crossdomain.command.SaveTestcaseCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
 import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
@@ -66,7 +67,7 @@ public class MySystemController {
     }
     @PostMapping("/runTest")
     @ResponseBody
-    public Response runTest(@RequestBody RunTestCommand command){
+    public Response runTest(@RequestBody RunTestCommnad command){
         try {
             Response response = new Response();
             response.putContext("instruction", this.ktsService.runTest(command));

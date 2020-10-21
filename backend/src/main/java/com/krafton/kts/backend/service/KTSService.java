@@ -2,6 +2,7 @@ package com.krafton.kts.backend.service;
 
 import com.krafton.kts.backend.domain.running_action.domain.db.RUNNING_ACTION;
 import com.krafton.kts.backend.service.crossdomain.command.FindRunningActionCommand;
+import com.krafton.kts.backend.service.crossdomain.command.OnFinishActionCommand;
 import com.krafton.kts.backend.service.crossdomain.command.RunTestCommnad;
 import com.krafton.kts.backend.service.crossdomain.command.SaveTestcaseCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
@@ -26,7 +27,7 @@ public interface KTSService {
     void removeTest(RemoveTestCommand command);
     void saveTestRelTestcase(SaveTestRelTestcaseCommand command);
     NextTestInstructionResponse runTest(RunTestCommnad command);
-    RUNNING_ACTION findRunningAction(FindRunningActionCommand command);
+    NextTestInstructionResponse onFinishAction(OnFinishActionCommand command);
 
     //action
     List<KTS_ACTION> findAction(String testcaseGuid);

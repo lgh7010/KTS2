@@ -169,6 +169,14 @@ export default {
       //최초 위치 설정
       this.nodePositionSet(action, node, action.y, action.x)
     }
+    for(let actionGuid in this.currentTestcaseActions){
+      //start 액션 세팅
+      var action = this.currentTestcaseActions[actionGuid]
+      action.isStart = 'N'
+      if(!this.arrowsEndMap.hasOwnProperty(actionGuid)){
+        action.isStart = 'Y'
+      }
+    }
   },
   methods: {
     guid(){

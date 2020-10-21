@@ -30,6 +30,8 @@ dependencies {
 
 	compile project(':backend')
 	compile project(':frontend')
+
+	compile project(':dummyclient')
 }
 
 subprojects {

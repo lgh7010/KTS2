@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        var testList = []
+        var currentRunningTest = {}
+
+        function OnClickStartTest(){
+            axios.get('/findAllTest').then(responseTests => {
+                testList = responseTests.data.context.list
+                if(testList.length > 0){
+                    axios.post("/runTest", {
+                        "testGuid": testList[0].testGuid
+                    }).then(responseRunTest => {
+                        currentRunningTest = responseRunTest.data.context.instruction.runningTest
+                    }).catch(error => {
+                        console.log(error)
+                    })
+                }
+            }).catch(error => {
+                console.log(error)
+            })
+        }
+        function OnClickActionFinished(){
+            axios.post("/onFinishAction", {
+                runningTestGuid: currentRunningTest.runningTestGuid,
+                status: 'Success',
+            }).then(response => {
+                console.log(response)
+            }).catch(error => {
+                console.log(error)
+            })
+        }
+    </script>
+
+    <button onclick="OnClickStartTest()">테스트 시작</button>
+    <button onclick="OnClickActionFinished()">액션 하나 완료 처리</button>
+</body>
+</html>

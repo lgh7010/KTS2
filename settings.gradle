@@ -1,4 +1,5 @@
 rootProject.name = 'kts'
 include 'backend'
 include 'frontend'
+include 'dummyclient'
 

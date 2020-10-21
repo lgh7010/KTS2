@@ -130,6 +130,8 @@ public class KTSServiceImpl implements KTSService {
             RUNNING_TEST runningTest = new RUNNING_TEST();
             runningTest.setTestGuid(test.getTestGuid());
             runningTest.setRunningTestGuid(runningTestGuid);
+            runningTest.setStatus("Running");
+            runningTest.setStartAt(Timestamp.valueOf(LocalDateTime.now()));
 
             //step 2. 해당 테스트에 포함된 테스트케이스 정보를 확보하고, 이를 RunningTestcase에 추가한다.
             List<TEST_REL_TESTCASE_JOIN_TESTCASE> testcaseJoinTestcaseList = this.testRelTestcaseInterface.findTestRelTestcaseJoinTestcase(test.getTestGuid());
@@ -168,7 +170,6 @@ public class KTSServiceImpl implements KTSService {
                         break;
                     }
                 }
-                System.out.println(currentAction);
                 int actionOrder = 0;
                 while(currentAction != null){
                     //현재 액션을 RUNNING액션에 추가
@@ -222,18 +223,13 @@ public class KTSServiceImpl implements KTSService {
     @Transactional
     public NextTestInstructionResponse onFinishAction(OnFinishActionCommand command) {
         try {
-            System.out.println(command.getRunningTestGuid() + " | " + command.getStatus());
             NextTestInstructionResponse nextTestInstructionResponse = new NextTestInstructionResponse();
 
             //step 1. RUNNING_TEST DB의 currentRunningTestcaseOrder, currentRunningActionOrder 정보를 업데이트한다.
             RUNNING_TEST runningTest = this.runningTestInterface.findRunningTest(command.getRunningTestGuid());
-            System.out.println(runningTest);
             List<RUNNING_TESTCASE> runningTestcases = this.runningTestcaseInterface.findRunningTestcase(runningTest.getRunningTestGuid());
-            System.out.println(runningTestcases);
             RUNNING_TESTCASE runningTestcase = runningTestcases.get(runningTest.getCurrentRunningTestcaseOrder());
-            System.out.println(runningTestcase);
             List<RUNNING_ACTION> runningActions = this.runningActionInterface.findRunningAction(runningTestcase.getRunningTestcaseGuid());
-            System.out.println(runningActions);
             if(runningTest.getCurrentRunningActionOrder() >= runningActions.stream().count() - 1){
                 //액션리스트가 끝났으면, 테스트케이스 오더를 1 올린다.
                 if(runningTest.getCurrentRunningTestcaseOrder() >= runningTestcases.stream().count() - 1){
@@ -279,8 +275,6 @@ public class KTSServiceImpl implements KTSService {
             throw e;
         }
     }
-
-
 
     //action
     @Override

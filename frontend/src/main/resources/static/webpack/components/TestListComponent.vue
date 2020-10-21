@@ -64,7 +64,7 @@ export default {
       axios.post("/removeTest", {
         'testGuid': testGuid
       }).then(response => {
-        alert('삭제 완료')
+        alert((response.return_code == 0) ? '삭제 완료' : '삭제 실패')
         location.reload()
       }).catch(error => {
         alert(error)

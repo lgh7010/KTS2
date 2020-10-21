@@ -59,9 +59,11 @@ export default {
   },
   methods: {
     onClickRemove: function(testcaseGuid){
-      axios.post('/removeTestcase', {'testcaseGuid': testcaseGuid}).then(resposne => {
-        location.reload()
+      axios.post('/removeTestcase', {'testcaseGuid': testcaseGuid}).then(response => {
         console.log(resposne)
+        if(response.return_code == 0){
+          location.reload()
+        }
       }).catch(error => {
         console.log(error)
       })

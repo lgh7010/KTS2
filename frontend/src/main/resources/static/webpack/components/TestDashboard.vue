@@ -47,7 +47,6 @@
 <script>
 import jQuery from 'jquery'
 import axios from "axios";
-import Vue from 'vue'
 window.jQuery = window.$ = jQuery
 
 export default {
@@ -60,7 +59,6 @@ export default {
   },
   mounted() {
     axios.get("/findAllRunningTest").then(response => {
-      console.log(response)
       this.runningTestList = []
       this.finishedTestList = []
       var tempList = response.data.context.runningTests
@@ -71,14 +69,9 @@ export default {
           this.finishedTestList.push(tempList[index])
         }
       }
-      console.log(this.runningTestList)
-      console.log(this.finishedTestList)
     }).catch(error => {
       console.log(error)
     })
-  },
-  methods: {
-
   }
 }
 </script>

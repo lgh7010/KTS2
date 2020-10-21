@@ -163,7 +163,7 @@ export default {
         "testName": document.getElementById("testName").value,
         "testDescription": document.getElementById("testDescription").value,
       }).then(response => {
-        alert("저장 완료")
+        alert((response.return_code == 0) ? "저장 완료" : "저장 실패")
         console.log(response)
       }).catch(error => {
         console.log(error)

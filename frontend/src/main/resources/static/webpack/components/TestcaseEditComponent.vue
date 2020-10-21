@@ -140,9 +140,7 @@ export default {
         this.currentTestcaseActions = responseCurrentTestcaseActions.data.context.currentTestcaseActions
 
         axios.get("/findProperties", { params: {'testcaseGuid': this.$route.params.testcaseGuid}}).then(responseProperties => {
-          console.log(responseProperties)
           this.currentTestcaseActionPropertyMap = responseProperties.data.context.map
-          console.log(this.currentTestcaseActionPropertyMap)
         }).catch(error => {
           console.log(error)
         })
@@ -239,7 +237,7 @@ export default {
         "removeActionGuidList": this.removeActionGuidList,
         "testcase": this.currentTestcase,
       }).then(response => {
-        alert("저장 완료")
+        alert((response.return_code == 0) ? "저장 완료" : "저장 실패")
         console.log(response)
       }).catch(error => {
         console.log(error)
@@ -332,18 +330,6 @@ export default {
       $("#actionIdSelection").val(action.actionId)
       $("#actionEditorBackground").show()
       $("#actionEditor").show()
-
-      // axios.get("/properties", { params: {'actionGuid': this.currentActionGuid}}).then(response => {
-      //   console.log(response)
-      //   this.actionProperties = response.data.context.list
-      //   console.log(action);
-      //   $("#actionIdSelection").val(action.actionId)
-      //
-      //   $("#actionEditorBackground").show()
-      //   $("#actionEditor").show()
-      // }).catch(error => {
-      //   console.log(error)
-      // })
     },
     actionClose(){
       this.currentActionGuid = ""
@@ -370,17 +356,6 @@ export default {
       }
       this.currentTestcaseActionPropertyMap[this.currentActionGuid] = this.actionProperties
       this.actionClose()
-
-      // axios.post("/saveProperties", {
-      //   "actionGuid": this.currentActionGuid,
-      //   "actionId": this.currentTestcaseActions[this.currentActionGuid].actionId,
-      //   "properties": this.actionProperties
-      // }).then(response => {
-      //   alert('저장 완료')
-      //   console.log(response)
-      // }).catch(error => {
-      //   console.log(error)
-      // })
     }
   }
 }

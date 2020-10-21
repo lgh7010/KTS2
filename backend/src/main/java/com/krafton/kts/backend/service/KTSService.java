@@ -159,7 +159,6 @@ public class KTSService {
                 //첫번째 액션을 찾는다.
                 KTS_ACTION currentAction = null;
                 for(KTS_ACTION action : actionList){
-                    System.out.println(action);
                     if(action.getIsStart().equals("Y")){
                         currentAction = action;
                         break;

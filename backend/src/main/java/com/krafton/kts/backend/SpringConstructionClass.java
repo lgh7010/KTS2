@@ -19,7 +19,6 @@ import com.krafton.kts.backend.domain.test_rel_testcase.interfaces.mybatis.TestR
 import com.krafton.kts.backend.domain.testcase.interfaces.TestcaseInterface;
 import com.krafton.kts.backend.domain.testcase.interfaces.mybatis.TestcaseInterfaceMybatis;
 import com.krafton.kts.backend.service.KTSService;
-import com.krafton.kts.backend.service.KTSServiceImpl;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -36,7 +35,7 @@ public class SpringConstructionClass {
 
     @Bean
     public KTSService mySystemService(){
-        return new KTSServiceImpl(
+        return new KTSService(
                 actionInterface(),
                 propertyInterface(),
                 testcaseInterface(),

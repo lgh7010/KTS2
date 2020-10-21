@@ -1,5 +1,6 @@
 package com.krafton.kts.frontend;
 
+import com.krafton.kts.backend.service.KTSService;
 import com.krafton.kts.backend.service.crossdomain.command.OnFinishActionCommand;
 import com.krafton.kts.backend.service.crossdomain.command.RunTestCommnad;
 import com.krafton.kts.backend.service.crossdomain.command.SaveTestcaseCommand;
@@ -7,7 +8,6 @@ import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
 import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
 import com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand;
-import com.krafton.kts.backend.service.KTSService;
 import com.krafton.kts.frontend.common.ErrorCode;
 import com.krafton.kts.frontend.common.Response;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +21,7 @@ import java.util.Map;
 
 @Controller
 @RequiredArgsConstructor
-public class MySystemController {
+public class KTSController {
 
     private final KTSService ktsService;
 

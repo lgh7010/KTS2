@@ -1,6 +1,7 @@
 package com.krafton.kts.backend.service;
 
 import com.krafton.kts.backend.domain.running_action.domain.db.RUNNING_ACTION;
+import com.krafton.kts.backend.domain.running_test.domain.db.RUNNING_TEST;
 import com.krafton.kts.backend.service.crossdomain.command.FindRunningActionCommand;
 import com.krafton.kts.backend.service.crossdomain.command.OnFinishActionCommand;
 import com.krafton.kts.backend.service.crossdomain.command.RunTestCommnad;
@@ -45,6 +46,9 @@ public interface KTSService {
     List<TEST_REL_TESTCASE_JOIN_TESTCASE> findTestRelTestcaseJoinTestcase(String testGuid);
 
     //testcase
-    List<KTS_TESTCASE> findAll();
+    List<KTS_TESTCASE> findAllTestcase();
     KTS_TESTCASE findTestcase(String testcaseGuid);
+
+    //running_test
+    List<RUNNING_TEST> findAllRunningTest();
 }

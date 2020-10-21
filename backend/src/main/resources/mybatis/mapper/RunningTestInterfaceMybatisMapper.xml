@@ -12,4 +12,8 @@
     <select id="findRunningTest" parameterType="String" resultType="com.krafton.kts.backend.domain.running_test.domain.db.RUNNING_TEST">
         SELECT * FROM RUNNING_TEST WHERE runningTestGuid = #{runningTestGuid};
     </select>
+
+    <select id="findAllRunningTest" resultType="com.krafton.kts.backend.domain.running_test.domain.db.RUNNING_TEST">
+        SELECT * FROM RUNNING_TEST;
+    </select>
 </mapper>

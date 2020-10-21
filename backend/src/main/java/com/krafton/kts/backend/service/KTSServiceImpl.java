@@ -335,12 +335,18 @@ public class KTSServiceImpl implements KTSService {
 
     //testcase
     @Override
-    public List<KTS_TESTCASE> findAll() {
+    public List<KTS_TESTCASE> findAllTestcase() {
         return this.testcaseInterface.findAll();
     }
     @Override
     public KTS_TESTCASE findTestcase(String testcaseGuid) {
         return this.testcaseInterface.findTestcase(testcaseGuid);
+    }
+
+    //running_test
+    @Override
+    public List<RUNNING_TEST> findAllRunningTest() {
+        return this.runningTestInterface.findAllRunningTest();
     }
 
 }

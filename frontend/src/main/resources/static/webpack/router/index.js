@@ -5,6 +5,7 @@ import TestEditComponent from "../components/TestEditComponent.vue"
 import TestListComponent from "../components/TestListComponent.vue"
 import TestcaseListComponent from "../components/TestcaseListComponent.vue";
 import TestcaseEditComponent from "../components/TestcaseEditComponent.vue";
+import TestDashboard from "../components/TestDashboard.vue";
 
 Vue.use(Router)
 
@@ -33,6 +34,11 @@ const router = new Router({
             path: '/testcase/edit/:testcaseGuid',
             name: 'TestcaseEdit',
             component: TestcaseEditComponent
+        },
+        {
+            path: '/test/dashboard',
+            name: 'TestDashboard',
+            component: TestDashboard
         }
     ]
 })

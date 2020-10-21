@@ -18,7 +18,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ExecutionException;
 
 @Controller
 @RequiredArgsConstructor
@@ -179,13 +178,12 @@ public class MySystemController {
     public Response testcaseList(){
         try {
             Response response = new Response();
-            response.putContext("testcaseList", this.ktsService.findAll());
+            response.putContext("testcaseList", this.ktsService.findAllTestcase());
             return response;
         } catch(Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());
         }
     }
-
     @GetMapping("/testcase")
     @ResponseBody
     public Response testcase(@RequestParam(value = "testcaseGuid") String testcaseGuid){
@@ -194,6 +192,19 @@ public class MySystemController {
             response.putContext("testcase", this.ktsService.findTestcase(testcaseGuid));
             return response;
         } catch (Exception e){
+            return new Response(ErrorCode.ERR_COMMON, e.getMessage());
+        }
+    }
+
+    //running_test
+    @GetMapping("/findAllRunningTest")
+    @ResponseBody
+    public Response findAllRunningTest(){
+        try {
+            Response response = new Response();
+            response.putContext("runningTests", this.ktsService.findAllRunningTest());
+            return response;
+        } catch(Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());
         }
     }

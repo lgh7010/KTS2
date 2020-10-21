@@ -221,38 +221,47 @@ public class KTSServiceImpl implements KTSService {
     @Override
     @Transactional
     public NextTestInstructionResponse onFinishAction(OnFinishActionCommand command) {
-        NextTestInstructionResponse nextTestInstructionResponse = new NextTestInstructionResponse();
+        try {
+            System.out.println(command.getRunningTestGuid() + " | " + command.getStatus());
+            NextTestInstructionResponse nextTestInstructionResponse = new NextTestInstructionResponse();
 
-        //step 1. RUNNING_TEST DB의 currentRunningTestcaseOrder, currentRunningActionOrder 정보를 업데이트한다.
-        RUNNING_TEST runningTest = this.runningTestInterface.findRunningTest(command.getRunningTestGuid());
-        List<RUNNING_TESTCASE> runningTestcases = this.runningTestcaseInterface.findRunningTestcase(runningTest.getRunningTestGuid());
-        RUNNING_TESTCASE runningTestcase = runningTestcases.get(command.getCurrentRunningTestcaseOrder());
-        List<RUNNING_ACTION> runningActions = this.runningActionInterface.findRunningAction(runningTestcase.getRunningTestcaseGuid());
-        if(command.getCurrentRunningActionOrder() >= runningActions.stream().count() - 1){
-            //액션리스트가 끝났으면, 테스트케이스 오더를 1 올린다.
-            if(runningTest.getCurrentRunningTestcaseOrder() >= runningTestcases.stream().count() - 1){
-                //테스트케이스 리스트도 끝났으면 테스트 완료 처리
-                nextTestInstructionResponse.setRunningTest(runningTest);
-                nextTestInstructionResponse.setIsFinished("Y");
-                runningTest.setEndAt(Timestamp.valueOf(LocalDateTime.now()));
-                runningTest.setStatus(command.getStatus());
-                this.runningTestInterface.addOrUpdateRunningTest(runningTest);
-                return nextTestInstructionResponse;
+            //step 1. RUNNING_TEST DB의 currentRunningTestcaseOrder, currentRunningActionOrder 정보를 업데이트한다.
+            RUNNING_TEST runningTest = this.runningTestInterface.findRunningTest(command.getRunningTestGuid());
+            System.out.println(runningTest);
+            List<RUNNING_TESTCASE> runningTestcases = this.runningTestcaseInterface.findRunningTestcase(runningTest.getRunningTestGuid());
+            System.out.println(runningTestcases);
+            RUNNING_TESTCASE runningTestcase = runningTestcases.get(runningTest.getCurrentRunningTestcaseOrder());
+            System.out.println(runningTestcase);
+            List<RUNNING_ACTION> runningActions = this.runningActionInterface.findRunningAction(runningTestcase.getRunningTestcaseGuid());
+            System.out.println(runningActions);
+            if(runningTest.getCurrentRunningActionOrder() >= runningActions.stream().count() - 1){
+                //액션리스트가 끝났으면, 테스트케이스 오더를 1 올린다.
+                if(runningTest.getCurrentRunningTestcaseOrder() >= runningTestcases.stream().count() - 1){
+                    //테스트케이스 리스트도 끝났으면 테스트 완료 처리
+                    nextTestInstructionResponse.setRunningTest(runningTest);
+                    nextTestInstructionResponse.setIsFinished("Y");
+                    runningTest.setEndAt(Timestamp.valueOf(LocalDateTime.now()));
+                    runningTest.setStatus(command.getStatus());
+                    this.runningTestInterface.addOrUpdateRunningTest(runningTest);
+                    return nextTestInstructionResponse;
+                }
+                runningTest.setCurrentRunningTestcaseOrder(runningTest.getCurrentRunningTestcaseOrder() + 1);
+                runningTest.setCurrentRunningActionOrder(0);
+            } else {
+                //액션리스트가 아직 안 끝났으면, 액션 오더를 1 올린다.
+                runningTest.setCurrentRunningActionOrder(runningTest.getCurrentRunningActionOrder() + 1);
             }
-            runningTest.setCurrentRunningTestcaseOrder(runningTest.getCurrentRunningTestcaseOrder() + 1);
-            runningTest.setCurrentRunningActionOrder(0);
-        } else {
-            //액션리스트가 아직 안 끝났으면, 액션 오더를 1 올린다.
-            runningTest.setCurrentRunningActionOrder(runningTest.getCurrentRunningActionOrder() + 1);
-        }
-        this.runningTestInterface.addOrUpdateRunningTest(runningTest);
+            this.runningTestInterface.addOrUpdateRunningTest(runningTest);
 
-        //step 2. 해당 액션 정보를 가져와서, 필요한 정보를 넣어 반환한다.
-        RUNNING_ACTION nextAction = this.findRunningAction(new FindRunningActionCommand(runningTest.getRunningTestGuid(), runningTest.getCurrentRunningTestcaseOrder(), runningTest.getCurrentRunningActionOrder()));
-        nextTestInstructionResponse.setRunningTest(runningTest);
-        nextTestInstructionResponse.setRunningAction(nextAction);
-        nextTestInstructionResponse.setRunningProperties(this.runningPropertyInterface.findRunningProperty(nextAction.getRunningActionGuid()));
-        return nextTestInstructionResponse;
+            //step 2. 해당 액션 정보를 가져와서, 필요한 정보를 넣어 반환한다.
+            RUNNING_ACTION nextAction = this.findRunningAction(new FindRunningActionCommand(runningTest.getRunningTestGuid(), runningTest.getCurrentRunningTestcaseOrder(), runningTest.getCurrentRunningActionOrder()));
+            nextTestInstructionResponse.setRunningTest(runningTest);
+            nextTestInstructionResponse.setRunningAction(nextAction);
+            nextTestInstructionResponse.setRunningProperties(this.runningPropertyInterface.findRunningProperty(nextAction.getRunningActionGuid()));
+            return nextTestInstructionResponse;
+        } catch (Exception e){
+            throw e;
+        }
     }
     private RUNNING_ACTION findRunningAction(FindRunningActionCommand command) {
         try {

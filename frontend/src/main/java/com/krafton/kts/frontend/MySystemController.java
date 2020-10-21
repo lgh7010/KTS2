@@ -1,5 +1,6 @@
 package com.krafton.kts.frontend;
 
+import com.krafton.kts.backend.service.crossdomain.command.OnFinishActionCommand;
 import com.krafton.kts.backend.service.crossdomain.command.RunTestCommnad;
 import com.krafton.kts.backend.service.crossdomain.command.SaveTestcaseCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
@@ -17,6 +18,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 @Controller
 @RequiredArgsConstructor
@@ -73,6 +75,17 @@ public class MySystemController {
             response.putContext("instruction", this.ktsService.runTest(command));
             return response;
         } catch (Exception e){
+            return new Response(ErrorCode.ERR_COMMON, e.getMessage());
+        }
+    }
+    @PostMapping("/onFinishAction")
+    @ResponseBody
+    public Response onFinishAction(@RequestBody OnFinishActionCommand command){
+        try {
+            Response response = new Response();
+            response.putContext("instruction", this.ktsService.onFinishAction(command));
+            return response;
+        } catch(Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());
         }
     }

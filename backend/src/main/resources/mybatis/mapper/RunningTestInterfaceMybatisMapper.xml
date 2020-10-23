@@ -4,9 +4,9 @@
 
 <mapper namespace="com.krafton.kts.backend.domain.running_test.interfaces.mybatis.RunningTestInterfaceMybatisMapper">
     <insert id="addOrUpdateRunningTest" parameterType="com.krafton.kts.backend.domain.running_test.domain.db.RUNNING_TEST">
-        INSERT INTO RUNNING_TEST (runningTestGuid, testGuid, currentRunningTestcaseOrder, currentRunningActionOrder, startAt, endAt, status)
-        VALUES (#{runningTestGuid}, #{testGuid}, #{currentRunningTestcaseOrder}, #{currentRunningActionOrder}, #{startAt}, #{endAt}, #{status})
-        ON DUPLICATE KEY UPDATE testGuid = VALUES(testGuid), currentRunningTestcaseOrder = VALUES(currentRunningTestcaseOrder), currentRunningActionOrder = VALUES(currentRunningActionOrder), startAt = VALUES(startAt), endAt = VALUES(endAt), status = VALUES(status);
+        INSERT INTO RUNNING_TEST (runningTestGuid, testGuid, currentRunningTestcaseOrder, currentRunningActionOrder, name, description, startAt, endAt, status)
+        VALUES (#{runningTestGuid}, #{testGuid}, #{currentRunningTestcaseOrder}, #{currentRunningActionOrder}, #{name}, #{description}, #{startAt}, #{endAt}, #{status})
+        ON DUPLICATE KEY UPDATE testGuid = VALUES(testGuid), currentRunningTestcaseOrder = VALUES(currentRunningTestcaseOrder), currentRunningActionOrder = VALUES(currentRunningActionOrder), name = VALUES(name), description = VALUES(description), startAt = VALUES(startAt), endAt = VALUES(endAt), status = VALUES(status);
     </insert>
 
     <select id="findRunningTest" parameterType="String" resultType="com.krafton.kts.backend.domain.running_test.domain.db.RUNNING_TEST">

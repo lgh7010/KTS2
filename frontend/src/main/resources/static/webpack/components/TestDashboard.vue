@@ -7,13 +7,15 @@
         <thead>
         <tr>
           <th>테스트 이름</th>
+          <th>설명</th>
           <th>시작 시간</th>
           <th>진행 시간</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="runningTest in this.runningTestList">
-          <td>{{runningTest.testGuid}}</td>
+          <td>{{runningTest.name}}</td>
+          <td>{{runningTest.description}}</td>
           <td>{{runningTest.startAt}}</td>
           <td>{{runningTest.endAt}}</td>
         </tr>
@@ -27,13 +29,15 @@
         <thead>
         <tr>
           <th>테스트 이름</th>
+          <th>설명</th>
           <th>시작 시간</th>
           <th>완료 시간</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="finishedTest in this.finishedTestList">
-          <td>{{finishedTest.testGuid}}</td>
+          <td>{{finishedTest.name}}</td>
+          <td>{{finishedTest.description}}</td>
           <td>{{finishedTest.startAt}}</td>
           <td>{{finishedTest.endAt}}</td>
         </tr>

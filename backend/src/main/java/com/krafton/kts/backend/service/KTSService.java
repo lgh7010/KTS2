@@ -127,6 +127,10 @@ public class KTSService {
             RUNNING_TEST runningTest = new RUNNING_TEST();
             runningTest.setTestGuid(test.getTestGuid());
             runningTest.setRunningTestGuid(runningTestGuid);
+            runningTest.setCurrentRunningActionOrder(0);
+            runningTest.setCurrentRunningTestcaseOrder(0);
+            runningTest.setName(test.getName());
+            runningTest.setDescription(test.getDescription());
             runningTest.setStatus("Running");
             runningTest.setStartAt(Timestamp.valueOf(LocalDateTime.now()));
 

@@ -1,4 +1,4 @@
-package com.krafton.kts.backend.service.crossdomain.command;
+package com.krafton.kts.backend.crossdomain.domain.command;
 
 import lombok.Data;
 

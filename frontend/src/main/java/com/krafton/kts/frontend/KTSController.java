@@ -1,9 +1,9 @@
 package com.krafton.kts.frontend;
 
 import com.krafton.kts.backend.service.KTSService;
-import com.krafton.kts.backend.service.crossdomain.command.OnFinishActionCommand;
-import com.krafton.kts.backend.service.crossdomain.command.RunTestCommnad;
-import com.krafton.kts.backend.service.crossdomain.command.SaveTestcaseCommand;
+import com.krafton.kts.backend.crossdomain.domain.command.OnFinishActionCommand;
+import com.krafton.kts.backend.crossdomain.domain.command.RunTestCommnad;
+import com.krafton.kts.backend.crossdomain.domain.command.SaveTestcaseCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
 import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;

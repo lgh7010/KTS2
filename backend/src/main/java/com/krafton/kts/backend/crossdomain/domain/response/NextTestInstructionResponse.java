@@ -1,4 +1,4 @@
-package com.krafton.kts.backend.service.crossdomain.response;
+package com.krafton.kts.backend.crossdomain.domain.response;
 
 import com.krafton.kts.backend.domain.property.domain.db.KTS_ACTION_PROPERTY;
 import com.krafton.kts.backend.domain.running_action.domain.db.RUNNING_ACTION;

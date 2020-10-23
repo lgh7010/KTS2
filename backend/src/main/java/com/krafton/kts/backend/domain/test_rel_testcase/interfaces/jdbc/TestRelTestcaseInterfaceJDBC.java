@@ -4,7 +4,7 @@ import com.krafton.kts.backend.common.JdbcCommon;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestGuidCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestcaseGuidCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
-import com.krafton.kts.backend.service.crossdomain.db.TEST_REL_TESTCASE_JOIN_TESTCASE;
+import com.krafton.kts.backend.crossdomain.domain.db.TEST_REL_TESTCASE_JOIN_TESTCASE;
 import com.krafton.kts.backend.domain.test_rel_testcase.interfaces.TestRelTestcaseInterface;
 
 import javax.sql.DataSource;
@@ -17,37 +17,37 @@ public class TestRelTestcaseInterfaceJDBC extends JdbcCommon implements TestRelT
         super(dataSource);
     }
 
-    @Override
-    public List<TEST_REL_TESTCASE_JOIN_TESTCASE> findTestRelTestcaseJoinTestcase(String testGuid) {
-        Connection conn = null;
-        PreparedStatement pstmt = null;
-        ResultSet rs = null;
-
-        try {
-            conn = getConnection();
-            pstmt = conn.prepareStatement("SELECT a.*, b.name, b.description " +
-                    "FROM TEST_REL_TESTCASE a LEFT JOIN KTS_TESTCASE b ON a.testcaseGuid = b.testcaseGuid " +
-                    "WHERE a.testGuid = ? AND a.deleted = 'N' ORDER BY listIndex");
-            pstmt.setString(1, testGuid);
-            rs = pstmt.executeQuery();
-            List<TEST_REL_TESTCASE_JOIN_TESTCASE> rels = new ArrayList<>();
-            while(rs.next()){
-                TEST_REL_TESTCASE_JOIN_TESTCASE rel = new TEST_REL_TESTCASE_JOIN_TESTCASE();
-                rel.setRelationGuid(rs.getString("relationGuid"));
-                rel.setTestGuid(rs.getString("testGuid"));
-                rel.setTestcaseGuid(rs.getString("testcaseGuid"));
-                rel.setDeleted(rs.getString("deleted"));
-                rel.setName(rs.getString("name"));
-                rel.setDescription(rs.getString("description"));
-                rels.add(rel);
-            }
-            return rels;
-        } catch (Exception e){
-            throw new IllegalStateException(e);
-        } finally {
-            close(conn, pstmt, rs);
-        }
-    }
+//    @Override
+//    public List<TEST_REL_TESTCASE_JOIN_TESTCASE> findTestRelTestcaseJoinTestcase(String testGuid) {
+//        Connection conn = null;
+//        PreparedStatement pstmt = null;
+//        ResultSet rs = null;
+//
+//        try {
+//            conn = getConnection();
+//            pstmt = conn.prepareStatement("SELECT a.*, b.name, b.description " +
+//                    "FROM TEST_REL_TESTCASE a LEFT JOIN KTS_TESTCASE b ON a.testcaseGuid = b.testcaseGuid " +
+//                    "WHERE a.testGuid = ? AND a.deleted = 'N' ORDER BY listIndex");
+//            pstmt.setString(1, testGuid);
+//            rs = pstmt.executeQuery();
+//            List<TEST_REL_TESTCASE_JOIN_TESTCASE> rels = new ArrayList<>();
+//            while(rs.next()){
+//                TEST_REL_TESTCASE_JOIN_TESTCASE rel = new TEST_REL_TESTCASE_JOIN_TESTCASE();
+//                rel.setRelationGuid(rs.getString("relationGuid"));
+//                rel.setTestGuid(rs.getString("testGuid"));
+//                rel.setTestcaseGuid(rs.getString("testcaseGuid"));
+//                rel.setDeleted(rs.getString("deleted"));
+//                rel.setName(rs.getString("name"));
+//                rel.setDescription(rs.getString("description"));
+//                rels.add(rel);
+//            }
+//            return rels;
+//        } catch (Exception e){
+//            throw new IllegalStateException(e);
+//        } finally {
+//            close(conn, pstmt, rs);
+//        }
+//    }
 
     @Override
     public void saveTestRelTestcase(SaveTestRelTestcaseCommand command) {

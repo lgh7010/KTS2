@@ -1,5 +1,7 @@
 package com.krafton.kts.backend;
 
+import com.krafton.kts.backend.crossdomain.interfaces.CrossDomainInterface;
+import com.krafton.kts.backend.crossdomain.interfaces.mybatis.CrossDomainInterfaceMybatis;
 import com.krafton.kts.backend.domain.action.interfaces.ActionInterface;
 import com.krafton.kts.backend.domain.action.interfaces.mybatis.ActionInterfaceMybatis;
 import com.krafton.kts.backend.domain.property.interfaces.PropertyInterface;
@@ -44,7 +46,8 @@ public class SpringConstructionClass {
                 runningTestInterface(),
                 runningTestcaseInterface(),
                 runningActionInterface(),
-                runningPropertyInterface()
+                runningPropertyInterface(),
+                crossDomainInterface()
         );
     }
 
@@ -96,5 +99,10 @@ public class SpringConstructionClass {
     @Bean
     public RunningPropertyInterface runningPropertyInterface(){
         return new RunningPropertyInterfaceMybatis();           //Mybatis 이용
+    }
+
+    @Bean
+    public CrossDomainInterface crossDomainInterface(){
+        return new CrossDomainInterfaceMybatis();
     }
 }

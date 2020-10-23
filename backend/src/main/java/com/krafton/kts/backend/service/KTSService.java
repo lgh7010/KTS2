@@ -1,5 +1,6 @@
 package com.krafton.kts.backend.service;
 
+import com.krafton.kts.backend.crossdomain.interfaces.CrossDomainInterface;
 import com.krafton.kts.backend.domain.action.domain.command.*;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
 import com.krafton.kts.backend.domain.property.domain.command.FindPropertiesCommand;
@@ -28,16 +29,16 @@ import com.krafton.kts.backend.domain.test.interfaces.TestInterface;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestGuidCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestcaseGuidCommand;
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
-import com.krafton.kts.backend.service.crossdomain.command.FindRunningActionCommand;
-import com.krafton.kts.backend.service.crossdomain.command.OnFinishActionCommand;
-import com.krafton.kts.backend.service.crossdomain.command.RunTestCommnad;
-import com.krafton.kts.backend.service.crossdomain.db.TEST_REL_TESTCASE_JOIN_TESTCASE;
+import com.krafton.kts.backend.crossdomain.domain.command.FindRunningActionCommand;
+import com.krafton.kts.backend.crossdomain.domain.command.OnFinishActionCommand;
+import com.krafton.kts.backend.crossdomain.domain.command.RunTestCommnad;
+import com.krafton.kts.backend.crossdomain.domain.db.TEST_REL_TESTCASE_JOIN_TESTCASE;
 import com.krafton.kts.backend.domain.test_rel_testcase.interfaces.TestRelTestcaseInterface;
 import com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand;
 import com.krafton.kts.backend.domain.testcase.domain.db.KTS_TESTCASE;
 import com.krafton.kts.backend.domain.testcase.interfaces.TestcaseInterface;
-import com.krafton.kts.backend.service.crossdomain.command.SaveTestcaseCommand;
-import com.krafton.kts.backend.service.crossdomain.response.NextTestInstructionResponse;
+import com.krafton.kts.backend.crossdomain.domain.command.SaveTestcaseCommand;
+import com.krafton.kts.backend.crossdomain.domain.response.NextTestInstructionResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -57,6 +58,7 @@ public class KTSService {
     private final RunningTestcaseInterface runningTestcaseInterface;
     private final RunningActionInterface runningActionInterface;
     private final RunningPropertyInterface runningPropertyInterface;
+    private final CrossDomainInterface crossDomainInterface;
 
     //transactional
     @Transactional
@@ -129,7 +131,7 @@ public class KTSService {
             runningTest.setStartAt(Timestamp.valueOf(LocalDateTime.now()));
 
             //step 2. 해당 테스트에 포함된 테스트케이스 정보를 확보하고, 이를 RunningTestcase에 추가한다.
-            List<TEST_REL_TESTCASE_JOIN_TESTCASE> testcaseJoinTestcaseList = this.testRelTestcaseInterface.findTestRelTestcaseJoinTestcase(test.getTestGuid());
+            List<TEST_REL_TESTCASE_JOIN_TESTCASE> testcaseJoinTestcaseList = this.crossDomainInterface.findTestRelTestcaseJoinTestcase(test.getTestGuid());
             List<RUNNING_TESTCASE> runningTestcases = new ArrayList<>();
             for (TEST_REL_TESTCASE_JOIN_TESTCASE testRelTestcaseJoinTestcase : testcaseJoinTestcaseList) {
                 String runningTestcaseGuid = UUID.randomUUID().toString();
@@ -316,7 +318,7 @@ public class KTSService {
 
     //test_rel_testcase
     public List<TEST_REL_TESTCASE_JOIN_TESTCASE> findTestRelTestcaseJoinTestcase(String testGuid) {
-        return this.testRelTestcaseInterface.findTestRelTestcaseJoinTestcase(testGuid);
+        return this.crossDomainInterface.findTestRelTestcaseJoinTestcase(testGuid);
     }
 
     //testcase

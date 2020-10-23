@@ -2,7 +2,7 @@ package com.krafton.kts.frontend;
 
 import com.krafton.kts.backend.service.KTSService;
 import com.krafton.kts.backend.crossdomain.domain.command.OnFinishActionCommand;
-import com.krafton.kts.backend.crossdomain.domain.command.RunTestCommnad;
+import com.krafton.kts.backend.crossdomain.domain.command.RunTestCommand;
 import com.krafton.kts.backend.crossdomain.domain.command.SaveTestcaseCommand;
 import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
 import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
@@ -68,7 +68,7 @@ public class KTSController {
     }
     @PostMapping("/runTest")
     @ResponseBody
-    public Response runTest(@RequestBody RunTestCommnad command){
+    public Response runTest(@RequestBody RunTestCommand command){
         try {
             Response response = new Response();
             response.putContext("instruction", this.ktsService.runTest(command));

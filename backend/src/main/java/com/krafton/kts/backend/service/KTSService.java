@@ -31,7 +31,7 @@ import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTes
 import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
 import com.krafton.kts.backend.crossdomain.domain.command.FindRunningActionCommand;
 import com.krafton.kts.backend.crossdomain.domain.command.OnFinishActionCommand;
-import com.krafton.kts.backend.crossdomain.domain.command.RunTestCommnad;
+import com.krafton.kts.backend.crossdomain.domain.command.RunTestCommand;
 import com.krafton.kts.backend.crossdomain.domain.db.TEST_REL_TESTCASE_JOIN_TESTCASE;
 import com.krafton.kts.backend.domain.test_rel_testcase.interfaces.TestRelTestcaseInterface;
 import com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand;
@@ -118,7 +118,7 @@ public class KTSService {
     }
 
     @Transactional
-    public NextTestInstructionResponse runTest(RunTestCommnad command) {
+    public NextTestInstructionResponse runTest(RunTestCommand command) {
         try {
             String runningTestGuid = UUID.randomUUID().toString();
 

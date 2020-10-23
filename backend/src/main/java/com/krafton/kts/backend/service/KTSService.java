@@ -1,59 +1,52 @@
 package com.krafton.kts.backend.service;
 
-import com.krafton.kts.backend.crossdomain.interfaces.CrossDomainInterface;
-import com.krafton.kts.backend.domain.action.domain.command.*;
-import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
-import com.krafton.kts.backend.domain.property.domain.command.FindPropertiesCommand;
-import com.krafton.kts.backend.domain.property.domain.command.RemovePropertiesCommand;
-import com.krafton.kts.backend.domain.property.domain.command.SavePropertiesCommand;
-import com.krafton.kts.backend.domain.property.domain.db.KTS_ACTION_PROPERTY;
-import com.krafton.kts.backend.domain.property.domain.db.KTS_ACTION_PROPERTY_TEMPLATE;
-import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_TEMPLATE;
-import com.krafton.kts.backend.domain.action.interfaces.ActionInterface;
-import com.krafton.kts.backend.domain.property.interfaces.PropertyInterface;
-import com.krafton.kts.backend.domain.running_action.domain.command.AddRunningActionCommand;
-import com.krafton.kts.backend.domain.running_action.domain.db.RUNNING_ACTION;
-import com.krafton.kts.backend.domain.running_action.interfaces.RunningActionInterface;
-import com.krafton.kts.backend.domain.running_property.domain.command.AddRunningPropertyCommand;
-import com.krafton.kts.backend.domain.running_property.domain.db.RUNNING_PROPERTY;
-import com.krafton.kts.backend.domain.running_property.interfaces.RunningPropertyInterface;
-import com.krafton.kts.backend.domain.running_test.domain.db.RUNNING_TEST;
-import com.krafton.kts.backend.domain.running_test.interfaces.RunningTestInterface;
-import com.krafton.kts.backend.domain.running_testcase.domain.command.AddRunningTestcaseCommand;
-import com.krafton.kts.backend.domain.running_testcase.domain.db.RUNNING_TESTCASE;
-import com.krafton.kts.backend.domain.running_testcase.interfaces.RunningTestcaseInterface;
-import com.krafton.kts.backend.domain.test.domain.command.AddTestCommand;
-import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
-import com.krafton.kts.backend.domain.test.domain.db.KTS_TEST;
-import com.krafton.kts.backend.domain.test.interfaces.TestInterface;
-import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestGuidCommand;
-import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestcaseGuidCommand;
-import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
-import com.krafton.kts.backend.crossdomain.domain.command.FindRunningActionCommand;
-import com.krafton.kts.backend.crossdomain.domain.command.OnFinishActionCommand;
-import com.krafton.kts.backend.crossdomain.domain.command.RunTestCommand;
-import com.krafton.kts.backend.crossdomain.domain.db.TEST_REL_TESTCASE_JOIN_TESTCASE;
-import com.krafton.kts.backend.domain.test_rel_testcase.interfaces.TestRelTestcaseInterface;
-import com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand;
-import com.krafton.kts.backend.domain.testcase.domain.db.KTS_TESTCASE;
-import com.krafton.kts.backend.domain.testcase.interfaces.TestcaseInterface;
-import com.krafton.kts.backend.crossdomain.domain.command.SaveTestcaseCommand;
-import com.krafton.kts.backend.crossdomain.domain.response.NextTestInstructionResponse;
+import com.krafton.kts.backend.interfaces.*;
+import com.krafton.kts.domain.action.command.*;
+import com.krafton.kts.domain.action.db.KTS_ACTION;
+import com.krafton.kts.domain.property.command.FindPropertiesCommand;
+import com.krafton.kts.domain.property.command.RemovePropertiesCommand;
+import com.krafton.kts.domain.property.command.SavePropertiesCommand;
+import com.krafton.kts.domain.property.db.KTS_ACTION_PROPERTY;
+import com.krafton.kts.domain.property.db.KTS_ACTION_PROPERTY_TEMPLATE;
+import com.krafton.kts.domain.action.db.KTS_ACTION_TEMPLATE;
+import com.krafton.kts.domain.running_action.command.AddRunningActionCommand;
+import com.krafton.kts.domain.running_action.db.RUNNING_ACTION;
+import com.krafton.kts.domain.running_property.command.AddRunningPropertyCommand;
+import com.krafton.kts.domain.running_property.db.RUNNING_PROPERTY;
+import com.krafton.kts.domain.running_test.db.RUNNING_TEST;
+import com.krafton.kts.domain.running_testcase.command.AddRunningTestcaseCommand;
+import com.krafton.kts.domain.running_testcase.db.RUNNING_TESTCASE;
+import com.krafton.kts.domain.test.command.AddTestCommand;
+import com.krafton.kts.domain.test.command.RemoveTestCommand;
+import com.krafton.kts.domain.test.db.KTS_TEST;
+import com.krafton.kts.domain.test_rel_testcase.command.RemoveTestRelTestcaseByTestGuidCommand;
+import com.krafton.kts.domain.test_rel_testcase.command.RemoveTestRelTestcaseByTestcaseGuidCommand;
+import com.krafton.kts.domain.test_rel_testcase.command.SaveTestRelTestcaseCommand;
+import com.krafton.kts.crossdomain.command.FindRunningActionCommand;
+import com.krafton.kts.crossdomain.command.OnFinishActionCommand;
+import com.krafton.kts.crossdomain.command.RunTestCommand;
+import com.krafton.kts.crossdomain.db.TEST_REL_TESTCASE_JOIN_TESTCASE;
+import com.krafton.kts.domain.testcase.command.RemoveTestcaseCommand;
+import com.krafton.kts.domain.testcase.db.KTS_TESTCASE;
+import com.krafton.kts.crossdomain.command.SaveTestcaseCommand;
+import com.krafton.kts.crossdomain.response.NextTestInstructionResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
+@Service
 @RequiredArgsConstructor
 public class KTSService {
 
     private final ActionInterface actionInterface;
     private final PropertyInterface propertyInterface;
     private final TestcaseInterface testcaseInterface;
-    private final TestRelTestcaseInterface testRelTestcaseInterface;
     private final TestInterface testInterface;
+    private final TestRelTestcaseInterface testRelTestcaseInterface;
     private final RunningTestInterface runningTestInterface;
     private final RunningTestcaseInterface runningTestcaseInterface;
     private final RunningActionInterface runningActionInterface;
@@ -310,14 +303,6 @@ public class KTSService {
             }
         }
         return ret;
-    }
-
-    //test
-    public List<KTS_TEST> findAllTest() {
-        return this.testInterface.findAllTest();
-    }
-    public KTS_TEST findTest(String testGuid) {
-        return this.testInterface.findTest(testGuid);
     }
 
     //test_rel_testcase

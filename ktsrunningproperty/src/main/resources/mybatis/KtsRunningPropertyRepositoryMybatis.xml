@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.krafton.kts.running_property.repository.mybatis.KtsRunningPropertyRepositoryMybatis">
+    <insert id="addRunningProperty" parameterType="com.krafton.kts.domain.running_property.command.AddRunningPropertyCommand">
+        INSERT INTO RUNNING_PROPERTY (runningPropertyGuid, runningActionGuid, runningPropertyName, runningPropertyValue) VALUES
+        <foreach collection="runningProperties" item="item" separator=",">
+            (#{item.runningPropertyGuid}, #{item.runningActionGuid}, #{item.runningPropertyName}, #{item.runningPropertyValue})
+        </foreach>;
+    </insert>
+
+    <select id="findRunningProperty" parameterType="String" resultType="com.krafton.kts.domain.running_property.db.RUNNING_PROPERTY">
+        SELECT * FROM RUNNING_PROPERTY WHERE runningActionGuid = #{runningActionGuid};
+    </select>
+</mapper>

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.krafton.kts.property.repository.mybatis.KtsPropertyRepositoryMybatis">
+    <select id="findProperty" resultType="com.krafton.kts.domain.property.db.KTS_ACTION_PROPERTY">
+        SELECT * FROM KTS_ACTION_PROPERTY WHERE actionGuid = #{actionGuid};
+    </select>
+
+    <select id="getPropertyTemplate" resultType="com.krafton.kts.domain.property.db.KTS_ACTION_PROPERTY_TEMPLATE">
+        SELECT * FROM KTS_ACTION_PROPERTY_TEMPLATE where actionId = #{actionId}
+    </select>
+
+    <update id="saveProperties" parameterType="com.krafton.kts.domain.property.command.SavePropertiesCommand">
+        DELETE FROM KTS_ACTION_PROPERTY WHERE actionGuid IN (
+        <foreach collection="actionGuids" item="item" separator=",">
+            #{item}
+        </foreach>
+        );
+
+        <if test="properties != null and properties.size() > 0">
+            INSERT INTO KTS_ACTION_PROPERTY (actionGuid, propertyName, propertyValue) VALUES
+            <foreach item="item" index="index" collection="properties" separator=",">
+                (#{item.actionGuid}, #{item.propertyName}, #{item.propertyValue})
+            </foreach>
+            ON DUPLICATE KEY UPDATE actionGuid = VALUES(actionGuid), propertyName = VALUES(propertyName), propertyValue = VALUES(propertyValue);
+        </if>
+    </update>
+
+    <delete id="removeProperties" parameterType="com.krafton.kts.domain.property.command.RemovePropertiesCommand">
+        DELETE FROM KTS_ACTION_PROPERTY
+        WHERE actionGuid IN (
+            SELECT actionGuid FROM KTS_ACTION WHERE testcaseGuid = #{testcaseGuid} AND deleted = 'N' GROUP BY actionGuid
+        );
+    </delete>
+
+    <select id="findProperties" parameterType="com.krafton.kts.domain.property.command.FindPropertiesCommand" resultType="com.krafton.kts.domain.property.db.KTS_ACTION_PROPERTY">
+        SELECT * FROM KTS_ACTION_PROPERTY WHERE actionGuid IN (
+        <foreach collection="actionGuids" item="item" separator=",">
+            #{item}
+        </foreach>
+        );
+    </select>
+</mapper>

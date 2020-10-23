@@ -1,13 +1,13 @@
 package com.krafton.kts.frontend;
 
 import com.krafton.kts.backend.service.KTSService;
-import com.krafton.kts.backend.crossdomain.domain.command.OnFinishActionCommand;
-import com.krafton.kts.backend.crossdomain.domain.command.RunTestCommand;
-import com.krafton.kts.backend.crossdomain.domain.command.SaveTestcaseCommand;
-import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
-import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
-import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
-import com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand;
+import com.krafton.kts.crossdomain.command.OnFinishActionCommand;
+import com.krafton.kts.crossdomain.command.RunTestCommand;
+import com.krafton.kts.crossdomain.command.SaveTestcaseCommand;
+import com.krafton.kts.domain.action.db.KTS_ACTION;
+import com.krafton.kts.domain.test.command.RemoveTestCommand;
+import com.krafton.kts.domain.test_rel_testcase.command.SaveTestRelTestcaseCommand;
+import com.krafton.kts.domain.testcase.command.RemoveTestcaseCommand;
 import com.krafton.kts.frontend.common.ErrorCode;
 import com.krafton.kts.frontend.common.Response;
 import lombok.RequiredArgsConstructor;
@@ -140,23 +140,6 @@ public class KTSController {
         } catch(Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());
         }
-    }
-
-    //test
-    @GetMapping("/findAllTest")
-    @ResponseBody
-    public Response findAllTest(){
-        Response response = new Response();
-        response.putContext("list", this.ktsService.findAllTest());
-        return response;
-    }
-
-    @GetMapping("/findTest")
-    @ResponseBody
-    public Response findTest(@RequestParam String testGuid){
-        Response response = new Response();
-        response.putContext("test", this.ktsService.findTest(testGuid));
-        return response;
     }
 
     //test_rel_testcase

@@ -1,4 +1,4 @@
-package com.krafton.kts.backend.interfaces;
+package com.krafton.kts.transactional.interfaces;
 
 import com.krafton.kts.domain.running_test.db.RUNNING_TEST;
 import lombok.RequiredArgsConstructor;

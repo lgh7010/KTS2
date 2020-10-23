@@ -1,4 +1,4 @@
-package com.krafton.kts.backend.interfaces;
+package com.krafton.kts.transactional.interfaces;
 
 import com.krafton.kts.domain.running_property.command.AddRunningPropertyCommand;
 import com.krafton.kts.domain.running_property.db.RUNNING_PROPERTY;

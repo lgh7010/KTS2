@@ -1,4 +1,4 @@
-package com.krafton.kts.backend.interfaces;
+package com.krafton.kts.transactional.interfaces;
 
 import com.krafton.kts.domain.property.command.FindPropertiesCommand;
 import com.krafton.kts.domain.property.command.RemovePropertiesCommand;

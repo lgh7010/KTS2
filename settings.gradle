@@ -13,4 +13,5 @@ include 'ktsrunningaction'
 include 'ktsrunningproperty'
 include 'ktsrunningtest'
 include 'ktsrunningtestcase'
+include 'transactional'
 

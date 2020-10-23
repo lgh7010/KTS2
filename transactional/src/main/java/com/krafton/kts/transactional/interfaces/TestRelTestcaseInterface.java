@@ -1,4 +1,4 @@
-package com.krafton.kts.backend.interfaces;
+package com.krafton.kts.transactional.interfaces;
 
 import com.krafton.kts.domain.test_rel_testcase.command.RemoveTestRelTestcaseByTestGuidCommand;
 import com.krafton.kts.domain.test_rel_testcase.command.RemoveTestRelTestcaseByTestcaseGuidCommand;

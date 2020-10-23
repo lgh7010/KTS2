@@ -1,14 +1,18 @@
-package com.krafton.kts.backend.service;
+package com.krafton.kts.transactional.services;
 
-import com.krafton.kts.backend.interfaces.*;
-import com.krafton.kts.domain.action.command.*;
+import com.krafton.kts.crossdomain.command.FindRunningActionCommand;
+import com.krafton.kts.crossdomain.command.OnFinishActionCommand;
+import com.krafton.kts.crossdomain.command.RunTestCommand;
+import com.krafton.kts.crossdomain.command.SaveTestcaseCommand;
+import com.krafton.kts.crossdomain.db.TEST_REL_TESTCASE_JOIN_TESTCASE;
+import com.krafton.kts.crossdomain.response.NextTestInstructionResponse;
+import com.krafton.kts.domain.action.command.RemoveActionCommand;
+import com.krafton.kts.domain.action.command.SaveActionCommand;
 import com.krafton.kts.domain.action.db.KTS_ACTION;
 import com.krafton.kts.domain.property.command.FindPropertiesCommand;
 import com.krafton.kts.domain.property.command.RemovePropertiesCommand;
 import com.krafton.kts.domain.property.command.SavePropertiesCommand;
 import com.krafton.kts.domain.property.db.KTS_ACTION_PROPERTY;
-import com.krafton.kts.domain.property.db.KTS_ACTION_PROPERTY_TEMPLATE;
-import com.krafton.kts.domain.action.db.KTS_ACTION_TEMPLATE;
 import com.krafton.kts.domain.running_action.command.AddRunningActionCommand;
 import com.krafton.kts.domain.running_action.db.RUNNING_ACTION;
 import com.krafton.kts.domain.running_property.command.AddRunningPropertyCommand;
@@ -22,14 +26,8 @@ import com.krafton.kts.domain.test.db.KTS_TEST;
 import com.krafton.kts.domain.test_rel_testcase.command.RemoveTestRelTestcaseByTestGuidCommand;
 import com.krafton.kts.domain.test_rel_testcase.command.RemoveTestRelTestcaseByTestcaseGuidCommand;
 import com.krafton.kts.domain.test_rel_testcase.command.SaveTestRelTestcaseCommand;
-import com.krafton.kts.crossdomain.command.FindRunningActionCommand;
-import com.krafton.kts.crossdomain.command.OnFinishActionCommand;
-import com.krafton.kts.crossdomain.command.RunTestCommand;
-import com.krafton.kts.crossdomain.db.TEST_REL_TESTCASE_JOIN_TESTCASE;
 import com.krafton.kts.domain.testcase.command.RemoveTestcaseCommand;
-import com.krafton.kts.domain.testcase.db.KTS_TESTCASE;
-import com.krafton.kts.crossdomain.command.SaveTestcaseCommand;
-import com.krafton.kts.crossdomain.response.NextTestInstructionResponse;
+import com.krafton.kts.transactional.interfaces.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,8 +38,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class KTSService {
-
+public class KtsTransactionalService {
     private final ActionInterface actionInterface;
     private final PropertyInterface propertyInterface;
     private final TestcaseInterface testcaseInterface;
@@ -53,7 +50,6 @@ public class KTSService {
     private final RunningPropertyInterface runningPropertyInterface;
     private final CrossDomainInterface crossDomainInterface;
 
-    //transactional
     @Transactional
     public void saveTestcase(SaveTestcaseCommand command) {
         try {
@@ -268,23 +264,7 @@ public class KTSService {
         }
     }
 
-    //action
-    public List<KTS_ACTION> findAction(String testcaseGuid) {
-        return this.actionInterface.findAction(testcaseGuid);
-    }
-    public Map<String, KTS_ACTION_TEMPLATE> getActionTemplate() {
-        List<KTS_ACTION_TEMPLATE> list = this.actionInterface.getActionTemplate();
-        Map<String, KTS_ACTION_TEMPLATE> ret = new HashMap<>();
-        for (KTS_ACTION_TEMPLATE ktsActionTemplate : list) {
-            ret.put(ktsActionTemplate.getActionId(), ktsActionTemplate);
-        }
-        return ret;
-    }
-
-    //property
-    public List<KTS_ACTION_PROPERTY_TEMPLATE> getPropertyTemplate(String actionId) {
-        return this.propertyInterface.getPropertyTemplate(actionId);
-    }
+    //여러 도메인
     public Map<String, List<KTS_ACTION_PROPERTY>> findProperties(String testcaseGuid) {
         List<KTS_ACTION> actions = this.actionInterface.findAction(testcaseGuid);
         List<String> actionGuids = new ArrayList<>();
@@ -303,23 +283,5 @@ public class KTSService {
             }
         }
         return ret;
-    }
-
-    //test_rel_testcase
-    public List<TEST_REL_TESTCASE_JOIN_TESTCASE> findTestRelTestcaseJoinTestcase(String testGuid) {
-        return this.crossDomainInterface.findTestRelTestcaseJoinTestcase(testGuid);
-    }
-
-    //testcase
-    public List<KTS_TESTCASE> findAllTestcase() {
-        return this.testcaseInterface.findAll();
-    }
-    public KTS_TESTCASE findTestcase(String testcaseGuid) {
-        return this.testcaseInterface.findTestcase(testcaseGuid);
-    }
-
-    //running_test
-    public List<RUNNING_TEST> findAllRunningTest() {
-        return this.runningTestInterface.findAllRunningTest();
     }
 }

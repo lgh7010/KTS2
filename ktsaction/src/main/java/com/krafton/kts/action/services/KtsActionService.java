@@ -9,7 +9,9 @@ import com.krafton.kts.domain.action.db.KTS_ACTION_TEMPLATE;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -17,12 +19,18 @@ public class KtsActionService {
 
     private final KtsActionInterface ktsActionInterface;
 
-    public List<KTS_ACTION> findAction(String testcaseGuid){
+    public List<KTS_ACTION> findAction(String testcaseGuid) {
         return this.ktsActionInterface.findAction(testcaseGuid);
     }
-    public List<KTS_ACTION_TEMPLATE> getActionTemplate(){
-        return this.ktsActionInterface.getActionTemplate();
+    public Map<String, KTS_ACTION_TEMPLATE> getActionTemplate() {
+        List<KTS_ACTION_TEMPLATE> list = this.ktsActionInterface.getActionTemplate();
+        Map<String, KTS_ACTION_TEMPLATE> ret = new HashMap<>();
+        for (KTS_ACTION_TEMPLATE ktsActionTemplate : list) {
+            ret.put(ktsActionTemplate.getActionId(), ktsActionTemplate);
+        }
+        return ret;
     }
+
     public void saveAction(SaveActionCommand command){
         this.ktsActionInterface.saveAction(command);
     }

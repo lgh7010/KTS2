@@ -237,7 +237,7 @@ export default {
         "removeActionGuidList": this.removeActionGuidList,
         "testcase": this.currentTestcase,
       }).then(response => {
-        alert((response.return_code == 0) ? "저장 완료" : "저장 실패")
+        alert((response.data.return_code == 0) ? "저장 완료" : "저장 실패")
         console.log(response)
       }).catch(error => {
         console.log(error)

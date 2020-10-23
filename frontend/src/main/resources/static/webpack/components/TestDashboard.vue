@@ -6,18 +6,20 @@
       <table class="table table-hover">
         <thead>
         <tr>
-          <th>테스트 이름</th>
+          <th>테스트이름</th>
           <th>설명</th>
-          <th>시작 시간</th>
-          <th>진행 시간</th>
+          <th>시작시간</th>
+          <th>진행시간</th>
+          <th>상호작용</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="runningTest in this.runningTestList">
           <td>{{runningTest.name}}</td>
           <td>{{runningTest.description}}</td>
-          <td>{{runningTest.startAt}}</td>
-          <td>{{runningTest.endAt}}</td>
+          <td>{{$filters.utcToLocaltime(runningTest.startAt)}}</td>
+          <td>{{$filters.utcToLocaltime(runningTest.endAt)}}</td>
+          <td><button v-on:click="onClickRunningTest(runningTest)">상세보기</button></td>
         </tr>
         </tbody>
       </table>
@@ -28,18 +30,20 @@
       <table class="table table-hover">
         <thead>
         <tr>
-          <th>테스트 이름</th>
+          <th>테스트이름</th>
           <th>설명</th>
-          <th>시작 시간</th>
-          <th>완료 시간</th>
+          <th>시작시간</th>
+          <th>진행시간</th>
+          <th>상호작용</th>
         </tr>
         </thead>
         <tbody>
         <tr v-for="finishedTest in this.finishedTestList">
           <td>{{finishedTest.name}}</td>
           <td>{{finishedTest.description}}</td>
-          <td>{{finishedTest.startAt}}</td>
-          <td>{{finishedTest.endAt}}</td>
+          <td>{{$filters.utcToLocaltime(finishedTest.startAt)}}</td>
+          <td>{{$filters.utcToLocaltime(finishedTest.endAt)}}</td>
+          <td><button v-on:click="onClickRunningTest(finishedTest)">상세보기</button></td>
         </tr>
         </tbody>
       </table>
@@ -76,6 +80,13 @@ export default {
     }).catch(error => {
       console.log(error)
     })
+  },
+  methods: {
+    onClickRunningTest(runningTest){
+      console.log("======")
+      console.log(runningTest)
+      console.log(this.$filters.utcToLocaltime(runningTest.startAt))
+    }
   }
 }
 </script>

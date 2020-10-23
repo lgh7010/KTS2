@@ -1,5 +1,5 @@
 rootProject.name = 'kts'
-include 'backend'
+include 'crossdomain'
 include 'frontend'
 include 'dummyclient'
 include 'ktstest'

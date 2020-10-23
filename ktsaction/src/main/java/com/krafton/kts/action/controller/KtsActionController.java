@@ -1,8 +1,10 @@
 package com.krafton.kts.action.controller;
 
+import com.krafton.kts.action.services.KtsActionService;
 import com.krafton.kts.common.ErrorCode;
 import com.krafton.kts.common.Response;
 import com.krafton.kts.domain.action.db.KTS_ACTION;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -14,12 +16,16 @@ import java.util.List;
 import java.util.Map;
 
 @Controller
+@RequiredArgsConstructor
 public class KtsActionController {
+
+    private final KtsActionService ktsActionService;
+
     @GetMapping("/currentTestcaseActions")
     @ResponseBody
     public Response currentTestcaseActions(@RequestParam(value = "testcaseGuid") String testcaseGuid){
         try {
-            List<KTS_ACTION> list = this.ktsService.findAction(testcaseGuid);
+            List<KTS_ACTION> list = this.ktsActionService.findAction(testcaseGuid);
             Map<String, KTS_ACTION> ret = new HashMap<>();
             for (Iterator<KTS_ACTION> iter = list.iterator(); iter.hasNext();){
                 KTS_ACTION tc = iter.next();
@@ -38,7 +44,7 @@ public class KtsActionController {
     public Response actionTemplates(){
         try {
             Response response = new Response();
-            response.putContext("actionTemplates", this.ktsService.getActionTemplate());
+            response.putContext("actionTemplates", this.ktsActionService.getActionTemplate());
             return response;
         } catch(Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());

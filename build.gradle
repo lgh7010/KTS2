@@ -28,7 +28,7 @@ dependencies {
 		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 	}
 
-	compile project(':backend')
+	compile project(':crossdomain')
 	compile project(':frontend')
 
 	compile project(':dummyclient')

@@ -1,8 +1,8 @@
-package com.krafton.kts.property.controller;
+package com.krafton.kts.crossdomain.controller;
 
 import com.krafton.kts.common.ErrorCode;
 import com.krafton.kts.common.Response;
-import com.krafton.kts.property.services.KtsPropertyService;
+import com.krafton.kts.crossdomain.service.CrossDomainService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,18 +11,18 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
-public class KtsPropertyController {
+public class CrossDomainController {
 
-    private final KtsPropertyService ktsPropertyService;
+    private final CrossDomainService crossDomainService;
 
-    @GetMapping("/propertiesTemplate")
+    @GetMapping("/testRelTestcaseJoinTestcase")
     @ResponseBody
-    public Response propertiesTemplate(@RequestParam(value = "actionId") String actionId){
+    public Response testRelTestcaseJoinTestcase(@RequestParam(value = "testGuid") String testGuid){
         try {
             Response response = new Response();
-            response.putContext("list", this.ktsPropertyService.getPropertyTemplate(actionId));
+            response.putContext("list", this.crossDomainService.findTestRelTestcaseJoinTestcase(testGuid));
             return response;
-        } catch(Exception e) {
+        } catch(Exception e){
             return new Response(ErrorCode.ERR_COMMON, e.getMessage());
         }
     }

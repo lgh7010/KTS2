@@ -12,6 +12,7 @@ import com.krafton.kts.interfaces.repository.testreltestcase.TestRelTestcaseInte
 import com.krafton.kts.interfaces.service.TestcaseListComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -30,6 +31,7 @@ public class TestcaseListComponentService implements TestcaseListComponent {
     }
 
     @Override
+    @Transactional
     public void removeTestcase(RemoveTestcaseCommand command) {
         try {
             this.testcaseInterface.removeTestcase(command);

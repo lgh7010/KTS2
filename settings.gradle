@@ -2,7 +2,6 @@ rootProject.name = 'kts'
 
 include 'interfaces'
 include 'kts'
-include 'domains'
 include 'repository-mybatis'
 include 'service-dashboard'
 include 'service-test'

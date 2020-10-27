@@ -4,6 +4,3 @@ bootJar {
 jar {
     enabled = true
 }
-dependencies {
-    compile project(':domains')
-}

@@ -12,6 +12,7 @@ import com.krafton.kts.interfaces.repository.testreltestcase.TestRelTestcaseInte
 import com.krafton.kts.interfaces.service.TestEditComponent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class TestEditComponentService implements TestEditComponent {
     }
 
     @Override
+    @Transactional
     public void saveTestRelTestcase(SaveTestRelTestcaseCommand command) {
         try {
             if(command.getRelationList().stream().count() > 0){

@@ -1,6 +1,5 @@
 package com.krafton.kts.frontend;
 
-//import com.krafton.kts.backend.service.KTSService;
 import com.krafton.kts.interfaces.repository.derived.OnFinishActionCommand;
 import com.krafton.kts.interfaces.repository.derived.RunTestCommand;
 import com.krafton.kts.interfaces.repository.derived.SaveTestcaseCommand;
@@ -24,7 +23,6 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class KTSController {
 
-    //private final KTSService ktsService;
     private final TestcaseEditComponentService testcaseEditComponentService;
     private final TestcaseListComponentService testcaseListComponentService;
     private final TestDashboardService testDashboardService;

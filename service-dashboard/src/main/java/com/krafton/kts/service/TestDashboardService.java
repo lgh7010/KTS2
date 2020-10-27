@@ -41,6 +41,7 @@ public class TestDashboardService implements TestDashboard {
         return this.runningTestInterface.findAllRunningTest();
     }
 
+    @Override
     @Transactional
     public NextTestInstructionResponse runTest(RunTestCommand command) {
         try {
@@ -145,6 +146,8 @@ public class TestDashboardService implements TestDashboard {
             throw e;
         }
     }
+
+    @Override
     @Transactional
     public NextTestInstructionResponse onFinishAction(OnFinishActionCommand command) {
         try {

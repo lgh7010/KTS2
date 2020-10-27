@@ -11,5 +11,4 @@ dependencies {
     compile("mysql:mysql-connector-java:5.1.46")
 
     compile project(':interfaces')
-    compile project(':domains')
 }

@@ -3,4 +3,5 @@ dependencies {
     compile project(':backend')
     compile project(':frontend')
     compile project(':dummyclient')
+    compile project(':repository-mybatis')
 }

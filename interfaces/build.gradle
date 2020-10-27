@@ -6,5 +6,4 @@ jar {
 }
 dependencies {
     compile project(':domains')
-    compile project(':commands')
 }

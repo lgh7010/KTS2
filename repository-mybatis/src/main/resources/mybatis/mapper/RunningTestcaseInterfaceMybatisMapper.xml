@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.krafton.kts.repository.RunningTestcaseInterfaceMybatisMapper">
+    <insert id="addRunningTestcase" parameterType="com.krafton.kts.interfaces.repository.runningtestcase.AddRunningTestcaseCommand">
+        INSERT INTO RUNNING_TESTCASE (runningTestcaseGuid, testcaseGuid, runningTestGuid, runningTestcaseOrder) VALUES
+        <foreach collection="runningTestcases" item="item" separator=",">
+            (#{item.runningTestcaseGuid}, #{item.testcaseGuid}, #{item.runningTestGuid}, #{item.runningTestcaseOrder})
+        </foreach>;
+    </insert>
+
+    <select id="findRunningTestcase" parameterType="String" resultType="com.krafton.kts.domains.entity.RUNNING_TESTCASE">
+        SELECT * FROM RUNNING_TESTCASE WHERE runningTestGuid = #{runningTestGuid} ORDER BY runningTestcaseOrder;
+    </select>
+</mapper>

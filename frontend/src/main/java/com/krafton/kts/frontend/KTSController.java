@@ -1,12 +1,12 @@
 package com.krafton.kts.frontend;
 
 import com.krafton.kts.backend.service.KTSService;
-import com.krafton.kts.commands.crossdomain.OnFinishActionCommand;
-import com.krafton.kts.commands.crossdomain.RunTestCommand;
-import com.krafton.kts.commands.crossdomain.SaveTestcaseCommand;
-import com.krafton.kts.commands.test.RemoveTestCommand;
-import com.krafton.kts.commands.testcase.RemoveTestcaseCommand;
-import com.krafton.kts.commands.testreltestcase.SaveTestRelTestcaseCommand;
+import com.krafton.kts.interfaces.repository.derived.OnFinishActionCommand;
+import com.krafton.kts.interfaces.repository.derived.RunTestCommand;
+import com.krafton.kts.interfaces.repository.derived.SaveTestcaseCommand;
+import com.krafton.kts.interfaces.repository.test.RemoveTestCommand;
+import com.krafton.kts.interfaces.repository.testcase.RemoveTestcaseCommand;
+import com.krafton.kts.interfaces.repository.testreltestcase.SaveTestRelTestcaseCommand;
 import com.krafton.kts.domains.entity.KTS_ACTION;
 import com.krafton.kts.frontend.common.ErrorCode;
 import com.krafton.kts.frontend.common.Response;

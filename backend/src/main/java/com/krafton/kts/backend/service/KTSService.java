@@ -1,35 +1,40 @@
 package com.krafton.kts.backend.service;
 
-import com.krafton.kts.commands.action.RemoveActionCommand;
-import com.krafton.kts.commands.action.SaveActionCommand;
-import com.krafton.kts.commands.crossdomain.*;
-import com.krafton.kts.commands.property.FindPropertiesCommand;
-import com.krafton.kts.commands.property.RemovePropertiesCommand;
-import com.krafton.kts.commands.property.SavePropertiesCommand;
-import com.krafton.kts.commands.runningaction.AddRunningActionCommand;
-import com.krafton.kts.commands.runningproperty.AddRunningPropertyCommand;
-import com.krafton.kts.commands.runningtestcase.AddRunningTestcaseCommand;
-import com.krafton.kts.commands.test.AddTestCommand;
-import com.krafton.kts.commands.test.RemoveTestCommand;
-import com.krafton.kts.commands.testcase.RemoveTestcaseCommand;
-import com.krafton.kts.commands.testreltestcase.RemoveTestRelTestcaseByTestGuidCommand;
-import com.krafton.kts.commands.testreltestcase.RemoveTestRelTestcaseByTestcaseGuidCommand;
-import com.krafton.kts.commands.testreltestcase.SaveTestRelTestcaseCommand;
+import com.krafton.kts.interfaces.repository.action.ActionInterface;
+import com.krafton.kts.interfaces.repository.action.RemoveActionCommand;
+import com.krafton.kts.interfaces.repository.action.SaveActionCommand;
+import com.krafton.kts.interfaces.repository.derived.*;
+import com.krafton.kts.interfaces.repository.property.FindPropertiesCommand;
+import com.krafton.kts.interfaces.repository.property.PropertyInterface;
+import com.krafton.kts.interfaces.repository.property.RemovePropertiesCommand;
+import com.krafton.kts.interfaces.repository.property.SavePropertiesCommand;
+import com.krafton.kts.interfaces.repository.runningaction.AddRunningActionCommand;
+import com.krafton.kts.interfaces.repository.runningaction.RunningActionInterface;
+import com.krafton.kts.interfaces.repository.runningproperty.AddRunningPropertyCommand;
+import com.krafton.kts.interfaces.repository.runningproperty.RunningPropertyInterface;
+import com.krafton.kts.interfaces.repository.runningtest.RunningTestInterface;
+import com.krafton.kts.interfaces.repository.runningtestcase.AddRunningTestcaseCommand;
+import com.krafton.kts.interfaces.repository.runningtestcase.RunningTestcaseInterface;
+import com.krafton.kts.interfaces.repository.test.AddTestCommand;
+import com.krafton.kts.interfaces.repository.test.RemoveTestCommand;
+import com.krafton.kts.interfaces.repository.test.TestInterface;
+import com.krafton.kts.interfaces.repository.testcase.RemoveTestcaseCommand;
+import com.krafton.kts.interfaces.repository.testcase.TestcaseInterface;
+import com.krafton.kts.interfaces.repository.testreltestcase.RemoveTestRelTestcaseByTestGuidCommand;
+import com.krafton.kts.interfaces.repository.testreltestcase.RemoveTestRelTestcaseByTestcaseGuidCommand;
+import com.krafton.kts.interfaces.repository.testreltestcase.SaveTestRelTestcaseCommand;
 import com.krafton.kts.domains.entity.*;
-import com.krafton.kts.interfaces.repository.CrossDomainInterface;
-import com.krafton.kts.interfaces.repository.RunningTestcaseInterface;
-import com.krafton.kts.interfaces.repository.TestInterface;
 import com.krafton.kts.domains.derived.TEST_REL_TESTCASE_JOIN_TESTCASE;
-import com.krafton.kts.interfaces.repository.TestRelTestcaseInterface;
-import com.krafton.kts.interfaces.repository.TestcaseInterface;
-import com.krafton.kts.interfaces.repository.*;
+import com.krafton.kts.interfaces.repository.testreltestcase.TestRelTestcaseInterface;
 import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.*;
 
+@Service
 @RequiredArgsConstructor
 public class KTSService {
 
@@ -42,7 +47,7 @@ public class KTSService {
     private final RunningTestcaseInterface runningTestcaseInterface;
     private final RunningActionInterface runningActionInterface;
     private final RunningPropertyInterface runningPropertyInterface;
-    private final CrossDomainInterface crossDomainInterface;
+    private final DerivedDomainInterface crossDomainInterface;
 
     //transactional
     @Transactional
@@ -184,7 +189,9 @@ public class KTSService {
                 System.out.println("add runningActions : " + runningActions);
                 System.out.println("add runningProperties : " + runningProperties);
                 this.runningActionInterface.addRunningAction(new AddRunningActionCommand(runningActions));
-                this.runningPropertyInterface.addRunningProperty(new AddRunningPropertyCommand(runningProperties));
+                if(runningProperties.stream().count() > 0){
+                    this.runningPropertyInterface.addRunningProperty(new AddRunningPropertyCommand(runningProperties));
+                }
             }
 
             System.out.println("add runningTestcase : " + runningTestcases);

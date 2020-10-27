@@ -1,7 +1,11 @@
 dependencies {
     compile project(':interfaces')
-    compile project(':backend')
+    compile project(':repository-mybatis')
+
+    compile project(':service-dashboard')
+    compile project(':service-test')
+    compile project(':service-testcase')
+
     compile project(':frontend')
     compile project(':dummyclient')
-    compile project(':repository-mybatis')
 }

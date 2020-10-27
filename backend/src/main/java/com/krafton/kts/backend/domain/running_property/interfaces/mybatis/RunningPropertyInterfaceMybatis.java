@@ -1,8 +1,8 @@
 package com.krafton.kts.backend.domain.running_property.interfaces.mybatis;
 
-import com.krafton.kts.backend.domain.running_property.domain.command.AddRunningPropertyCommand;
-import com.krafton.kts.backend.domain.running_property.domain.db.RUNNING_PROPERTY;
-import com.krafton.kts.backend.domain.running_property.interfaces.RunningPropertyInterface;
+import com.krafton.kts.commands.runningproperty.AddRunningPropertyCommand;
+import com.krafton.kts.domains.entity.RUNNING_PROPERTY;
+import com.krafton.kts.interfaces.repository.RunningPropertyInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

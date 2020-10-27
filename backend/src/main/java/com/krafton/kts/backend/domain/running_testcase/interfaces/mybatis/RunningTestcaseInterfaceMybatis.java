@@ -1,8 +1,8 @@
 package com.krafton.kts.backend.domain.running_testcase.interfaces.mybatis;
 
-import com.krafton.kts.backend.domain.running_testcase.domain.command.AddRunningTestcaseCommand;
-import com.krafton.kts.backend.domain.running_testcase.domain.db.RUNNING_TESTCASE;
-import com.krafton.kts.backend.domain.running_testcase.interfaces.RunningTestcaseInterface;
+import com.krafton.kts.commands.runningtestcase.AddRunningTestcaseCommand;
+import com.krafton.kts.interfaces.repository.RunningTestcaseInterface;
+import com.krafton.kts.domains.entity.RUNNING_TESTCASE;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

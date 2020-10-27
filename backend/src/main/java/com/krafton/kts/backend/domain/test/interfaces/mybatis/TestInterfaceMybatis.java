@@ -1,10 +1,9 @@
 package com.krafton.kts.backend.domain.test.interfaces.mybatis;
 
-import com.krafton.kts.backend.domain.test.domain.command.AddTestCommand;
-import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
-import com.krafton.kts.backend.domain.test.domain.db.KTS_TEST;
-import com.krafton.kts.backend.domain.test.interfaces.TestInterface;
-import lombok.RequiredArgsConstructor;
+import com.krafton.kts.commands.test.AddTestCommand;
+import com.krafton.kts.commands.test.RemoveTestCommand;
+import com.krafton.kts.domains.entity.KTS_TEST;
+import com.krafton.kts.interfaces.repository.TestInterface;
 import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
@@ -28,7 +27,7 @@ public class TestInterfaceMybatis implements TestInterface {
 
     @Override
     @Transactional
-    public void removeTest(@Param("removeTestCommand")RemoveTestCommand command) {
+    public void removeTest(@Param("removeTestCommand") RemoveTestCommand command) {
         this.testInterfaceMybatisMapper.removeTest(command);
     }
 

@@ -1,7 +1,7 @@
 package com.krafton.kts.backend.crossdomain.interfaces.mybatis;
 
-import com.krafton.kts.backend.crossdomain.domain.db.TEST_REL_TESTCASE_JOIN_TESTCASE;
-import com.krafton.kts.backend.crossdomain.interfaces.CrossDomainInterface;
+import com.krafton.kts.domains.derived.TEST_REL_TESTCASE_JOIN_TESTCASE;
+import com.krafton.kts.interfaces.repository.CrossDomainInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

@@ -1,13 +1,13 @@
 package com.krafton.kts.frontend;
 
 import com.krafton.kts.backend.service.KTSService;
-import com.krafton.kts.backend.crossdomain.domain.command.OnFinishActionCommand;
-import com.krafton.kts.backend.crossdomain.domain.command.RunTestCommand;
-import com.krafton.kts.backend.crossdomain.domain.command.SaveTestcaseCommand;
-import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
-import com.krafton.kts.backend.domain.test.domain.command.RemoveTestCommand;
-import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
-import com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand;
+import com.krafton.kts.commands.crossdomain.OnFinishActionCommand;
+import com.krafton.kts.commands.crossdomain.RunTestCommand;
+import com.krafton.kts.commands.crossdomain.SaveTestcaseCommand;
+import com.krafton.kts.commands.test.RemoveTestCommand;
+import com.krafton.kts.commands.testcase.RemoveTestcaseCommand;
+import com.krafton.kts.commands.testreltestcase.SaveTestRelTestcaseCommand;
+import com.krafton.kts.domains.entity.KTS_ACTION;
 import com.krafton.kts.frontend.common.ErrorCode;
 import com.krafton.kts.frontend.common.Response;
 import lombok.RequiredArgsConstructor;

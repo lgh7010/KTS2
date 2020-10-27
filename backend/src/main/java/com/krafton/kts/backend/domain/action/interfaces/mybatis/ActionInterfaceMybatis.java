@@ -1,12 +1,11 @@
 package com.krafton.kts.backend.domain.action.interfaces.mybatis;
 
-import com.krafton.kts.backend.domain.action.domain.command.RemoveActionCommand;
-import com.krafton.kts.backend.domain.action.domain.command.SaveActionCommand;
-import com.krafton.kts.backend.domain.action.domain.command.UpdateActionIdCommand;
-import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION;
-import com.krafton.kts.backend.domain.action.domain.db.KTS_ACTION_TEMPLATE;
-import com.krafton.kts.backend.domain.action.interfaces.ActionInterface;
-import lombok.RequiredArgsConstructor;
+import com.krafton.kts.commands.action.RemoveActionCommand;
+import com.krafton.kts.commands.action.SaveActionCommand;
+import com.krafton.kts.commands.action.UpdateActionIdCommand;
+import com.krafton.kts.domains.entity.KTS_ACTION;
+import com.krafton.kts.domains.entity.KTS_ACTION_TEMPLATE;
+import com.krafton.kts.interfaces.repository.ActionInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

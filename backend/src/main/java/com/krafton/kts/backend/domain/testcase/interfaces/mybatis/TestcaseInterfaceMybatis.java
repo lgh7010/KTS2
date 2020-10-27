@@ -1,9 +1,8 @@
 package com.krafton.kts.backend.domain.testcase.interfaces.mybatis;
 
-import com.krafton.kts.backend.domain.testcase.domain.command.RemoveTestcaseCommand;
-import com.krafton.kts.backend.domain.testcase.domain.db.KTS_TESTCASE;
-import com.krafton.kts.backend.domain.testcase.interfaces.TestcaseInterface;
-import lombok.RequiredArgsConstructor;
+import com.krafton.kts.commands.testcase.RemoveTestcaseCommand;
+import com.krafton.kts.domains.entity.KTS_TESTCASE;
+import com.krafton.kts.interfaces.repository.TestcaseInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;

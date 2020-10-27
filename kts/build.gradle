@@ -1,0 +1,6 @@
+dependencies {
+    compile project(':interfaces')
+    compile project(':backend')
+    compile project(':frontend')
+    compile project(':dummyclient')
+}

@@ -4,36 +4,6 @@ plugins {
 	id 'java'
 }
 
-group = 'com.krafton'
-version = '0.0.1-SNAPSHOT'
-sourceCompatibility = '11'
-
-configurations {
-	compileOnly {
-		extendsFrom annotationProcessor
-	}
-}
-
-repositories {
-	mavenCentral()
-}
-
-dependencies {
-	implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-	implementation 'org.springframework.boot:spring-boot-starter-web'
-	compileOnly 'org.projectlombok:lombok'
-	developmentOnly 'org.springframework.boot:spring-boot-devtools'
-	annotationProcessor 'org.projectlombok:lombok'
-	testImplementation('org.springframework.boot:spring-boot-starter-test') {
-		exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
-	}
-
-	compile project(':backend')
-	compile project(':frontend')
-
-	compile project(':dummyclient')
-}
-
 subprojects {
 	buildscript {
 		repositories {
@@ -50,6 +20,7 @@ subprojects {
 
 	group 'com.krafton'
 	version '0.0.1-SNAPSHOT'
+	sourceCompatibility = '11'
 
 	repositories {
 		mavenCentral()
@@ -64,8 +35,8 @@ subprojects {
 			exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
 		}
 	}
-}
 
-test {
-	useJUnitPlatform()
+	test {
+		useJUnitPlatform()
+	}
 }

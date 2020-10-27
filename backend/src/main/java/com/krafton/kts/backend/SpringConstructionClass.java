@@ -1,24 +1,15 @@
 package com.krafton.kts.backend;
 
-import com.krafton.kts.backend.crossdomain.interfaces.CrossDomainInterface;
+import com.krafton.kts.interfaces.repository.*;
 import com.krafton.kts.backend.crossdomain.interfaces.mybatis.CrossDomainInterfaceMybatis;
-import com.krafton.kts.backend.domain.action.interfaces.ActionInterface;
 import com.krafton.kts.backend.domain.action.interfaces.mybatis.ActionInterfaceMybatis;
-import com.krafton.kts.backend.domain.property.interfaces.PropertyInterface;
 import com.krafton.kts.backend.domain.property.interfaces.mybatis.PropertyInterfaceMybatis;
-import com.krafton.kts.backend.domain.running_action.interfaces.RunningActionInterface;
 import com.krafton.kts.backend.domain.running_action.interfaces.mybatis.RunningActionInterfaceMybatis;
-import com.krafton.kts.backend.domain.running_property.interfaces.RunningPropertyInterface;
 import com.krafton.kts.backend.domain.running_property.interfaces.mybatis.RunningPropertyInterfaceMybatis;
-import com.krafton.kts.backend.domain.running_test.interfaces.RunningTestInterface;
 import com.krafton.kts.backend.domain.running_test.interfaces.mybatis.RunningTestInterfaceMybatis;
-import com.krafton.kts.backend.domain.running_testcase.interfaces.RunningTestcaseInterface;
 import com.krafton.kts.backend.domain.running_testcase.interfaces.mybatis.RunningTestcaseInterfaceMybatis;
-import com.krafton.kts.backend.domain.test.interfaces.TestInterface;
 import com.krafton.kts.backend.domain.test.interfaces.mybatis.TestInterfaceMybatis;
-import com.krafton.kts.backend.domain.test_rel_testcase.interfaces.TestRelTestcaseInterface;
 import com.krafton.kts.backend.domain.test_rel_testcase.interfaces.mybatis.TestRelTestcaseInterfaceMybatis;
-import com.krafton.kts.backend.domain.testcase.interfaces.TestcaseInterface;
 import com.krafton.kts.backend.domain.testcase.interfaces.mybatis.TestcaseInterfaceMybatis;
 import com.krafton.kts.backend.service.KTSService;
 import org.springframework.context.annotation.Bean;

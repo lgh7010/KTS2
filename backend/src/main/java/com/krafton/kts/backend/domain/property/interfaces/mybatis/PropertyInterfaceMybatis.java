@@ -1,16 +1,14 @@
 package com.krafton.kts.backend.domain.property.interfaces.mybatis;
 
-import com.krafton.kts.backend.domain.property.domain.command.FindPropertiesCommand;
-import com.krafton.kts.backend.domain.property.domain.command.RemovePropertiesCommand;
-import com.krafton.kts.backend.domain.property.domain.command.SavePropertiesCommand;
-import com.krafton.kts.backend.domain.property.domain.db.KTS_ACTION_PROPERTY;
-import com.krafton.kts.backend.domain.property.domain.db.KTS_ACTION_PROPERTY_TEMPLATE;
-import com.krafton.kts.backend.domain.property.interfaces.PropertyInterface;
-import lombok.RequiredArgsConstructor;
+import com.krafton.kts.commands.property.FindPropertiesCommand;
+import com.krafton.kts.commands.property.RemovePropertiesCommand;
+import com.krafton.kts.commands.property.SavePropertiesCommand;
+import com.krafton.kts.domains.entity.KTS_ACTION_PROPERTY;
+import com.krafton.kts.domains.entity.KTS_ACTION_PROPERTY_TEMPLATE;
+import com.krafton.kts.interfaces.repository.PropertyInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.List;
-import java.util.Map;
 
 public class PropertyInterfaceMybatis implements PropertyInterface {
 

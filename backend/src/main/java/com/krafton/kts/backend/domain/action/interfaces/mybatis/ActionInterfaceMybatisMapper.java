@@ -1,6 +1,6 @@
 package com.krafton.kts.backend.domain.action.interfaces.mybatis;
 
-import com.krafton.kts.backend.domain.action.interfaces.ActionInterface;
+import com.krafton.kts.interfaces.repository.ActionInterface;
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 

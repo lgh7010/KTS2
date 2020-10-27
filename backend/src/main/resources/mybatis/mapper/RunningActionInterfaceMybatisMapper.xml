@@ -3,14 +3,14 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.krafton.kts.backend.domain.running_action.interfaces.mybatis.RunningActionInterfaceMybatisMapper">
-    <insert id="addRunningAction" parameterType="com.krafton.kts.backend.domain.running_action.domain.command.AddRunningActionCommand">
+    <insert id="addRunningAction" parameterType="com.krafton.kts.commands.runningaction.AddRunningActionCommand">
         INSERT INTO RUNNING_ACTION (runningActionGuid, runningTestcaseGuid, actionId, actionOrder) VALUES
         <foreach collection="runningActions" item="item" separator=",">
             (#{item.runningActionGuid}, #{item.runningTestcaseGuid}, #{item.actionId}, #{item.actionOrder})
         </foreach>;
     </insert>
 
-    <select id="findRunningAction" parameterType="String" resultType="com.krafton.kts.backend.domain.running_action.domain.db.RUNNING_ACTION">
+    <select id="findRunningAction" parameterType="String" resultType="com.krafton.kts.domains.entity.RUNNING_ACTION">
         SELECT * FROM RUNNING_ACTION WHERE runningTestcaseGuid = #{runningTestcaseGuid} ORDER BY actionOrder;
     </select>
 </mapper>

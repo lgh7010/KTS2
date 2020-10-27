@@ -1,9 +1,9 @@
 package com.krafton.kts.backend.domain.test_rel_testcase.interfaces.mybatis;
 
-import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestGuidCommand;
-import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.RemoveTestRelTestcaseByTestcaseGuidCommand;
-import com.krafton.kts.backend.domain.test_rel_testcase.domain.command.SaveTestRelTestcaseCommand;
-import com.krafton.kts.backend.domain.test_rel_testcase.interfaces.TestRelTestcaseInterface;
+import com.krafton.kts.commands.testreltestcase.RemoveTestRelTestcaseByTestGuidCommand;
+import com.krafton.kts.commands.testreltestcase.RemoveTestRelTestcaseByTestcaseGuidCommand;
+import com.krafton.kts.commands.testreltestcase.SaveTestRelTestcaseCommand;
+import com.krafton.kts.interfaces.repository.TestRelTestcaseInterface;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class TestRelTestcaseInterfaceMybatis implements TestRelTestcaseInterface {

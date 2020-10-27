@@ -3,3 +3,9 @@ include 'backend'
 include 'frontend'
 include 'dummyclient'
 
+include 'interfaces'
+include 'kts'
+include 'domains'
+include 'commands'
+include 'repository-mybatis'
+

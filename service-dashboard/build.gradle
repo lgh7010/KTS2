@@ -7,4 +7,6 @@ jar {
 dependencies {
     compile project(':interfaces')
     implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
+    testCompile project(':kts')
 }

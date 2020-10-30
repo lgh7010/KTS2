@@ -12,7 +12,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class FindTestRelTestcaseService implements FindTestRelTestcaseJoinTestcaseInterface {
 
-    private DerivedDomainInterface derivedDomainInterface;
+    private final DerivedDomainInterface derivedDomainInterface;
 
     @Override
     public List<TestRelTestcaseJoinTestcase> findTestRelTestcaseJoinTestcase(String testGuid) {

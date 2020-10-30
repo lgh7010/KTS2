@@ -4,3 +4,6 @@ bootJar {
 jar {
     enabled = true
 }
+dependencies {
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:2.1.0'
+}

@@ -3,6 +3,7 @@ package com.krafton.kts.service;
 import com.krafton.kts.domains.derived.TEST_REL_TESTCASE_JOIN_TESTCASE;
 import com.krafton.kts.domains.entity.KTS_TEST;
 import com.krafton.kts.domains.entity.KTS_TESTCASE;
+import com.krafton.kts.domains.entity.TEST_REL_TESTCASE;
 import com.krafton.kts.interfaces.repository.derived.DerivedDomainInterface;
 import com.krafton.kts.interfaces.repository.test.AddTestCommand;
 import com.krafton.kts.interfaces.repository.test.TestInterface;
@@ -19,6 +20,7 @@ import java.util.List;
 
 import static org.mockito.BDDMockito.given;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.doAnswer;
 
 @SpringBootTest(classes = TestEditComponentService.class)
 public class TestEditComponentServiceTest {
@@ -83,7 +85,23 @@ public class TestEditComponentServiceTest {
     }
     @Test
     public void saveTestRelTestcase() {
+        SaveTestRelTestcaseCommand command = new SaveTestRelTestcaseCommand();
+        command.setTestName("name1");
+        command.setTestDescription("desc1");
+        command.setTestGuid("guid1");
+        List<TEST_REL_TESTCASE> rel = new ArrayList<>();
+        command.setRelationList(rel);
 
+        doAnswer(invocation -> {
+            return null;
+        }).when(this.testRelTestcaseInterface).saveTestRelTestcase(new SaveTestRelTestcaseCommand());
+        doAnswer(invocation -> {
+            return null;
+        }).when(this.testInterface).addTest(new AddTestCommand("GUID1", "name1", "desc1"));
+
+        if(command.getRelationList().stream().count() > 0){
+            this.testRelTestcaseInterface.saveTestRelTestcase(command);
+        }
+        this.testInterface.addTest(new AddTestCommand(command.getTestGuid(), command.getTestName(), command.getTestDescription()));
     }
-
 }

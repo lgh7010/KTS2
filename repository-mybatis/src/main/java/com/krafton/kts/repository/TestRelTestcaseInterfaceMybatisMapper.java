@@ -4,6 +4,5 @@ import com.krafton.kts.interfaces.repository.testreltestcase.TestRelTestcaseInte
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-@Repository
 @Mapper
 public interface TestRelTestcaseInterfaceMybatisMapper extends TestRelTestcaseInterface {}

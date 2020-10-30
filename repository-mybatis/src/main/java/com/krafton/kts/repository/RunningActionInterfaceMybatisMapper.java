@@ -4,6 +4,5 @@ import com.krafton.kts.interfaces.repository.runningaction.RunningActionInterfac
 import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
-@Repository
 @Mapper
 public interface RunningActionInterfaceMybatisMapper extends RunningActionInterface {}

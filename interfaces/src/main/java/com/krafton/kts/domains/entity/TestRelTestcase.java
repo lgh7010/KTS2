@@ -3,7 +3,7 @@ package com.krafton.kts.domains.entity;
 import lombok.Data;
 
 @Data
-public class TEST_REL_TESTCASE {
+public class TestRelTestcase {
     private String relationGuid;
     private String testGuid;
     private int listIndex;

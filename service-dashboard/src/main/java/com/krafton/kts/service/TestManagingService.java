@@ -1,6 +1,6 @@
 package com.krafton.kts.service;
 
-import com.krafton.kts.domains.derived.TEST_REL_TESTCASE_JOIN_TESTCASE;
+import com.krafton.kts.domains.derived.TestRelTestcaseJoinTestcase;
 import com.krafton.kts.domains.entity.*;
 import com.krafton.kts.interfaces.repository.action.ActionInterface;
 import com.krafton.kts.interfaces.repository.derived.*;
@@ -14,7 +14,7 @@ import com.krafton.kts.interfaces.repository.runningtest.RunningTestInterface;
 import com.krafton.kts.interfaces.repository.runningtestcase.AddRunningTestcaseCommand;
 import com.krafton.kts.interfaces.repository.runningtestcase.RunningTestcaseInterface;
 import com.krafton.kts.interfaces.repository.test.TestInterface;
-import com.krafton.kts.interfaces.service.TestDashboard;
+import com.krafton.kts.interfaces.service.TestManagingServiceInterface;
 import lombok.RequiredArgsConstructor;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
@@ -26,7 +26,7 @@ import java.util.*;
 
 @Service
 @RequiredArgsConstructor
-public class TestDashboardService implements TestDashboard {
+public class TestManagingService implements TestManagingServiceInterface {
 
     private final RunningTestInterface runningTestInterface;
     private final TestInterface testInterface;
@@ -38,19 +38,14 @@ public class TestDashboardService implements TestDashboard {
     private final RunningTestcaseInterface runningTestcaseInterface;
 
     @Override
-    public List<RUNNING_TEST> findAllRunningTest() {
-        return this.runningTestInterface.findAllRunningTest();
-    }
-
-    @Override
     @Transactional
     public NextTestInstructionResponse runTest(RunTestCommand command) {
         try {
             String runningTestGuid = UUID.randomUUID().toString();
 
             //step 1. 실행하고자 하는 테스트 정보를 확보하고, 이를 RunningTest에 추가한다.
-            KTS_TEST test = this.testInterface.findTest(command.getTestGuid());
-            RUNNING_TEST runningTest = new RUNNING_TEST();
+            KtsTest test = this.testInterface.findTest(command.getTestGuid());
+            RunningTest runningTest = new RunningTest();
             runningTest.setTestGuid(test.getTestGuid());
             runningTest.setRunningTestGuid(runningTestGuid);
             runningTest.setCurrentRunningActionOrder(0);
@@ -61,12 +56,12 @@ public class TestDashboardService implements TestDashboard {
             runningTest.setStartAt(Timestamp.valueOf(LocalDateTime.now()));
 
             //step 2. 해당 테스트에 포함된 테스트케이스 정보를 확보하고, 이를 RunningTestcase에 추가한다.
-            List<TEST_REL_TESTCASE_JOIN_TESTCASE> testcaseJoinTestcaseList = this.derivedDomainInterface.findTestRelTestcaseJoinTestcase(test.getTestGuid());
-            List<RUNNING_TESTCASE> runningTestcases = new ArrayList<>();
-            for (TEST_REL_TESTCASE_JOIN_TESTCASE testRelTestcaseJoinTestcase : testcaseJoinTestcaseList) {
+            List<TestRelTestcaseJoinTestcase> testcaseJoinTestcaseList = this.derivedDomainInterface.findTestRelTestcaseJoinTestcase(test.getTestGuid());
+            List<RunningTestcase> runningTestcases = new ArrayList<>();
+            for (TestRelTestcaseJoinTestcase testRelTestcaseJoinTestcase : testcaseJoinTestcaseList) {
                 String runningTestcaseGuid = UUID.randomUUID().toString();
 
-                RUNNING_TESTCASE runningTestcase = new RUNNING_TESTCASE();
+                RunningTestcase runningTestcase = new RunningTestcase();
                 runningTestcase.setRunningTestcaseGuid(runningTestcaseGuid);
                 runningTestcase.setTestcaseGuid(testRelTestcaseJoinTestcase.getTestcaseGuid());
                 runningTestcase.setRunningTestGuid(runningTestGuid);
@@ -74,23 +69,23 @@ public class TestDashboardService implements TestDashboard {
                 runningTestcases.add(runningTestcase);
 
                 //step 3. 해당 테스트에 포함된 액션 정보와 프로퍼티 정보를 확인하고, 이를 RunningAction와 RunningProperties에 추가한다.
-                List<KTS_ACTION> actionList = this.actionInterface.findAction(testRelTestcaseJoinTestcase.getTestcaseGuid());
+                List<KtsAction> actionList = this.actionInterface.findAction(testRelTestcaseJoinTestcase.getTestcaseGuid());
                 List<String> actionGuids = new ArrayList<>();
-                for (KTS_ACTION action : actionList) {
+                for (KtsAction action : actionList) {
                     actionGuids.add(action.getActionGuid());
                 }
-                Map<String, KTS_ACTION> actionMap = new HashMap<>();
-                for (KTS_ACTION action : actionList) {
+                Map<String, KtsAction> actionMap = new HashMap<>();
+                for (KtsAction action : actionList) {
                     actionMap.put(action.getActionGuid(), action);
                 }
-                List<KTS_ACTION_PROPERTY> propertyList = this.propertyInterface.findProperties(new FindPropertiesCommand(actionGuids));
+                List<KtsActionProperty> propertyList = this.propertyInterface.findProperties(new FindPropertiesCommand(actionGuids));
 
-                List<RUNNING_ACTION> runningActions = new ArrayList<>();
-                List<RUNNING_PROPERTY> runningProperties = new ArrayList<>();
+                List<RunningAction> runningActions = new ArrayList<>();
+                List<RunningProperty> runningProperties = new ArrayList<>();
                 Map<String, String> actionGuidRunningActionGuidMatching = new HashMap<>();
                 //첫번째 액션을 찾는다.
-                KTS_ACTION currentAction = null;
-                for(KTS_ACTION action : actionList){
+                KtsAction currentAction = null;
+                for(KtsAction action : actionList){
                     if(action.getIsStart().equals("Y")){
                         currentAction = action;
                         break;
@@ -102,7 +97,7 @@ public class TestDashboardService implements TestDashboard {
                     String runningActionGuid = UUID.randomUUID().toString();
                     actionGuidRunningActionGuidMatching.put(currentAction.getActionGuid(), runningActionGuid);
 
-                    RUNNING_ACTION runningAction = new RUNNING_ACTION();
+                    RunningAction runningAction = new RunningAction();
                     runningAction.setRunningActionGuid(runningActionGuid);
                     runningAction.setRunningTestcaseGuid(runningTestcaseGuid);
                     runningAction.setActionId(currentAction.getActionId());
@@ -115,10 +110,10 @@ public class TestDashboardService implements TestDashboard {
                     }
                     currentAction = actionMap.get(currentAction.getNextActionGuid());
                 }
-                for (KTS_ACTION_PROPERTY property : propertyList) {
+                for (KtsActionProperty property : propertyList) {
                     String runningPropertyGuid = UUID.randomUUID().toString();
 
-                    RUNNING_PROPERTY runningProperty = new RUNNING_PROPERTY();
+                    RunningProperty runningProperty = new RunningProperty();
                     runningProperty.setRunningPropertyGuid(runningPropertyGuid);
                     runningProperty.setRunningActionGuid(actionGuidRunningActionGuidMatching.get(property.getActionGuid()));
                     runningProperty.setRunningPropertyName(property.getPropertyName());
@@ -142,7 +137,7 @@ public class TestDashboardService implements TestDashboard {
 
             //running에 넣은 값에서 '첫번째'액션의 정보를 클라이언트에 응답한다.
             NextTestInstructionResponse response = new NextTestInstructionResponse();
-            RUNNING_ACTION runningAction = this.findRunningAction(new FindRunningActionCommand(runningTestGuid, 0, 0));
+            RunningAction runningAction = this.findRunningAction(new FindRunningActionCommand(runningTestGuid, 0, 0));
             response.setRunningTest(runningTest);
             response.setRunningAction(runningAction);
             response.setRunningProperties(this.runningPropertyInterface.findRunningProperty(runningAction.getRunningActionGuid()));
@@ -159,10 +154,10 @@ public class TestDashboardService implements TestDashboard {
             NextTestInstructionResponse nextTestInstructionResponse = new NextTestInstructionResponse();
 
             //step 1. RUNNING_TEST DB의 currentRunningTestcaseOrder, currentRunningActionOrder 정보를 업데이트한다.
-            RUNNING_TEST runningTest = this.runningTestInterface.findRunningTest(command.getRunningTestGuid());
-            List<RUNNING_TESTCASE> runningTestcases = this.runningTestcaseInterface.findRunningTestcase(runningTest.getRunningTestGuid());
-            RUNNING_TESTCASE runningTestcase = runningTestcases.get(runningTest.getCurrentRunningTestcaseOrder());
-            List<RUNNING_ACTION> runningActions = this.runningActionInterface.findRunningAction(runningTestcase.getRunningTestcaseGuid());
+            RunningTest runningTest = this.runningTestInterface.findRunningTest(command.getRunningTestGuid());
+            List<RunningTestcase> runningTestcases = this.runningTestcaseInterface.findRunningTestcase(runningTest.getRunningTestGuid());
+            RunningTestcase runningTestcase = runningTestcases.get(runningTest.getCurrentRunningTestcaseOrder());
+            List<RunningAction> runningActions = this.runningActionInterface.findRunningAction(runningTestcase.getRunningTestcaseGuid());
             if(runningTest.getCurrentRunningActionOrder() >= runningActions.stream().count() - 1){
                 //액션리스트가 끝났으면, 테스트케이스 오더를 1 올린다.
                 if(runningTest.getCurrentRunningTestcaseOrder() >= runningTestcases.stream().count() - 1){
@@ -183,7 +178,7 @@ public class TestDashboardService implements TestDashboard {
             this.runningTestInterface.addOrUpdateRunningTest(runningTest);
 
             //step 2. 해당 액션 정보를 가져와서, 필요한 정보를 넣어 반환한다.
-            RUNNING_ACTION nextAction = this.findRunningAction(new FindRunningActionCommand(runningTest.getRunningTestGuid(), runningTest.getCurrentRunningTestcaseOrder(), runningTest.getCurrentRunningActionOrder()));
+            RunningAction nextAction = this.findRunningAction(new FindRunningActionCommand(runningTest.getRunningTestGuid(), runningTest.getCurrentRunningTestcaseOrder(), runningTest.getCurrentRunningActionOrder()));
             nextTestInstructionResponse.setRunningTest(runningTest);
             nextTestInstructionResponse.setRunningAction(nextAction);
             nextTestInstructionResponse.setRunningProperties(this.runningPropertyInterface.findRunningProperty(nextAction.getRunningActionGuid()));
@@ -192,17 +187,17 @@ public class TestDashboardService implements TestDashboard {
             throw e;
         }
     }
-    private RUNNING_ACTION findRunningAction(FindRunningActionCommand command) {
+    private RunningAction findRunningAction(FindRunningActionCommand command) {
         try {
             //step 1. 현재 runningTest의 currentRunningTestcaseOrder, currentRunningActionOrder 확보
-            RUNNING_TEST runningTest = this.runningTestInterface.findRunningTest(command.getRunningTestGuid());
+            RunningTest runningTest = this.runningTestInterface.findRunningTest(command.getRunningTestGuid());
 
             //step 2. 해당 runningTest에 속하는 runningTestcase들을 runningTestcaseOrder로 정렬해서 가져온다음, currentRunningTestcaseOrder에 해당하는 runningTestcase 확보
-            List<RUNNING_TESTCASE> runningTestcases = this.runningTestcaseInterface.findRunningTestcase(runningTest.getRunningTestGuid());
-            RUNNING_TESTCASE runningTestcase = runningTestcases.get(command.getCurrentRunningTestcaseOrder());
+            List<RunningTestcase> runningTestcases = this.runningTestcaseInterface.findRunningTestcase(runningTest.getRunningTestGuid());
+            RunningTestcase runningTestcase = runningTestcases.get(command.getCurrentRunningTestcaseOrder());
 
             //step 3. 해당 runningTestcase에 속하는 runningAction들을 runningActionOrder로 정렬해서 가져온다음, currentRunningActionOrder에 해당하는 runningAction 확보 및 반환
-            List<RUNNING_ACTION> runningActions = this.runningActionInterface.findRunningAction(runningTestcase.getRunningTestcaseGuid());
+            List<RunningAction> runningActions = this.runningActionInterface.findRunningAction(runningTestcase.getRunningTestcaseGuid());
             return runningActions.get(command.getCurrentRunningActionOrder());
         } catch(Exception e){
             throw e;

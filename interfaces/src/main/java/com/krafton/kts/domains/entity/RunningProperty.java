@@ -3,7 +3,7 @@ package com.krafton.kts.domains.entity;
 import lombok.Data;
 
 @Data
-public class RUNNING_PROPERTY {
+public class RunningProperty {
     private String runningPropertyGuid;
     private String runningActionGuid;
     private String runningPropertyName;

@@ -1,6 +1,6 @@
 package com.krafton.kts.interfaces.repository.runningproperty;
 
-import com.krafton.kts.domains.entity.RUNNING_PROPERTY;
+import com.krafton.kts.domains.entity.RunningProperty;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -8,5 +8,5 @@ import java.util.List;
 @Repository
 public interface RunningPropertyInterface {
     void addRunningProperty(AddRunningPropertyCommand command);
-    List<RUNNING_PROPERTY> findRunningProperty(String runningActionGuid);
+    List<RunningProperty> findRunningProperty(String runningActionGuid);
 }

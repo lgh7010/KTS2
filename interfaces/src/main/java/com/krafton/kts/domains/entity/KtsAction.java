@@ -3,7 +3,7 @@ package com.krafton.kts.domains.entity;
 import lombok.Data;
 
 @Data
-public class KTS_ACTION {
+public class KtsAction {
     private String actionGuid;
     private String testcaseGuid;
     private String isStart;

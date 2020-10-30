@@ -1,6 +1,6 @@
 package com.krafton.kts.interfaces.repository.runningaction;
 
-import com.krafton.kts.domains.entity.RUNNING_ACTION;
+import com.krafton.kts.domains.entity.RunningAction;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -8,5 +8,5 @@ import java.util.List;
 @Repository
 public interface RunningActionInterface {
     void addRunningAction(AddRunningActionCommand command);
-    List<RUNNING_ACTION> findRunningAction(String runningTestcaseGuid);
+    List<RunningAction> findRunningAction(String runningTestcaseGuid);
 }

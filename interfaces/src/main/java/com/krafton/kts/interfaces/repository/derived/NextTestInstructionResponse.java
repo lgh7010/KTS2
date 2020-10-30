@@ -1,16 +1,16 @@
 package com.krafton.kts.interfaces.repository.derived;
 
-import com.krafton.kts.domains.entity.RUNNING_ACTION;
-import com.krafton.kts.domains.entity.RUNNING_PROPERTY;
-import com.krafton.kts.domains.entity.RUNNING_TEST;
+import com.krafton.kts.domains.entity.RunningAction;
+import com.krafton.kts.domains.entity.RunningProperty;
+import com.krafton.kts.domains.entity.RunningTest;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
 public class NextTestInstructionResponse {
-    private RUNNING_TEST runningTest;
-    private RUNNING_ACTION runningAction;
-    private List<RUNNING_PROPERTY> runningProperties;
+    private RunningTest runningTest;
+    private RunningAction runningAction;
+    private List<RunningProperty> runningProperties;
     private String isFinished = "N";
 }

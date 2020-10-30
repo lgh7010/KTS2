@@ -1,6 +1,6 @@
 package com.krafton.kts.interfaces.repository.runningtestcase;
 
-import com.krafton.kts.domains.entity.RUNNING_TESTCASE;
+import com.krafton.kts.domains.entity.RunningTestcase;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -8,5 +8,5 @@ import java.util.List;
 @Repository
 public interface RunningTestcaseInterface {
     void addRunningTestcase(AddRunningTestcaseCommand command);
-    List<RUNNING_TESTCASE> findRunningTestcase(String runningTestGuid);
+    List<RunningTestcase> findRunningTestcase(String runningTestGuid);
 }

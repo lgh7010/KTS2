@@ -10,7 +10,7 @@
         </foreach>;
     </insert>
 
-    <select id="findRunningAction" parameterType="String" resultType="com.krafton.kts.domains.entity.RUNNING_ACTION">
+    <select id="findRunningAction" parameterType="String" resultType="com.krafton.kts.domains.entity.RunningAction">
         SELECT * FROM RUNNING_ACTION WHERE runningTestcaseGuid = #{runningTestcaseGuid} ORDER BY actionOrder;
     </select>
 </mapper>

@@ -3,11 +3,11 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.krafton.kts.repository.ActionInterfaceMybatisMapper">
-    <select id="findAction" resultType="com.krafton.kts.domains.entity.KTS_ACTION">
+    <select id="findAction" resultType="com.krafton.kts.domains.entity.KtsAction">
         SELECT * FROM KTS_ACTION WHERE testcaseGuid = #{testcaseGuid} AND deleted = 'N'
     </select>
 
-    <select id="getActionTemplate" resultType="com.krafton.kts.domains.entity.KTS_ACTION_TEMPLATE">
+    <select id="getActionTemplate" resultType="com.krafton.kts.domains.entity.KtsActionTemplate">
         SELECT * FROM KTS_ACTION_TEMPLATE;
     </select>
 

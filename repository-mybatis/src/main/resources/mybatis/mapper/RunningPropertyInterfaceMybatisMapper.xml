@@ -10,7 +10,7 @@
         </foreach>;
     </insert>
 
-    <select id="findRunningProperty" parameterType="String" resultType="com.krafton.kts.domains.entity.RUNNING_PROPERTY">
+    <select id="findRunningProperty" parameterType="String" resultType="com.krafton.kts.domains.entity.RunningProperty">
         SELECT * FROM RUNNING_PROPERTY WHERE runningActionGuid = #{runningActionGuid};
     </select>
 </mapper>

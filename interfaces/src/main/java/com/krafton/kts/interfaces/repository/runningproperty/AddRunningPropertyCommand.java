@@ -1,15 +1,15 @@
 package com.krafton.kts.interfaces.repository.runningproperty;
 
-import com.krafton.kts.domains.entity.RUNNING_PROPERTY;
+import com.krafton.kts.domains.entity.RunningProperty;
 import lombok.Data;
 
 import java.util.List;
 
 @Data
 public class AddRunningPropertyCommand {
-    private List<RUNNING_PROPERTY> runningProperties;
+    private List<RunningProperty> runningProperties;
 
-    public AddRunningPropertyCommand(List<RUNNING_PROPERTY> runningProperties){
+    public AddRunningPropertyCommand(List<RunningProperty> runningProperties){
         this.runningProperties = runningProperties;
     }
 }

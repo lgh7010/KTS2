@@ -1,11 +1,8 @@
-package com.krafton.kts.interfaces.repository.derived;
+package com.krafton.kts.interfaces.service;
 
 import com.krafton.kts.domains.derived.TestRelTestcaseJoinTestcase;
-import org.springframework.stereotype.Repository;
-
 import java.util.List;
 
-@Repository
-public interface DerivedDomainInterface {
+public interface FindTestRelTestcaseJoinTestcaseInterface {
     List<TestRelTestcaseJoinTestcase> findTestRelTestcaseJoinTestcase(String testGuid);
 }

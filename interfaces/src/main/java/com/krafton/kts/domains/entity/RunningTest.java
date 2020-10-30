@@ -5,7 +5,7 @@ import lombok.Data;
 import java.sql.Timestamp;
 
 @Data
-public class RUNNING_TEST {
+public class RunningTest {
     private String runningTestGuid;
     private String testGuid;
     private int currentRunningTestcaseOrder;

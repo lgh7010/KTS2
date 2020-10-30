@@ -12,11 +12,11 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
-@SpringBootTest(classes = TestDashboardService.class)
+@SpringBootTest(classes = TestManagingService.class)
 public class TestDashboardServiceTest {
 
     @MockBean
-    TestDashboardService testDashboardService;
+    TestManagingService testDashboardService;
 
     @MockBean
     RunningTestInterface runningTestInterface;

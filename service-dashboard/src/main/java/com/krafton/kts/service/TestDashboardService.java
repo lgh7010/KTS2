@@ -16,6 +16,7 @@ import com.krafton.kts.interfaces.repository.runningtestcase.RunningTestcaseInte
 import com.krafton.kts.interfaces.repository.test.TestInterface;
 import com.krafton.kts.interfaces.service.TestDashboard;
 import lombok.RequiredArgsConstructor;
+import org.apache.logging.log4j.util.Strings;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -108,6 +109,10 @@ public class TestDashboardService implements TestDashboard {
                     runningAction.setActionOrder(actionOrder++);
                     runningActions.add(runningAction);
 
+                    if(Strings.isEmpty(currentAction.getNextActionGuid())){
+                        //java map은 키가 null인경우 이전값을 그냥 리턴(?!)한다..
+                        break;
+                    }
                     currentAction = actionMap.get(currentAction.getNextActionGuid());
                 }
                 for (KTS_ACTION_PROPERTY property : propertyList) {

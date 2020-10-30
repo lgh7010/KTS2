@@ -4,7 +4,6 @@ import com.krafton.kts.domains.derived.TestRelTestcaseJoinTestcase;
 import com.krafton.kts.interfaces.repository.derived.DerivedDomainInterface;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
 
 import java.util.ArrayList;

@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface ActionInterface {
     List<KtsAction> findAction(String testcaseGuid);
     List<KtsActionTemplate> getActionTemplate();

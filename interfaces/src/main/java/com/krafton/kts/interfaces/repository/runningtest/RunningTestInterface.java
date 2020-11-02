@@ -6,7 +6,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface RunningTestInterface {
     void addOrUpdateRunningTest(RunningTest runningTest);
     RunningTest findRunningTest(String runningTestGuid);

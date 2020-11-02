@@ -2,7 +2,6 @@ package com.krafton.kts.interfaces.repository.testreltestcase;
 
 import org.springframework.stereotype.Repository;
 
-@Repository
 public interface TestRelTestcaseInterface {
     void saveTestRelTestcase(SaveTestRelTestcaseCommand command);
     void removeTestRelTestcaseByTestcaseGuid(RemoveTestRelTestcaseByTestcaseGuidCommand command);

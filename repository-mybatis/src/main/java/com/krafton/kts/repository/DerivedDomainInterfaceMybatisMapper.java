@@ -5,4 +5,4 @@ import org.apache.ibatis.annotations.Mapper;
 import org.springframework.stereotype.Repository;
 
 @Mapper
-public interface CrossDomainInterfaceMybatisMapper extends DerivedDomainInterface {}
+public interface DerivedDomainInterfaceMybatisMapper extends DerivedDomainInterface {}

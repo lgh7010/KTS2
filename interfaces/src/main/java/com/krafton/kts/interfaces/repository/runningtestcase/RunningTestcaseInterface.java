@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface RunningTestcaseInterface {
     void addRunningTestcase(AddRunningTestcaseCommand command);
     List<RunningTestcase> findRunningTestcase(String runningTestGuid);

@@ -5,7 +5,6 @@ import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
-@Repository
 public interface TestcaseInterface {
     void addTestcase(KtsTestcase testcase);
     List<KtsTestcase> findAll();

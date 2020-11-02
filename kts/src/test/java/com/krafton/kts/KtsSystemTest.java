@@ -25,7 +25,6 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.boot.test.mock.mockito.SpyBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,9 +32,23 @@ import java.util.List;
 import static org.mockito.BDDMockito.given;
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest(classes = KtsSystem.class)
+@SpringBootTest(classes = {
+        FindRunningTestService.class,
+        TestManagingService.class,
+        FindTestRelTestcaseService.class,
+        FindTestService.class,
+        RemoveTestService.class,
+        SaveTestRelTestcaseService.class,
+        FindActionPropertyService.class,
+        FindActionService.class,
+        FindPropertyService.class,
+        FindTestcaseService.class,
+        RemoveTestcaseService.class,
+        SaveTestcaseService.class,
+})
 public class KtsSystemTest {
 
+    //region 테스트 준비
     private final String TESTCASE_GUID = "testcaseGuid1";
     private final String TEST_GUID = "testGuid1";
     private final String ACTION_ID = "actionId1";
@@ -46,86 +59,110 @@ public class KtsSystemTest {
     private final String RUNNING_PROPERTY_GUID = "runningPropertyGuid1";
     private final String RUNNING_TESTCASE_GUID = "runningTestcaseGuid1";
 
-    //Repository 스파이 래핑
-    @SpyBean
+    //Repository는 Mock객체 사용
+    @MockBean
     private ActionInterface actionInterface;
-    @SpyBean
+    @MockBean
     private DerivedDomainInterface derivedDomainInterface;
-    @SpyBean
+    @MockBean
     private PropertyInterface propertyInterface;
-    @SpyBean
+    @MockBean
     private RunningActionInterface runningActionInterface;
-    @SpyBean
+    @MockBean
     private RunningPropertyInterface runningPropertyInterface;
-    @SpyBean
+    @MockBean
     private RunningTestcaseInterface runningTestcaseInterface;
-    @SpyBean
+    @MockBean
     private RunningTestInterface runningTestInterface;
-    @SpyBean
+    @MockBean
     private TestcaseInterface testcaseInterface;
-    @SpyBean
+    @MockBean
     private TestInterface testInterface;
-    @SpyBean
+    @MockBean
     private TestRelTestcaseInterface testRelTestcaseInterface;
+
+    List<KtsActionTemplate> actionTemplateList;
+    KtsActionTemplate actionTemplate;
+    List<KtsTestcase> testcaseList;
+    KtsTestcase testcase;
+    List<KtsAction> actionList;
+    KtsAction action;
+    List<TestRelTestcaseJoinTestcase> testRelTestcaseJoinTestcaseList;
+    TestRelTestcaseJoinTestcase testRelTestcaseJoinTestcase;
+    List<KtsActionPropertyTemplate> actionPropertyTemplateList;
+    KtsActionPropertyTemplate actionPropertyTemplate;
+    List<String> actionGuidList;
+    List<KtsActionProperty> actionPropertyList;
+    KtsActionProperty actionProperty;
+    List<RunningAction> runningActionList;
+    RunningAction runningAction;
+    List<RunningProperty> runningPropertyList;
+    RunningProperty runningProperty;
+    List<RunningTestcase> runningTestcaseList;
+    RunningTestcase runningTestcase;
+    List<RunningTest> runningTestList;
+    RunningTest runningTest;
+    List<KtsTest> testList;
+    KtsTest test;
 
     @BeforeEach
     public void beforeEach(){
         //자료 생성
-        List<KtsActionTemplate> actionTemplateList = new ArrayList<>();
-        KtsActionTemplate actionTemplate = new KtsActionTemplate();
+        actionTemplateList = new ArrayList<>();
+        actionTemplate = new KtsActionTemplate();
         actionTemplate.setActionId(ACTION_ID);
         actionTemplateList.add(actionTemplate);
 
-        List<KtsTestcase> testcaseList = new ArrayList<>();
-        KtsTestcase testcase = new KtsTestcase();
+        testcaseList = new ArrayList<>();
+        testcase = new KtsTestcase();
         testcase.setTestcaseGuid(TESTCASE_GUID);
         testcaseList.add(testcase);
 
-        List<KtsAction> actionList = new ArrayList<>();
-        KtsAction action = new KtsAction();
+        actionList = new ArrayList<>();
+        action = new KtsAction();
         action.setActionGuid(ACTION_GUID);
         actionList.add(action);
 
-        List<TestRelTestcaseJoinTestcase> testRelTestcaseJoinTestcaseList = new ArrayList<>();
-        TestRelTestcaseJoinTestcase testRelTestcaseJoinTestcase = new TestRelTestcaseJoinTestcase();
+        testRelTestcaseJoinTestcaseList = new ArrayList<>();
+        testRelTestcaseJoinTestcase = new TestRelTestcaseJoinTestcase();
         testRelTestcaseJoinTestcase.setRelationGuid(RELATION_GUID);
         testRelTestcaseJoinTestcaseList.add(testRelTestcaseJoinTestcase);
 
-        List<KtsActionPropertyTemplate> actionPropertyTemplateList = new ArrayList<>();
-        KtsActionPropertyTemplate actionPropertyTemplate = new KtsActionPropertyTemplate();
+        actionPropertyTemplateList = new ArrayList<>();
+        actionPropertyTemplate = new KtsActionPropertyTemplate();
         actionPropertyTemplate.setActionId(ACTION_ID);
         actionPropertyTemplateList.add(actionPropertyTemplate);
 
-        List<String> actionGuidList = new ArrayList<>();
+        actionGuidList = new ArrayList<>();
         actionGuidList.add(ACTION_GUID);
 
-        List<KtsActionProperty> actionPropertyList = new ArrayList<>();
-        KtsActionProperty actionProperty = new KtsActionProperty();
+        actionPropertyList = new ArrayList<>();
+        actionProperty = new KtsActionProperty();
         actionProperty.setActionGuid(ACTION_GUID);
         actionPropertyList.add(actionProperty);
 
-        List<RunningAction> runningActionList = new ArrayList<>();
-        RunningAction runningAction = new RunningAction();
+        runningActionList = new ArrayList<>();
+        runningAction = new RunningAction();
         runningAction.setRunningActionGuid(RUNNING_ACTION_GUID);
         runningActionList.add(runningAction);
 
-        List<RunningProperty> runningPropertyList = new ArrayList<>();
-        RunningProperty runningProperty = new RunningProperty();
+        runningPropertyList = new ArrayList<>();
+        runningProperty = new RunningProperty();
         runningProperty.setRunningPropertyGuid(RUNNING_PROPERTY_GUID);
         runningPropertyList.add(runningProperty);
 
-        List<RunningTestcase> runningTestcaseList = new ArrayList<>();
-        RunningTestcase runningTestcase = new RunningTestcase();
+        runningTestcaseList = new ArrayList<>();
+        runningTestcase = new RunningTestcase();
         runningTestcase.setRunningTestcaseGuid(RUNNING_TESTCASE_GUID);
         runningTestcaseList.add(runningTestcase);
 
-        List<RunningTest> runningTestList = new ArrayList<>();
-        RunningTest runningTest = new RunningTest();
+        runningTestList = new ArrayList<>();
+        runningTest = new RunningTest();
         runningTest.setRunningTestGuid(RUNNING_TEST_GUID);
         runningTestList.add(runningTest);
 
-        List<KtsTest> testList = new ArrayList<>();
-        KtsTest test = new KtsTest();
+        testList = new ArrayList<>();
+        test = new KtsTest();
         test.setTestGuid(TEST_GUID);
         testList.add(test);
 
@@ -144,32 +181,54 @@ public class KtsSystemTest {
         given(this.testInterface.findAllTest()).willReturn(testList);
         given(this.testInterface.findTest(TEST_GUID)).willReturn(test);
     }
+    //endregion
 
-    //service-dashboard
+    //region service-dashboard
     @Autowired
     private FindRunningTestService findRunningTestService;
     @Test
     public void findAllRunningTest() {
-        this.findRunningTestService.findAllRunningTest();
+        List<RunningTest> res = this.findRunningTestService.findAllRunningTest();
+        assertEquals(runningTestList.stream().count(), res.stream().count());
+        for(int i = 0; i < runningTestList.stream().count(); i++){
+            assertEquals(runningTestList.get(i).getRunningTestGuid(), res.get(i).getRunningTestGuid());
+        }
     }
 
     @Autowired
     private TestManagingService testManagingService;
     @Test
     public void runTest(){
-
+        //테스트가 실제로 실행되고 정보가 DB에 남는지를 봐야 하는 로직이라 테스트가 곤란함. (4개 테이블 사용)
+        //이 기능 자체를 여러개의 기능으로 쪼개서 유닛테스트가 가능하게 할 수도 있겠지만,
+        //실제로는 다 트랜잭셔널한 내용인데 테스트를 위해 쪼개는것은 큰 의미가 없어 보임.
+        //이런식의 거대한 하나의 기능이 마음에 들지 않는다면, 애초에 DB설계시부터 이런 내용을 반영해야 할 듯.
+        //사실 지금도 running_XXX로 된 DB들은 전부 runTest,onActionFinished에서밖에 사용되지 않는다.
+        //근데 이게 4개의 도메인을 차지하고 있어서 테스트가 거대해졌다. 꼭 'DB'구조 그대로 '도메인'을 쪼갤 필요는 없는것으로 보인다.
     }
     @Test
     public void onActionFinished(){
-
+        //상기한 이유로 생략.
     }
+    //endregion
 
-    //service-test
+    //region service-test
     @Autowired
     private FindTestRelTestcaseService findTestRelTestcaseService;
     @Test
     public void findTestRelTestcaseJoinTestcase(){
+        List<TestRelTestcaseJoinTestcase> list = new ArrayList<>();
+        TestRelTestcaseJoinTestcase testRelTestcaseJoinTestcase = new TestRelTestcaseJoinTestcase();
+        testRelTestcaseJoinTestcase.setRelationGuid(RELATION_GUID);
+        list.add(testRelTestcaseJoinTestcase);
+        given(this.derivedDomainInterface.findTestRelTestcaseJoinTestcase(TEST_GUID)).willReturn(list);
 
+        List<TestRelTestcaseJoinTestcase> res = this.findTestRelTestcaseService.findTestRelTestcaseJoinTestcase(TEST_GUID);
+
+        assertEquals(list.stream().count(), res.stream().count());
+        for(int i = 0; i < list.stream().count(); i++){
+            assertEquals(list.get(i).getRelationGuid(), res.get(i).getRelationGuid());
+        }
     }
 
     @Autowired
@@ -196,8 +255,9 @@ public class KtsSystemTest {
     public void saveTestRelTestcase(){
 
     }
+    //endregion
 
-    //service-testcase
+    //region service-testcase
     @Autowired
     private FindActionPropertyService findActionPropertyService;
     @Test
@@ -247,4 +307,5 @@ public class KtsSystemTest {
     public void saveTestcase(){
 
     }
+    //endregion
 }

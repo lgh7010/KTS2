@@ -27,7 +27,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static org.mockito.BDDMockito.given;
 import static org.junit.jupiter.api.Assertions.*;
@@ -83,6 +85,7 @@ public class KtsSystemTest {
 
     List<KtsActionTemplate> actionTemplateList;
     KtsActionTemplate actionTemplate;
+    Map<String, KtsActionTemplate> actionTemplateMap;
     List<KtsTestcase> testcaseList;
     KtsTestcase testcase;
     List<KtsAction> actionList;
@@ -93,6 +96,7 @@ public class KtsSystemTest {
     KtsActionPropertyTemplate actionPropertyTemplate;
     List<String> actionGuidList;
     List<KtsActionProperty> actionPropertyList;
+    Map<String, List<KtsActionProperty>> actionPropertyMap;
     KtsActionProperty actionProperty;
     List<RunningAction> runningActionList;
     RunningAction runningAction;
@@ -112,6 +116,8 @@ public class KtsSystemTest {
         actionTemplate = new KtsActionTemplate();
         actionTemplate.setActionId(ACTION_ID);
         actionTemplateList.add(actionTemplate);
+        actionTemplateMap = new HashMap<>();
+        actionTemplateMap.put(ACTION_ID, actionTemplate);
 
         testcaseList = new ArrayList<>();
         testcase = new KtsTestcase();
@@ -140,6 +146,8 @@ public class KtsSystemTest {
         actionProperty = new KtsActionProperty();
         actionProperty.setActionGuid(ACTION_GUID);
         actionPropertyList.add(actionProperty);
+        actionPropertyMap = new HashMap<>();
+        actionPropertyMap.put(ACTION_GUID, actionPropertyList);
 
         runningActionList = new ArrayList<>();
         runningAction = new RunningAction();
@@ -217,17 +225,10 @@ public class KtsSystemTest {
     private FindTestRelTestcaseService findTestRelTestcaseService;
     @Test
     public void findTestRelTestcaseJoinTestcase(){
-        List<TestRelTestcaseJoinTestcase> list = new ArrayList<>();
-        TestRelTestcaseJoinTestcase testRelTestcaseJoinTestcase = new TestRelTestcaseJoinTestcase();
-        testRelTestcaseJoinTestcase.setRelationGuid(RELATION_GUID);
-        list.add(testRelTestcaseJoinTestcase);
-        given(this.derivedDomainInterface.findTestRelTestcaseJoinTestcase(TEST_GUID)).willReturn(list);
-
         List<TestRelTestcaseJoinTestcase> res = this.findTestRelTestcaseService.findTestRelTestcaseJoinTestcase(TEST_GUID);
-
-        assertEquals(list.stream().count(), res.stream().count());
-        for(int i = 0; i < list.stream().count(); i++){
-            assertEquals(list.get(i).getRelationGuid(), res.get(i).getRelationGuid());
+        assertEquals(testRelTestcaseJoinTestcaseList.stream().count(), res.stream().count());
+        for(int i = 0; i < testRelTestcaseJoinTestcaseList.stream().count(); i++){
+            assertEquals(testRelTestcaseJoinTestcaseList.get(i).getRelationGuid(), res.get(i).getRelationGuid());
         }
     }
 
@@ -235,11 +236,16 @@ public class KtsSystemTest {
     private FindTestService findTestService;
     @Test
     public void findTest() {
-
+        KtsTest res = this.findTestService.findTest(TEST_GUID);
+        assertEquals(test.getTestGuid(), res.getTestGuid());
     }
     @Test
     public void findAllTest() {
-
+        List<KtsTest> res = this.findTestService.findAllTest();
+        assertEquals(testList.stream().count(), res.stream().count());
+        for(int i = 0; i < testList.stream().count(); i++){
+            assertEquals(testList.get(i).getTestGuid(), res.get(i).getTestGuid());
+        }
     }
 
     @Autowired
@@ -262,36 +268,56 @@ public class KtsSystemTest {
     private FindActionPropertyService findActionPropertyService;
     @Test
     public void findProperties(){
-
+        Map<String, List<KtsActionProperty>> res = this.findActionPropertyService.findProperties(TESTCASE_GUID);
+        assertTrue(res.containsKey(ACTION_GUID));
+        assertEquals(res.get(ACTION_GUID).stream().count(), actionPropertyMap.get(ACTION_GUID).stream().count());
+        for(int i = 0; i < res.get(ACTION_GUID).stream().count(); i++){
+            assertEquals(res.get(ACTION_GUID).get(i).getActionGuid(), actionPropertyMap.get(ACTION_GUID).get(i).getActionGuid());
+        }
     }
 
     @Autowired
     private FindActionService findActionService;
     @Test
     public void getActionTemplate() {
-
+        Map<String, KtsActionTemplate> res = this.findActionService.getActionTemplate();
+        assertTrue(res.containsKey(ACTION_ID));
+        assertEquals(res.get(ACTION_ID).getActionId(), actionTemplateMap.get(ACTION_ID).getActionId());
     }
     @Test
     public void findAction() {
-
+        List<KtsAction> res = this.findActionService.findAction(TESTCASE_GUID);
+        assertEquals(res.stream().count(), actionList.stream().count());
+        for(int i = 0; i < res.stream().count(); i++){
+            assertEquals(res.get(i).getActionGuid(), actionList.get(i).getActionGuid());
+        }
     }
 
     @Autowired
     private FindPropertyService findPropertyService;
     @Test
     public void getPropertyTemplate(){
-
+        List<KtsActionPropertyTemplate> res = this.findPropertyService.getPropertyTemplate(ACTION_ID);
+        assertEquals(actionPropertyTemplateList.stream().count(), res.stream().count());
+        for(int i = 0; i < res.stream().count(); i++){
+            assertEquals(res.get(i).getActionId(), actionPropertyTemplateList.get(i).getActionId());
+        }
     }
 
     @Autowired
     private FindTestcaseService findTestcaseService;
     @Test
     public void findTestcase() {
-
+        KtsTestcase res = this.findTestcaseService.findTestcase(TESTCASE_GUID);
+        assertEquals(res.getTestcaseGuid(), testcase.getTestcaseGuid());
     }
     @Test
     public void findAllTestcase() {
-
+        List<KtsTestcase> res = this.findTestcaseService.findAllTestcase();
+        assertEquals(res.stream().count(), testcaseList.stream().count());
+        for(int i = 0; i < res.stream().count(); i++){
+            assertEquals(res.get(i).getTestcaseGuid(), testcaseList.get(i).getTestcaseGuid());
+        }
     }
 
     @Autowired

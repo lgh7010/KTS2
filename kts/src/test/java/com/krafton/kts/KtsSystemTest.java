@@ -86,26 +86,36 @@ public class KtsSystemTest {
     List<KtsActionTemplate> actionTemplateList;
     KtsActionTemplate actionTemplate;
     Map<String, KtsActionTemplate> actionTemplateMap;
+
     List<KtsTestcase> testcaseList;
     KtsTestcase testcase;
+
     List<KtsAction> actionList;
     KtsAction action;
+
     List<TestRelTestcaseJoinTestcase> testRelTestcaseJoinTestcaseList;
     TestRelTestcaseJoinTestcase testRelTestcaseJoinTestcase;
+
     List<KtsActionPropertyTemplate> actionPropertyTemplateList;
     KtsActionPropertyTemplate actionPropertyTemplate;
+
     List<String> actionGuidList;
     List<KtsActionProperty> actionPropertyList;
     Map<String, List<KtsActionProperty>> actionPropertyMap;
     KtsActionProperty actionProperty;
+
     List<RunningAction> runningActionList;
     RunningAction runningAction;
+
     List<RunningProperty> runningPropertyList;
     RunningProperty runningProperty;
+
     List<RunningTestcase> runningTestcaseList;
     RunningTestcase runningTestcase;
+
     List<RunningTest> runningTestList;
     RunningTest runningTest;
+
     List<KtsTest> testList;
     KtsTest test;
 

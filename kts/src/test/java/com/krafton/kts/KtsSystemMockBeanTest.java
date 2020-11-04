@@ -48,7 +48,7 @@ import static org.junit.jupiter.api.Assertions.*;
         RemoveTestcaseService.class,
         SaveTestcaseService.class,
 })
-public class KtsSystemTest {
+public class KtsSystemMockBeanTest {
 
     //region 테스트 준비
     private final String TESTCASE_GUID = "testcaseGuid1";

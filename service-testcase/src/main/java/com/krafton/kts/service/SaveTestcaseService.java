@@ -28,7 +28,7 @@ public class SaveTestcaseService implements SaveTestcaseServiceInterface {
     @Transactional
     public void saveTestcase(SaveTestcaseCommand command) {
         try {
-            if(command.getCurrentTestcaseActions().size() > 0){
+            if(command.getCurrentTestcaseActions() != null && command.getCurrentTestcaseActions().size() > 0){
                 this.actionInterface.saveAction(new SaveActionCommand(command.getCurrentTestcaseActions(), command.getRemoveActionGuidList()));
 
                 Map<String, List<KtsActionProperty>> currentTestcaseActionPropertyMap = command.getCurrentTestcaseActionPropertyMap();

@@ -1,6 +1,8 @@
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
 
+    implementation 'org.springframework.boot:spring-boot-starter-jdbc'
+
     compile project(':interfaces')
     compile project(':repository-mybatis')
 

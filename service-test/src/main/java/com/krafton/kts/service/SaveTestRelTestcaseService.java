@@ -20,7 +20,7 @@ public class SaveTestRelTestcaseService implements SaveTestRelTestcaseServiceInt
     @Transactional
     public void saveTestRelTestcase(SaveTestRelTestcaseCommand command) {
         try {
-            if(command.getRelationList().stream().count() > 0){
+            if(command.getRelationList() != null && command.getRelationList().stream().count() > 0){
                 this.testRelTestcaseInterface.saveTestRelTestcase(command);
             }
             this.testInterface.addTest(new AddTestCommand(command.getTestGuid(), command.getTestName(), command.getTestDescription()));

@@ -78,55 +78,60 @@ public class TestManagingService implements TestManagingServiceInterface {
                 for (KtsAction action : actionList) {
                     actionMap.put(action.getActionGuid(), action);
                 }
-                List<KtsActionProperty> propertyList = this.propertyInterface.findProperties(new FindPropertiesCommand(actionGuids));
+                if(actionGuids.stream().count() > 0){
+                    List<KtsActionProperty> propertyList = this.propertyInterface.findProperties(new FindPropertiesCommand(actionGuids));
 
-                List<RunningAction> runningActions = new ArrayList<>();
-                List<RunningProperty> runningProperties = new ArrayList<>();
-                Map<String, String> actionGuidRunningActionGuidMatching = new HashMap<>();
-                //첫번째 액션을 찾는다.
-                KtsAction currentAction = null;
-                for(KtsAction action : actionList){
-                    if(action.getIsStart().equals("Y")){
-                        currentAction = action;
-                        break;
+                    List<RunningAction> runningActions = new ArrayList<>();
+                    List<RunningProperty> runningProperties = new ArrayList<>();
+                    Map<String, String> actionGuidRunningActionGuidMatching = new HashMap<>();
+                    //첫번째 액션을 찾는다.
+                    KtsAction currentAction = null;
+                    for(KtsAction action : actionList){
+                        if(action.getIsStart().equals("Y")){
+                            currentAction = action;
+                            break;
+                        }
                     }
-                }
-                int actionOrder = 0;
-                while(currentAction != null){
-                    //현재 액션을 RUNNING액션에 추가
-                    String runningActionGuid = UUID.randomUUID().toString();
-                    actionGuidRunningActionGuidMatching.put(currentAction.getActionGuid(), runningActionGuid);
+                    int actionOrder = 0;
+                    while(currentAction != null){
+                        //현재 액션을 RUNNING액션에 추가
+                        String runningActionGuid = UUID.randomUUID().toString();
+                        actionGuidRunningActionGuidMatching.put(currentAction.getActionGuid(), runningActionGuid);
 
-                    RunningAction runningAction = new RunningAction();
-                    runningAction.setRunningActionGuid(runningActionGuid);
-                    runningAction.setRunningTestcaseGuid(runningTestcaseGuid);
-                    runningAction.setActionId(currentAction.getActionId());
-                    runningAction.setActionOrder(actionOrder++);
-                    runningActions.add(runningAction);
+                        RunningAction runningAction = new RunningAction();
+                        runningAction.setRunningActionGuid(runningActionGuid);
+                        runningAction.setRunningTestcaseGuid(runningTestcaseGuid);
+                        runningAction.setActionId(currentAction.getActionId());
+                        runningAction.setActionOrder(actionOrder++);
+                        runningActions.add(runningAction);
 
-                    if(Strings.isEmpty(currentAction.getNextActionGuid())){
-                        //java map은 키가 null인경우 이전값을 그냥 리턴(?!)한다..
-                        break;
+                        if(Strings.isEmpty(currentAction.getNextActionGuid())){
+                            //java map은 키가 null인경우 이전값을 그냥 리턴(?!)한다..
+                            break;
+                        }
+                        currentAction = actionMap.get(currentAction.getNextActionGuid());
                     }
-                    currentAction = actionMap.get(currentAction.getNextActionGuid());
-                }
-                for (KtsActionProperty property : propertyList) {
-                    String runningPropertyGuid = UUID.randomUUID().toString();
+                    for (KtsActionProperty property : propertyList) {
+                        String runningPropertyGuid = UUID.randomUUID().toString();
 
-                    RunningProperty runningProperty = new RunningProperty();
-                    runningProperty.setRunningPropertyGuid(runningPropertyGuid);
-                    runningProperty.setRunningActionGuid(actionGuidRunningActionGuidMatching.get(property.getActionGuid()));
-                    runningProperty.setRunningPropertyName(property.getPropertyName());
-                    runningProperty.setRunningPropertyValue(property.getPropertyValue());
+                        RunningProperty runningProperty = new RunningProperty();
+                        runningProperty.setRunningPropertyGuid(runningPropertyGuid);
+                        runningProperty.setRunningActionGuid(actionGuidRunningActionGuidMatching.get(property.getActionGuid()));
+                        runningProperty.setRunningPropertyName(property.getPropertyName());
+                        runningProperty.setRunningPropertyValue(property.getPropertyValue());
 
-                    runningProperties.add(runningProperty);
-                }
+                        runningProperties.add(runningProperty);
+                    }
 
-                System.out.println("add runningActions : " + runningActions);
-                System.out.println("add runningProperties : " + runningProperties);
-                this.runningActionInterface.addRunningAction(new AddRunningActionCommand(runningActions));
-                if(runningProperties.stream().count() > 0){
-                    this.runningPropertyInterface.addRunningProperty(new AddRunningPropertyCommand(runningProperties));
+                    System.out.println("add runningActions : " + runningActions);
+                    System.out.println("add runningProperties : " + runningProperties);
+                    if(runningActions.stream().count() > 0){
+                        this.runningActionInterface.addRunningAction(new AddRunningActionCommand(runningActions));
+
+                        if(runningProperties.stream().count() > 0){
+                            this.runningPropertyInterface.addRunningProperty(new AddRunningPropertyCommand(runningProperties));
+                        }
+                    }
                 }
             }
 
@@ -139,8 +144,10 @@ public class TestManagingService implements TestManagingServiceInterface {
             NextTestInstructionResponse response = new NextTestInstructionResponse();
             RunningAction runningAction = this.findRunningAction(new FindRunningActionCommand(runningTestGuid, 0, 0));
             response.setRunningTest(runningTest);
-            response.setRunningAction(runningAction);
-            response.setRunningProperties(this.runningPropertyInterface.findRunningProperty(runningAction.getRunningActionGuid()));
+            if(runningAction != null){
+                response.setRunningAction(runningAction);
+                response.setRunningProperties(this.runningPropertyInterface.findRunningProperty(runningAction.getRunningActionGuid()));
+            }
             return response;
         } catch(Exception e){
             throw e;
@@ -198,7 +205,10 @@ public class TestManagingService implements TestManagingServiceInterface {
 
             //step 3. 해당 runningTestcase에 속하는 runningAction들을 runningActionOrder로 정렬해서 가져온다음, currentRunningActionOrder에 해당하는 runningAction 확보 및 반환
             List<RunningAction> runningActions = this.runningActionInterface.findRunningAction(runningTestcase.getRunningTestcaseGuid());
-            return runningActions.get(command.getCurrentRunningActionOrder());
+            if(runningActions.stream().count() > 0){
+                return runningActions.get(command.getCurrentRunningActionOrder());
+            }
+            return null;
         } catch(Exception e){
             throw e;
         }
